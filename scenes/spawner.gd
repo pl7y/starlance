@@ -13,20 +13,20 @@ extends Node
 var t: float = 0.0
 
 func _process(delta: float) -> void:
-	if rig == null or enemy_scene == null:
-		return
+  if rig == null or enemy_scene == null:
+    return
 
-	t -= delta
-	if t > 0.0:
-		return
+  t -= delta
+  if t > 0.0:
+    return
 
-	t = spawn_interval
-	var e := enemy_scene.instantiate()
-	world.add_child(e)
+  t = spawn_interval
+  var e := enemy_scene.instantiate()
+  world.add_child(e)
 
-	# spawn in world space ahead of camera
-	var x := randf_range(-spawn_x_range, spawn_x_range)
-	var y := randf_range(-spawn_y_range, spawn_y_range)
-	var z := rig.cam_z + spawn_ahead_z + randf_range(0.0, 30.0)
+  # spawn in world space ahead of camera
+  var x := randf_range(-spawn_x_range, spawn_x_range)
+  var y := randf_range(-spawn_y_range, spawn_y_range)
+  var z := rig.cam_z + spawn_ahead_z + randf_range(0.0, 30.0)
 
-	e.world_pos = Vector3(x, y, z)
+  e.world_pos = Vector3(x, y, z)

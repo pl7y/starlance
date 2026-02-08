@@ -28,7 +28,7 @@ func _process(_delta: float) -> void:
 
   # Painter’s algorithm: nearer = higher z_index
   # Tune multiplier for your game scale.
-  z_index = int(100000 - p.rel_z * 1000.0)
+  z_index = int(4096 - p.rel_z * 10.0)
 
   # Despawn when past camera
   if p.rel_z < 1.2:
