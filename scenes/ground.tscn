@@ -1,0 +1,9 @@
+[gd_scene format=3 uid="uid://ehbcmyfcurbu"]
+
+[ext_resource type="Script" uid="uid://cay88h36qi2k8" path="res://scenes/ground.gd" id="1_pybca"]
+
+[node name="Ground" type="Node2D" unique_id=125099351]
+script = ExtResource("1_pybca")
+world_pos = null
+min_scale = null
+max_scale = null
