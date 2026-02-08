@@ -4,6 +4,7 @@
 [ext_resource type="PackedScene" uid="uid://ehbcmyfcurbu" path="res://scenes/ground.tscn" id="2_gej26"]
 [ext_resource type="PackedScene" uid="uid://owjcip6umxuh" path="res://scenes/spawner.tscn" id="3_skn3q"]
 [ext_resource type="PackedScene" uid="uid://bk0r22e6fyjqg" path="res://scenes/enemy.tscn" id="4_skn3q"]
+[ext_resource type="PackedScene" uid="uid://b1q5gjhbfsuaq" path="res://scenes/player_marker.tscn" id="5_157wf"]
 
 [node name="GameplayScreen" type="Node2D" unique_id=158736197]
 
@@ -17,3 +18,5 @@
 enemy_scene = ExtResource("4_skn3q")
 
 [node name="Player" type="CanvasLayer" parent="." unique_id=1463780327]
+
+[node name="Node2D" parent="Player" unique_id=1077760697 instance=ExtResource("5_157wf")]
