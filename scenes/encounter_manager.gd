@@ -96,9 +96,10 @@ class SpawnEvent:
   var hp: int
   var fire_interval: float
   var bullet_speed: float
+  var pattern: int
 
   func _init(_t: float, _x: float, _y: float, _zoff: float,
-      _p_hp := 3, _p_fire_interval := 1.2, _p_bullet_speed := 90.0) -> void:
+      _p_hp := 3, _p_fire_interval := 1.2, _p_bullet_speed := 90.0, _pattern := 0) -> void:
     t = _t
     x = _x
     y = _y
@@ -106,9 +107,10 @@ class SpawnEvent:
     hp = _p_hp
     fire_interval = _p_fire_interval
     bullet_speed = _p_bullet_speed
+    pattern = _pattern
 
   func has(key: String) -> bool:
-    return key in ["hp", "fire_interval", "bullet_speed"]
+    return key == "pattern" or key in ["hp", "fire_interval", "bullet_speed"]
 
 func _build_chunk(id: String) -> Array:
   match id:
@@ -134,10 +136,14 @@ func _chunk_swarm() -> Array:
 
   for r in range(rows):
     for c in range(cols):
-      var t := 0.2 + (r * 0.25) + randf_range(0.0, 0.08)
-      var x := start_x + c * spacing_x + randf_range(-0.6, 0.6)
-      var y := start_y + r * spacing_y + randf_range(-0.4, 0.4)
-      evs.append(SpawnEvent.new(t, x, y, 0.0, 1, 999.0, 0.0)) # hp=1, effectively no shots
+      var t := 0.2 + (r * 0.22) + randf_range(0.0, 0.06)
+      var x := start_x + c * spacing_x
+      var y := start_y + r * spacing_y
+      evs.append(SpawnEvent.new(
+        t, x, y, 0.0,
+        1, 999.0, 0.0,
+        Enemy.MovePattern.SINE_STRAFE
+      ))
   return evs
 
 func _chunk_lane_wall() -> Array:
@@ -151,9 +157,13 @@ func _chunk_lane_wall() -> Array:
     if i == gap_lane:
       continue
     var x: float = lerp(-half_w, half_w, float(i) / float(lanes - 1))
-    var y := randf_range(-2.0, 2.0) # keep it near center for readability
-    evs.append(SpawnEvent.new(t0, x, y, 0.0, 2, 1.4, 80.0))
+    evs.append(SpawnEvent.new(
+      t0, x, randf_range(-2.0, 2.0), 0.0,
+      2, 1.5, 85.0,
+      Enemy.MovePattern.SWOOP
+    ))
   return evs
+
 
 func _chunk_snipers() -> Array:
   var evs: Array = []
@@ -161,8 +171,11 @@ func _chunk_snipers() -> Array:
     var t := 0.3 + k * 0.9
     var x := randf_range(-12.0, 12.0)
     var y := randf_range(-6.0, 6.0)
-    # High HP, slow fire but faster bullets
-    evs.append(SpawnEvent.new(t, x, y, k * 8.0, 4, 1.8, 120.0))
+    evs.append(SpawnEvent.new(
+      t, x, y, k * 10.0,
+      4, 1.9, 130.0,
+      Enemy.MovePattern.DRIFT
+    ))
   return evs
 
 func _chunk_mini_boss_intro() -> Array:
