@@ -2,7 +2,6 @@
 
 [ext_resource type="PackedScene" uid="uid://dfvx4shbdy2i0" path="res://scenes/camera_rig.tscn" id="1_nl8x0"]
 [ext_resource type="PackedScene" uid="uid://ehbcmyfcurbu" path="res://scenes/ground.tscn" id="2_gej26"]
-[ext_resource type="PackedScene" uid="uid://owjcip6umxuh" path="res://scenes/spawner.tscn" id="3_skn3q"]
 [ext_resource type="PackedScene" uid="uid://bk0r22e6fyjqg" path="res://scenes/enemy.tscn" id="4_skn3q"]
 [ext_resource type="PackedScene" uid="uid://b1q5gjhbfsuaq" path="res://scenes/player_marker.tscn" id="5_157wf"]
 [ext_resource type="Script" uid="uid://kpbt6n1fjt4" path="res://scenes/shooter.gd" id="6_j70vx"]
@@ -17,9 +16,6 @@
 [node name="Ground" parent="." unique_id=444447118 instance=ExtResource("2_gej26")]
 
 [node name="World" type="Node" parent="." unique_id=242347781]
-
-[node name="Spawner" parent="." unique_id=2009793224 instance=ExtResource("3_skn3q")]
-enemy_scene = ExtResource("4_skn3q")
 
 [node name="Player" type="CanvasLayer" parent="." unique_id=1463780327]
 
