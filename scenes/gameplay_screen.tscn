@@ -8,6 +8,7 @@
 [ext_resource type="Script" uid="uid://kpbt6n1fjt4" path="res://scenes/shooter.gd" id="6_j70vx"]
 [ext_resource type="Script" uid="uid://4v63tpfjjf7a" path="res://scenes/collision_system.gd" id="7_iverm"]
 [ext_resource type="PackedScene" uid="uid://cbk5xftc2r2mk" path="res://scenes/bullet.tscn" id="7_qu4b3"]
+[ext_resource type="Script" uid="uid://cqqqpa6yalyl0" path="res://scenes/encounter_manager.gd" id="9_mcs8y"]
 
 [node name="GameplayScreen" type="Node2D" unique_id=158736197]
 
@@ -32,3 +33,8 @@ metadata/_custom_type_script = "uid://kpbt6n1fjt4"
 [node name="CollisionSystem" type="Node" parent="." unique_id=40909830]
 script = ExtResource("7_iverm")
 metadata/_custom_type_script = "uid://4v63tpfjjf7a"
+
+[node name="EncounterManager" type="Node" parent="." unique_id=1827593536]
+script = ExtResource("9_mcs8y")
+enemy_scene = ExtResource("4_skn3q")
+metadata/_custom_type_script = "uid://cqqqpa6yalyl0"

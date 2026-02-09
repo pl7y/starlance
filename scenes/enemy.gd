@@ -58,3 +58,8 @@ func _fire() -> void:
 
   dir = dir.normalized()
   b.vel = dir * bullet_speed
+
+func configure(p_hp: int, p_fire_interval: float, p_bullet_speed: float) -> void:
+  hp = p_hp
+  fire_interval = p_fire_interval
+  bullet_speed = p_bullet_speed

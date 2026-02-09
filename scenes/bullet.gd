@@ -12,8 +12,6 @@ func _process(delta: float) -> void:
   # Move forward in world space.
   world_pos.z += bullet_speed_z * delta
 
-  prints("Bullet at world z=", world_pos.z)
-
   _t += delta
   if _t >= life_seconds:
     queue_free()

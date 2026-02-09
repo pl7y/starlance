@@ -19,7 +19,6 @@ func _process(delta: float) -> void:
   _cooldown = maxf(0.0, _cooldown - delta)
 
   if Input.is_action_pressed("fire") and _cooldown <= 0.0:
-    prints("FIRE!")
     _cooldown = 1.0 / fire_rate
     _fire()
 
