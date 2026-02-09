@@ -31,5 +31,5 @@ func _process(_delta: float) -> void:
   z_index = int(4096 - p.rel_z * 10.0)
 
   # Despawn when past camera
-  if p.rel_z < 1.2:
+  if p.rel_z < 1.0:
     queue_free()
