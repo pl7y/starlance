@@ -34,3 +34,27 @@ func _process(_delta: float) -> void:
         (e as Enemy).take_hit((b as Bullet).damage)
         b.queue_free()
         break
+
+  # Enemy bullets -> Player
+  var players := get_tree().get_nodes_in_group("player")
+  if players.size() == 0:
+    return
+  var player := players[0] as Player
+  if player == null or not player.can_be_hit():
+    return
+
+  var enemy_bullets := get_tree().get_nodes_in_group("enemy_bullets")
+  for eb in enemy_bullets:
+    if not is_instance_valid(eb) or not eb.visible:
+      continue
+    if not (eb is EnemyBullet):
+      continue
+
+    var bpos: Vector2 = eb.position
+    var br: float = (eb as EnemyBullet).hit_radius_px * eb.scale.x
+    var pr: float = player.hurt_radius_px
+
+    if bpos.distance_to(player.position) <= (br + pr):
+      player.take_hit((eb as EnemyBullet).damage)
+      eb.queue_free()
+      break
