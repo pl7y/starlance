@@ -20,6 +20,7 @@
 [node name="Player" type="CanvasLayer" parent="." unique_id=1463780327]
 
 [node name="Node2D" parent="Player" unique_id=1077760697 instance=ExtResource("5_157wf")]
+player_z_offset = 100.0
 
 [node name="Shooter" type="Node" parent="." unique_id=1335539520]
 script = ExtResource("6_j70vx")

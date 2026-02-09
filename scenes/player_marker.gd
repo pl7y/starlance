@@ -1,32 +1,42 @@
-extends Node2D
+extends WorldObject
 class_name Player
 
 @export var hp: int = 5
 @export var invuln_seconds: float = 0.8
-@export var hurt_radius_px: float = 14.0 # collision size in SCREEN pixels
-@export var player_z_offset: float = 10.0 # where player is “drawn” in front of camera
-@export var flash_speed: float = 18.0 # visual blink speed
+@export var hurt_radius_px: float = 14.0 # screen-space radius
+@export var player_z_offset: float = 10.0 # how far in front of camera the player is drawn
+@export var muzzle_z_offset: float = 6.0 # useful later for bullet spawning
 
-@onready var rig: CameraRig = get_tree().get_first_node_in_group("camera_rig") as CameraRig
+@export var flash_speed: float = 18.0 # blink speed during iframes
+@export var lock_scale: bool = false # keep player same size on screen
+@export var locked_scale: float = 1.0 # only used if lock_scale=true
 
 var invuln_t: float = 0.0
 
 func _ready() -> void:
+  super._ready()
   add_to_group("player")
 
 func _process(delta: float) -> void:
   if rig == null:
     return
 
-  # Update where the player “is” on screen (based on camera X/Y)
-  var p := rig.project(Vector3(rig.cam_x, rig.cam_y, rig.cam_z + player_z_offset))
-  if p.visible:
-    position = p.screen
+  # Anchor player to camera in world space
+  world_pos.x = rig.cam_x
+  world_pos.y = rig.cam_y
+  world_pos.z = rig.cam_z + player_z_offset
 
   # Tick iframes
   invuln_t = maxf(0.0, invuln_t - delta)
 
-  # Simple blink feedback during iframes
+  # Use WorldObject projection to update position/scale/z_index
+  super._process(delta)
+
+  # Optional: keep player sprite size constant (more arcade-like)
+  if lock_scale:
+    scale = Vector2(locked_scale, locked_scale)
+
+  # Blink feedback during iframes
   if invuln_t > 0.0:
     var blink := (sin(Time.get_ticks_msec() / 1000.0 * flash_speed) * 0.5 + 0.5)
     modulate.a = lerp(0.25, 1.0, blink)
@@ -44,4 +54,8 @@ func take_hit(dmg: int) -> void:
   print("Player HP:", hp)
   if hp <= 0:
     print("DEAD (prototype)")
-    # Later: trigger death/run reset
+    # Later: emit a signal / trigger run reset
+
+func get_muzzle_world_pos() -> Vector3:
+  # Handy for the Shooter: spawn bullets from player's world position
+  return Vector3(world_pos.x, world_pos.y, rig.cam_z + muzzle_z_offset)
