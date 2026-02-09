@@ -13,6 +13,8 @@ var bank: float = 0.0
 @export var bounds_x: float = 14.0
 @export var bounds_y: float = 8.0
 
+@export var follow_strength: float = 0.15 # 0 = fixed camera, 1 = camera fully follows
+
 var vel_x: float = 0.0
 var vel_y: float = 0.0
 @export var forward_speed: float = 35.0
@@ -33,44 +35,14 @@ func _ready() -> void:
   _update_screen_params()
 
 func _process(delta: float) -> void:
-  # Forward motion (Space Harrier feel)
+  var player: Player = get_tree().get_first_node_in_group("player") as Player
+  if player != null:
+    cam_x = lerp(cam_x, player.world_pos.x * follow_strength, 1.0 - exp(-8.0 * delta))
+    cam_y = lerp(cam_y, player.world_pos.y * follow_strength, 1.0 - exp(-8.0 * delta))
+
   cam_z += forward_speed * delta
-
-  # Input
-  var ix := Input.get_action_strength("move_right") - Input.get_action_strength("move_left")
-  bank = lerp(bank, ix, 1.0 - exp(-bank_smoothing * delta))
-
-  var iy := Input.get_action_strength("move_down") - Input.get_action_strength("move_up")
-
-  # Target velocity (world units per second)
-  var target_vx := ix * move_speed_x
-  var target_vy := iy * move_speed_y
-
-  # Smooth velocity towards target (simple exponential approach)
-  vel_x = lerp(vel_x, target_vx, 1.0 - exp(-accel * delta))
-  vel_y = lerp(vel_y, target_vy, 1.0 - exp(-accel * delta))
-
-  # Apply velocity to camera position
-  cam_x += vel_x * delta
-  cam_y += vel_y * delta
-
-  # Boundaries
-  cam_x = clamp(cam_x, -bounds_x, bounds_x)
-  cam_y = clamp(cam_y, -bounds_y, bounds_y)
-
-  # Make boundaries feel elastic, not “brick wall”
-  var clamped_x: float = clamp(cam_x, -bounds_x, bounds_x)
-  if clamped_x != cam_x:
-    cam_x = clamped_x
-    vel_x = 0.0
-
-  var clamped_y: float = clamp(cam_y, -bounds_y, bounds_y)
-  if clamped_y != cam_y:
-    cam_y = clamped_y
-    vel_y = 0.0
-
-
   _update_screen_params()
+
 
 func _update_screen_params() -> void:
   var vp := get_viewport().get_visible_rect().size

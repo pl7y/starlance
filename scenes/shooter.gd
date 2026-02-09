@@ -10,6 +10,8 @@ class_name Shooter
 @onready var rig: CameraRig = get_tree().get_first_node_in_group("camera_rig") as CameraRig
 @onready var world := $"../World"
 
+@onready var player: Player = get_tree().get_first_node_in_group("player") as Player
+
 var _cooldown: float = 0.0
 
 func _process(delta: float) -> void:
@@ -26,9 +28,10 @@ func _fire() -> void:
   var b := bullet_scene.instantiate() as Node
   world.add_child(b)
 
-  # Spawn bullet at camera position, slightly ahead
-  b.world_pos = Vector3(rig.cam_x, rig.cam_y + muzzle_y_offset, rig.cam_z + muzzle_ahead_z)
 
+  var spawn := player.world_pos if player != null else Vector3(rig.cam_x, rig.cam_y, rig.cam_z + muzzle_ahead_z)
+  spawn.z = rig.cam_z + muzzle_ahead_z
+  b.world_pos = spawn
 
   # Group for collision system
   b.add_to_group("bullets")
