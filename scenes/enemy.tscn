@@ -1,10 +1,10 @@
 [gd_scene format=3 uid="uid://bk0r22e6fyjqg"]
 
-[ext_resource type="Script" uid="uid://b2nh0kc5uimbb" path="res://scenes/world_object.gd" id="1_7p1mj"]
+[ext_resource type="Script" uid="uid://bxboq3da63h70" path="res://scenes/enemy.gd" id="1_md0e3"]
 [ext_resource type="Texture2D" uid="uid://cupq3ytok6bx6" path="res://scenes/enemy.png" id="2_md0e3"]
 
-[node name="Enemy" type="Node2D" unique_id=625918716]
-script = ExtResource("1_7p1mj")
+[node name="Enemy" type="Node2D" unique_id=625918716 groups=["enemies"]]
+script = ExtResource("1_md0e3")
 
 [node name="Sprite2D" type="Sprite2D" parent="." unique_id=1333454786]
 texture = ExtResource("2_md0e3")

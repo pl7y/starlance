@@ -5,6 +5,9 @@
 [ext_resource type="PackedScene" uid="uid://owjcip6umxuh" path="res://scenes/spawner.tscn" id="3_skn3q"]
 [ext_resource type="PackedScene" uid="uid://bk0r22e6fyjqg" path="res://scenes/enemy.tscn" id="4_skn3q"]
 [ext_resource type="PackedScene" uid="uid://b1q5gjhbfsuaq" path="res://scenes/player_marker.tscn" id="5_157wf"]
+[ext_resource type="Script" uid="uid://kpbt6n1fjt4" path="res://scenes/shooter.gd" id="6_j70vx"]
+[ext_resource type="Script" uid="uid://4v63tpfjjf7a" path="res://scenes/collision_system.gd" id="7_iverm"]
+[ext_resource type="PackedScene" uid="uid://cbk5xftc2r2mk" path="res://scenes/bullet.tscn" id="7_qu4b3"]
 
 [node name="GameplayScreen" type="Node2D" unique_id=158736197]
 
@@ -20,3 +23,12 @@ enemy_scene = ExtResource("4_skn3q")
 [node name="Player" type="CanvasLayer" parent="." unique_id=1463780327]
 
 [node name="Node2D" parent="Player" unique_id=1077760697 instance=ExtResource("5_157wf")]
+
+[node name="Shooter" type="Node" parent="." unique_id=1335539520]
+script = ExtResource("6_j70vx")
+bullet_scene = ExtResource("7_qu4b3")
+metadata/_custom_type_script = "uid://kpbt6n1fjt4"
+
+[node name="CollisionSystem" type="Node" parent="." unique_id=40909830]
+script = ExtResource("7_iverm")
+metadata/_custom_type_script = "uid://4v63tpfjjf7a"
