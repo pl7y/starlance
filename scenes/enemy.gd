@@ -1,32 +1,112 @@
 extends WorldObject
 class_name Enemy
 
+enum MovePattern {STATIC, DRIFT, SINE_STRAFE, DIVE_AT_PLAYER, SWOOP, ORBIT}
+
 @export var hp: int = 3
-@export var hit_radius_px: float = 18.0 # screen-space radius at scale=1
+@export var hit_radius_px: float = 18.0
 
-func take_hit(dmg: int) -> void:
-  hp -= dmg
-  if hp <= 0:
-    queue_free()
-
+# Shooting
 @export var bullet_scene: PackedScene
 @export var fire_interval: float = 1.2
-@export var fire_min_z: float = 18.0 # don’t shoot when extremely far
-@export var fire_max_z: float = 95.0 # don’t shoot when too close (tune)
-
+@export var fire_min_z: float = 18.0
+@export var fire_max_z: float = 95.0
 @export var bullet_speed: float = 90.0
-@export var aim_lead_y: float = 0.0 # small tuning knob later
+@export var aim_lead_y: float = 0.0
+
+# Movement
+@export var pattern: MovePattern = MovePattern.STATIC
+@export var speed_z: float = -12.0 # negative = moves toward camera (optional)
+@export var speed_x: float = 0.0
+@export var speed_y: float = 0.0
+
+# Sine/curve params
+@export var amp_x: float = 4.0
+@export var amp_y: float = 2.0
+@export var freq: float = 1.2
+
+# Dive params
+@export var dive_turn: float = 2.5 # higher = homes faster (but keep readable)
+
+# Orbit params
+@export var orbit_radius: float = 6.0
+@export var orbit_speed: float = 1.5
 
 var _fire_t: float = 0.0
+var _age: float = 0.0
+var _spawn_pos: Vector3
+var _orbit_angle: float = 0.0
 
 func _ready() -> void:
   super._ready()
   add_to_group("enemies")
-  _fire_t = randf_range(0.0, fire_interval) # desync shots
+  _fire_t = randf_range(0.0, fire_interval)
+  _age = 0.0
+  _spawn_pos = world_pos
+  _orbit_angle = randf_range(0.0, TAU)
+
+func configure(p_hp: int, p_fire_interval: float, p_bullet_speed: float, p_pattern := MovePattern.STATIC) -> void:
+  hp = p_hp
+  fire_interval = p_fire_interval
+  bullet_speed = p_bullet_speed
+  pattern = p_pattern
 
 func _process(delta: float) -> void:
+  _age += delta
+
+  _update_movement(delta)
+
+  # Project + place sprite
   super._process(delta)
 
+  # Shooting (unchanged, but uses current world_pos)
+  _try_shoot(delta)
+
+func _update_movement(delta: float) -> void:
+  if rig == null:
+    return
+
+  match pattern:
+    MovePattern.STATIC:
+      # no-op
+      pass
+
+    MovePattern.DRIFT:
+      world_pos.x += speed_x * delta
+      world_pos.y += speed_y * delta
+      world_pos.z += speed_z * delta
+
+    MovePattern.SINE_STRAFE:
+      # Moves forward/back via speed_z, with sinusoidal x (and optional y)
+      world_pos.z += speed_z * delta
+      world_pos.x = _spawn_pos.x + sin(_age * TAU * freq) * amp_x
+      world_pos.y = _spawn_pos.y + sin(_age * TAU * (freq * 0.7)) * amp_y
+
+    MovePattern.DIVE_AT_PLAYER:
+      # Smoothly home towards camera X/Y while advancing in Z
+      world_pos.z += speed_z * delta
+
+      var target_x := rig.cam_x
+      var target_y := rig.cam_y
+      world_pos.x = lerp(world_pos.x, target_x, 1.0 - exp(-dive_turn * delta))
+      world_pos.y = lerp(world_pos.y, target_y, 1.0 - exp(-dive_turn * delta))
+
+    MovePattern.SWOOP:
+      # A readable “arc”: starts offset, crosses center, exits
+      world_pos.z += speed_z * delta
+      world_pos.x = _spawn_pos.x + sin(_age * TAU * freq) * amp_x
+      world_pos.y = _spawn_pos.y + cos(_age * TAU * freq) * amp_y
+
+    MovePattern.ORBIT:
+      # Orbits around a point in front of camera (feels 3D-ish even in fake 3D)
+      world_pos.z += speed_z * delta
+      _orbit_angle += orbit_speed * delta
+      var cx := rig.cam_x
+      var cy := rig.cam_y
+      world_pos.x = cx + cos(_orbit_angle) * orbit_radius
+      world_pos.y = cy + sin(_orbit_angle) * (orbit_radius * 0.6)
+
+func _try_shoot(delta: float) -> void:
   if rig == null or bullet_scene == null:
     return
 
@@ -34,7 +114,6 @@ func _process(delta: float) -> void:
   if _fire_t > 0.0:
     return
 
-  # Only shoot if within a Z band (keeps prototype readable)
   var rel_z := world_pos.z - rig.cam_z
   if rel_z < fire_min_z or rel_z > fire_max_z:
     return
@@ -44,22 +123,18 @@ func _process(delta: float) -> void:
 
 func _fire() -> void:
   var b := bullet_scene.instantiate() as EnemyBullet
-  get_parent().add_child(b) # assumes Enemy is under World node
+  get_parent().add_child(b)
 
-  # Start bullet at enemy position
   b.world_pos = world_pos
 
-  # Aim at camera/player position in world space at fire time
   var target := Vector3(rig.cam_x, rig.cam_y + aim_lead_y, rig.cam_z + 10.0)
-
-  var dir := (target - b.world_pos)
+  var dir := target - b.world_pos
   if dir.length() < 0.001:
     dir = Vector3(0, 0, -1)
-
   dir = dir.normalized()
   b.vel = dir * bullet_speed
 
-func configure(p_hp: int, p_fire_interval: float, p_bullet_speed: float) -> void:
-  hp = p_hp
-  fire_interval = p_fire_interval
-  bullet_speed = p_bullet_speed
+func take_hit(dmg: int) -> void:
+  hp -= dmg
+  if hp <= 0:
+    queue_free()

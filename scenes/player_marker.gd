@@ -12,36 +12,36 @@ class_name Player
 var invuln_t: float = 0.0
 
 func _ready() -> void:
-	add_to_group("player")
+  add_to_group("player")
 
 func _process(delta: float) -> void:
-	if rig == null:
-		return
+  if rig == null:
+    return
 
-	# Update where the player “is” on screen (based on camera X/Y)
-	var p := rig.project(Vector3(rig.cam_x, rig.cam_y, rig.cam_z + player_z_offset))
-	if p.visible:
-		position = p.screen
+  # Update where the player “is” on screen (based on camera X/Y)
+  var p := rig.project(Vector3(rig.cam_x, rig.cam_y, rig.cam_z + player_z_offset))
+  if p.visible:
+    position = p.screen
 
-	# Tick iframes
-	invuln_t = maxf(0.0, invuln_t - delta)
+  # Tick iframes
+  invuln_t = maxf(0.0, invuln_t - delta)
 
-	# Simple blink feedback during iframes
-	if invuln_t > 0.0:
-		var blink := (sin(Time.get_ticks_msec() / 1000.0 * flash_speed) * 0.5 + 0.5)
-		modulate.a = lerp(0.25, 1.0, blink)
-	else:
-		modulate.a = 1.0
+  # Simple blink feedback during iframes
+  if invuln_t > 0.0:
+    var blink := (sin(Time.get_ticks_msec() / 1000.0 * flash_speed) * 0.5 + 0.5)
+    modulate.a = lerp(0.25, 1.0, blink)
+  else:
+    modulate.a = 1.0
 
 func can_be_hit() -> bool:
-	return invuln_t <= 0.0
+  return invuln_t <= 0.0
 
 func take_hit(dmg: int) -> void:
-	if not can_be_hit():
-		return
-	hp -= dmg
-	invuln_t = invuln_seconds
-	print("Player HP:", hp)
-	if hp <= 0:
-		print("DEAD (prototype)")
-		# Later: trigger death/run reset
+  if not can_be_hit():
+    return
+  hp -= dmg
+  invuln_t = invuln_seconds
+  print("Player HP:", hp)
+  if hp <= 0:
+    print("DEAD (prototype)")
+    # Later: trigger death/run reset

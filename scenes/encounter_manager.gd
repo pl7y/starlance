@@ -71,9 +71,21 @@ func _spawn_enemy(ev) -> void:
   var z: float = rig.cam_z + spawn_ahead_z + ev.z_offset
   e.world_pos = Vector3(ev.x, ev.y, z)
 
-  # Optional tuning per event
-  if ev.has("hp"):
-    e.configure(ev.hp, ev.fire_interval, ev.bullet_speed)
+  # Defaults
+  var p_hp := 3
+  var p_fire_interval := 1.2
+  var p_bullet_speed := 90.0
+  var p_pattern := Enemy.MovePattern.STATIC
+
+  # If you're using SpawnEvent fields:
+  p_hp = ev.hp
+  p_fire_interval = ev.fire_interval
+  p_bullet_speed = ev.bullet_speed
+  if ev.has("pattern"):
+    p_pattern = ev.pattern
+
+  e.configure(p_hp, p_fire_interval, p_bullet_speed, p_pattern)
+
 
 class SpawnEvent:
   var t: float
