@@ -69,7 +69,6 @@ func _process(delta: float) -> void:
   # --- Run vs Fly state ---
   var altitude := ground_y - world_pos.y
   var grounded := altitude <= grounded_threshold
-  print("Grounded:", grounded, "altitude:", altitude) # Debug print for grounded state and Y position
 
   if grounded:
     if _label.text != "run":
