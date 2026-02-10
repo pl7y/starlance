@@ -3,7 +3,7 @@
 [ext_resource type="PackedScene" uid="uid://dfvx4shbdy2i0" path="res://scenes/camera_rig.tscn" id="1_nl8x0"]
 [ext_resource type="PackedScene" uid="uid://ehbcmyfcurbu" path="res://scenes/ground.tscn" id="2_gej26"]
 [ext_resource type="PackedScene" uid="uid://bk0r22e6fyjqg" path="res://scenes/enemy.tscn" id="4_skn3q"]
-[ext_resource type="PackedScene" uid="uid://b1q5gjhbfsuaq" path="res://scenes/player_marker.tscn" id="5_157wf"]
+[ext_resource type="PackedScene" uid="uid://b1q5gjhbfsuaq" path="res://scenes/player.tscn" id="5_157wf"]
 [ext_resource type="Script" uid="uid://kpbt6n1fjt4" path="res://scenes/shooter.gd" id="6_j70vx"]
 [ext_resource type="Script" uid="uid://4v63tpfjjf7a" path="res://scenes/collision_system.gd" id="7_iverm"]
 [ext_resource type="PackedScene" uid="uid://cbk5xftc2r2mk" path="res://scenes/bullet.tscn" id="7_qu4b3"]

@@ -1,9 +1,9 @@
 [gd_scene format=3 uid="uid://b1q5gjhbfsuaq"]
 
-[ext_resource type="Script" uid="uid://b716w5y0cpxg7" path="res://scenes/player_marker.gd" id="1_ywjxs"]
+[ext_resource type="Script" uid="uid://b716w5y0cpxg7" path="res://scenes/player.gd" id="1_ywjxs"]
 [ext_resource type="Texture2D" uid="uid://mvtm7wt0w2w6" path="res://assets/sh_player.png" id="2_7x7gm"]
 
-[node name="Node2D" type="Node2D" unique_id=1077760697]
+[node name="Player" type="Node2D" unique_id=1077760697]
 script = ExtResource("1_ywjxs")
 
 [node name="Sprite2D" type="Sprite2D" parent="." unique_id=1836268859]
