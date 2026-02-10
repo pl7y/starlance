@@ -43,6 +43,8 @@ func _process(delta: float) -> void:
   if player != null:
     camera_world_position.x = lerp(camera_world_position.x, player.world_pos.x * follow_strength, 1.0 - exp(-8.0 * delta))
     camera_world_position.y = lerp(camera_world_position.y, player.world_pos.y * follow_strength, 1.0 - exp(-8.0 * delta))
+  # camera_world_position.x = player.world_pos.x
+  # camera_world_position.y = player.world_pos.y
 
   # camera_world_position.z += forward_speed * delta
   camera_world_position.z = player.world_pos.z - player.player_z_offset
