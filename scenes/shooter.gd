@@ -28,10 +28,10 @@ func _fire() -> void:
   var b := bullet_scene.instantiate() as Node
   world.add_child(b)
 
+  if player:
+    var spawn := player.world_pos
+    spawn.z += muzzle_ahead_z
+    b.world_pos = spawn
 
-  var spawn := player.world_pos if player != null else Vector3(rig.cam_x, rig.cam_y, rig.cam_z + muzzle_ahead_z)
-  spawn.z = rig.cam_z + muzzle_ahead_z
-  b.world_pos = spawn
-
-  # Group for collision system
-  b.add_to_group("bullets")
+    # Group for collision system
+    b.add_to_group("bullets")

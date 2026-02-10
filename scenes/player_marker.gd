@@ -30,11 +30,11 @@ func _process(delta: float) -> void:
 	if lock_scale:
 		scale = Vector2(locked_scale, locked_scale)
 
-	if invuln_t > 0.0:
-		var blink := (sin(Time.get_ticks_msec() / 1000.0 * flash_speed) * 0.5 + 0.5)
-		modulate.a = lerp(0.25, 1.0, blink)
-	else:
-		modulate.a = 1.0
+	# if invuln_t > 0.0:
+	# 	var blink := (sin(Time.get_ticks_msec() / 1000.0 * flash_speed) * 0.5 + 0.5)
+	# 	modulate.a = lerp(0.25, 1.0, blink)
+	# else:
+	# 	modulate.a = 1.0
 
 func can_be_hit() -> bool:
 	return invuln_t <= 0.0

@@ -1,12 +1,12 @@
 extends Node
 class_name PlayerController
 
-@export var move_speed_x: float = 18.0
-@export var move_speed_y: float = 14.0
+@export var move_speed_x: float = 180.0
+@export var move_speed_y: float = 140.0
 @export var accel: float = 14.0
 
-@export var bounds_x: float = 14.0
-@export var bounds_y: float = 8.0
+@export var bounds_x: float = 140.0
+@export var bounds_y: float = 80.0
 
 @onready var player: Player = get_tree().get_first_node_in_group("player") as Player
 

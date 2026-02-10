@@ -10,9 +10,6 @@ var bank: float = 0.0
 @export var accel: float = 10.0 # bigger = snappier
 @export var damp: float = 10.0 # bigger = less overshoot (keep near accel)
 
-@export var bounds_x: float = 14.0
-@export var bounds_y: float = 8.0
-
 @export var follow_strength: float = 0.15 # 0 = fixed camera, 1 = camera fully follows
 
 @export var forward_speed: float = 35.0
@@ -38,7 +35,8 @@ func _process(delta: float) -> void:
     cam_x = lerp(cam_x, player.world_pos.x * follow_strength, 1.0 - exp(-8.0 * delta))
     cam_y = lerp(cam_y, player.world_pos.y * follow_strength, 1.0 - exp(-8.0 * delta))
 
-  cam_z += forward_speed * delta
+  # cam_z += forward_speed * delta
+  cam_z = player.world_pos.z - player.player_z_offset
   _update_screen_params()
 
 

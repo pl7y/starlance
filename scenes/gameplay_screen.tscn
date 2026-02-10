@@ -21,7 +21,8 @@
 [node name="Player" type="CanvasLayer" parent="." unique_id=1463780327]
 
 [node name="Node2D" parent="Player" unique_id=1077760697 groups=["player"] instance=ExtResource("5_157wf")]
-player_z_offset = 64.0
+modulate = Color(1, 1, 1, 0.42745098)
+player_z_offset = 128.0
 
 [node name="Shooter" type="Node" parent="." unique_id=1335539520]
 script = ExtResource("6_j70vx")
