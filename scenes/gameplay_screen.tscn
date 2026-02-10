@@ -22,7 +22,27 @@
 
 [node name="Node2D" parent="Player" unique_id=1077760697 groups=["player"] instance=ExtResource("5_157wf")]
 modulate = Color(1, 1, 1, 0.42745098)
+hp = null
+invuln_seconds = null
+hurt_radius_px = null
 player_z_offset = 128.0
+lock_scale = null
+locked_scale = null
+flash_speed = null
+ground_y = null
+grounded_threshold = null
+gravity = null
+lift_speed = null
+max_altitude = null
+world_pos = null
+min_scale = null
+max_scale = null
+
+[node name="PlayerLabel" type="Label" parent="Player/Node2D" unique_id=1240337173]
+unique_name_in_owner = true
+offset_right = 40.0
+offset_bottom = 23.0
+text = "hello"
 
 [node name="Shooter" type="Node" parent="." unique_id=1335539520]
 script = ExtResource("6_j70vx")
