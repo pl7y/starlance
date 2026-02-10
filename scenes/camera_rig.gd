@@ -15,8 +15,6 @@ var bank: float = 0.0
 
 @export var follow_strength: float = 0.15 # 0 = fixed camera, 1 = camera fully follows
 
-var vel_x: float = 0.0
-var vel_y: float = 0.0
 @export var forward_speed: float = 35.0
 
 # "Camera" position in world space (X,Y,Z)
@@ -26,7 +24,7 @@ var cam_z: float = 0.0
 
 # Projection tuning
 @export var focal: float = 320.0
-@export var horizon_ratio: float = 0.35 # 0..1 of screen height
+@export var horizon_ratio: float = 0.65 # 0..1 of screen height
 
 var center: Vector2
 var horizon_y: float
@@ -49,19 +47,14 @@ func _update_screen_params() -> void:
   center = Vector2(vp.x * 0.5, vp.y * 0.5)
   horizon_y = vp.y * horizon_ratio
 
-func project(world_pos: Vector3) -> Dictionary:
+func project(world_pos: Vector3) -> Projection2D:
   var rel := world_pos - Vector3(cam_x, cam_y, cam_z)
   if rel.z <= 0.1:
-    return {"visible": false}
+    return Projection2D.new(false, Vector2.ZERO, 1.0, 0.0)
 
   var scale := focal / rel.z
   # var sx := center.x + rel.x * scale
   var sx := (center.x + bank * bank_pixels) + rel.x * scale
 
   var sy := horizon_y + rel.y * scale
-  return {
-    "visible": true,
-    "screen": Vector2(sx, sy),
-    "scale": scale,
-    "rel_z": rel.z
-  }
+  return Projection2D.new(true, Vector2(sx, sy), scale, rel.z)
