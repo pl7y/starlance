@@ -21,8 +21,8 @@ func _draw() -> void:
 		var t := 0.0 if lanes == 1 else float(i) / float(lanes - 1)
 		var x: float = lerp(-half_width, half_width, t)
 
-		var a := rig.project(Vector3(x, 0.0, rig.cam_z + near_z))
-		var b := rig.project(Vector3(x, 0.0, rig.cam_z + far_z))
+		var a := rig.project(Vector3(x, 0.0, rig.camera_world_position.z + near_z))
+		var b := rig.project(Vector3(x, 0.0, rig.camera_world_position.z + far_z))
 		if a.visible and b.visible:
 			draw_line(a.screen, b.screen, Color(1, 1, 1, 0.35), 1.0)
 
@@ -32,7 +32,7 @@ func _draw() -> void:
 		var u: float = float(j) / float(depth_lines - 1)
 		var z: float = lerp(near_z, far_z, u * u) # quadratic bias
 
-		var left := rig.project(Vector3(-half_width, 0.0, rig.cam_z + z))
-		var right := rig.project(Vector3(half_width, 0.0, rig.cam_z + z))
+		var left := rig.project(Vector3(-half_width, 0.0, rig.camera_world_position.z + z))
+		var right := rig.project(Vector3(half_width, 0.0, rig.camera_world_position.z + z))
 		if left.visible and right.visible:
 			draw_line(left.screen, right.screen, Color(1, 1, 1, 0.25), 1.0)

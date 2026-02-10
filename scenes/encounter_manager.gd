@@ -68,7 +68,7 @@ func _spawn_enemy(ev) -> void:
   var e := enemy_scene.instantiate() as Enemy
   world.add_child(e)
 
-  var z: float = rig.cam_z + spawn_ahead_z + ev.z_offset
+  var z: float = rig.camera_world_position.z + spawn_ahead_z + ev.z_offset
   e.world_pos = Vector3(ev.x, ev.y, z)
 
   # Defaults

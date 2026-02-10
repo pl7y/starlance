@@ -21,7 +21,7 @@ func _process(delta: float) -> void:
 		return
 
 	# Keep player at a constant depth in front of camera
-	world_pos.z = rig.cam_z + player_z_offset
+	world_pos.z = rig.camera_world_position.z + player_z_offset
 
 	invuln_t = maxf(0.0, invuln_t - delta)
 

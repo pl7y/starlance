@@ -1,3 +1,11 @@
+#   ___________           __________                        __                 
+#  /   _____/  | _____.__.\______   \_______   ____ _____  |  | __ ___________ 
+#  \_____  \|  |/ <   |  | |    |  _/\_  __ \_/ __ \\__  \ |  |/ // __ \_  __ \
+#  /        \    < \___  | |    |   \ |  | \/\  ___/ / __ \|    <\  ___/|  | \/
+# /_______  /__|_ \/ ____| |______  / |__|    \___  >____  /__|_ \\___  >__|   
+#         \/     \/\/             \/              \/     \/     \/    \/       
+# (c) 2026 Pl7y.com
+
 extends Node
 class_name CameraRig
 
@@ -15,9 +23,7 @@ var bank: float = 0.0
 @export var forward_speed: float = 35.0
 
 # "Camera" position in world space (X,Y,Z)
-var cam_x: float = 0.0
-var cam_y: float = 0.0
-var cam_z: float = 0.0
+var camera_world_position: Vector3 = Vector3.ZERO
 
 # Projection tuning
 @export var focal: float = 320.0
@@ -32,11 +38,11 @@ func _ready() -> void:
 func _process(delta: float) -> void:
   var player: Player = get_tree().get_first_node_in_group("player") as Player
   if player != null:
-    cam_x = lerp(cam_x, player.world_pos.x * follow_strength, 1.0 - exp(-8.0 * delta))
-    cam_y = lerp(cam_y, player.world_pos.y * follow_strength, 1.0 - exp(-8.0 * delta))
+    camera_world_position.x = lerp(camera_world_position.x, player.world_pos.x * follow_strength, 1.0 - exp(-8.0 * delta))
+    camera_world_position.y = lerp(camera_world_position.y, player.world_pos.y * follow_strength, 1.0 - exp(-8.0 * delta))
 
-  # cam_z += forward_speed * delta
-  cam_z = player.world_pos.z - player.player_z_offset
+  # camera_world_position.z += forward_speed * delta
+  camera_world_position.z = player.world_pos.z - player.player_z_offset
   _update_screen_params()
 
 
@@ -46,7 +52,7 @@ func _update_screen_params() -> void:
   horizon_y = vp.y * horizon_ratio
 
 func project(world_pos: Vector3) -> Projection2D:
-  var rel := world_pos - Vector3(cam_x, cam_y, cam_z)
+  var rel := world_pos - camera_world_position
   if rel.z <= 0.1:
     return Projection2D.new(false, Vector2.ZERO, 1.0, 0.0)
 

@@ -1,3 +1,11 @@
+#   ___________           __________                        __                 
+#  /   _____/  | _____.__.\______   \_______   ____ _____  |  | __ ___________ 
+#  \_____  \|  |/ <   |  | |    |  _/\_  __ \_/ __ \\__  \ |  |/ // __ \_  __ \
+#  /        \    < \___  | |    |   \ |  | \/\  ___/ / __ \|    <\  ___/|  | \/
+# /_______  /__|_ \/ ____| |______  / |__|    \___  >____  /__|_ \\___  >__|   
+#         \/     \/\/             \/              \/     \/     \/    \/       
+# (c) 2026 Pl7y.com
+
 extends WorldObject
 class_name Enemy
 
@@ -86,8 +94,8 @@ func _update_movement(delta: float) -> void:
       # Smoothly home towards camera X/Y while advancing in Z
       world_pos.z += speed_z * delta
 
-      var target_x := rig.cam_x
-      var target_y := rig.cam_y
+      var target_x := rig.camera_world_position.x
+      var target_y := rig.camera_world_position.y
       world_pos.x = lerp(world_pos.x, target_x, 1.0 - exp(-dive_turn * delta))
       world_pos.y = lerp(world_pos.y, target_y, 1.0 - exp(-dive_turn * delta))
 
@@ -101,8 +109,8 @@ func _update_movement(delta: float) -> void:
       # Orbits around a point in front of camera (feels 3D-ish even in fake 3D)
       world_pos.z += speed_z * delta
       _orbit_angle += orbit_speed * delta
-      var cx := rig.cam_x
-      var cy := rig.cam_y
+      var cx := rig.camera_world_position.x
+      var cy := rig.camera_world_position.y
       world_pos.x = cx + cos(_orbit_angle) * orbit_radius
       world_pos.y = cy + sin(_orbit_angle) * (orbit_radius * 0.6)
 
@@ -114,7 +122,7 @@ func _try_shoot(delta: float) -> void:
   if _fire_t > 0.0:
     return
 
-  var rel_z := world_pos.z - rig.cam_z
+  var rel_z := world_pos.z - rig.camera_world_position.z
   if rel_z < fire_min_z or rel_z > fire_max_z:
     return
 
@@ -127,7 +135,7 @@ func _fire() -> void:
 
   b.world_pos = world_pos
 
-  var target := Vector3(rig.cam_x, rig.cam_y + aim_lead_y, rig.cam_z + 10.0)
+  var target := Vector3(rig.camera_world_position.x, rig.camera_world_position.y + aim_lead_y, rig.camera_world_position.z + 10.0)
   var dir := target - b.world_pos
   if dir.length() < 0.001:
     dir = Vector3(0, 0, -1)
