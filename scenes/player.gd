@@ -23,10 +23,11 @@ class_name Player
 var invuln_t: float = 0.0
 
 @export var ground_y: float = 0.0
-@export var grounded_threshold: float = 0.6 # how close to ground counts as grounded
 @export var gravity: float = 0.0 # pulls you down when not holding up
 @export var lift_speed: float = 22.0 # how fast you gain altitude
 @export var max_altitude: float = 100.0
+@export var min_altitude: float = 3.0 # minimum height when running
+@export var grounded_threshold: float = min_altitude + 1.0 # how close to ground counts as grounded
 
 
 func _ready() -> void:
@@ -52,8 +53,8 @@ func _process(delta: float) -> void:
   if down > 0.1:
     world_pos.y += (gravity * 0.8) * down * delta
 
-  # Clamp between max altitude (negative) and ground (0)
-  world_pos.y = clamp(world_pos.y, -max_altitude, ground_y)
+  # Clamp between max altitude (negative) and minimum altitude above ground
+  world_pos.y = clamp(world_pos.y, -max_altitude, ground_y - min_altitude)
 
   # --- Iframes timer (keep your existing code) ---
   invuln_t = maxf(0.0, invuln_t - delta)
@@ -68,7 +69,7 @@ func _process(delta: float) -> void:
   # --- Run vs Fly state ---
   var altitude := ground_y - world_pos.y
   var grounded := altitude <= grounded_threshold
-  print("Grounded:", grounded, "t:", world_pos.y - ground_y) # Debug print for grounded state and Y position
+  print("Grounded:", grounded, "altitude:", altitude) # Debug print for grounded state and Y position
 
   if grounded:
     if _label.text != "run":
