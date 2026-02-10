@@ -9,8 +9,11 @@
 extends Node
 class_name CameraRig
 
+# Camera banking (roll/tilt) effect - maximum horizontal screen offset in pixels
 @export var bank_pixels: float = 40.0
+# Smoothing factor for bank transitions (higher = smoother/slower response)
 @export var bank_smoothing: float = 8.0
+# Current bank amount (-1 to 1, where -1 is full left tilt, 1 is full right tilt)
 var bank: float = 0.0
 
 @export var move_speed_x: float = 18.0
@@ -58,6 +61,7 @@ func project(world_pos: Vector3) -> Projection2D:
 
   var scale := focal / rel.z
   # var sx := center.x + rel.x * scale
+  # Apply camera banking: shift the horizontal center by bank amount for tilt effect
   var sx := (center.x + bank * bank_pixels) + rel.x * scale
 
   var sy := horizon_y + rel.y * scale
