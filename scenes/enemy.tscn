@@ -7,6 +7,7 @@
 [node name="Enemy" type="Node2D" unique_id=625918716 groups=["enemies"]]
 script = ExtResource("1_md0e3")
 bullet_scene = ExtResource("2_4ra3w")
+max_scale = 16.0
 
 [node name="Sprite2D" type="Sprite2D" parent="." unique_id=1333454786]
 texture = ExtResource("2_md0e3")

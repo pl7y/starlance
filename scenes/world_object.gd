@@ -1,3 +1,10 @@
+#   ___________           __________                        __                 
+#  /   _____/  | _____.__.\______   \_______   ____ _____  |  | __ ___________ 
+#  \_____  \|  |/ <   |  | |    |  _/\_  __ \_/ __ \\__  \ |  |/ // __ \_  __ \
+#  /        \    < \___  | |    |   \ |  | \/\  ___/ / __ \|    <\  ___/|  | \/
+# /_______  /__|_ \/ ____| |______  / |__|    \___  >____  /__|_ \\___  >__|   
+#         \/     \/\/             \/              \/     \/     \/    \/       
+# (c) 2026 Pl7y.com
 extends Node2D
 class_name WorldObject
 
@@ -28,7 +35,12 @@ func _process(_delta: float) -> void:
 
   # Painter’s algorithm: nearer = higher z_index
   # Tune multiplier for your game scale.
-  z_index = int(4096 - p.rel_z * 10.0)
+  # z_index = int(4096 - p.rel_z * 10.0)
+  z_index = - int(p.rel_z)
+  if z_index < RenderingServer.CANVAS_ITEM_Z_MIN:
+    push_warning("Object is too far away and may not render correctly. Consider adjusting the scale or z_index calculation.")
+  elif z_index > RenderingServer.CANVAS_ITEM_Z_MAX:
+    push_warning("Object is too close and may not render correctly. Consider adjusting the scale or z_index calculation.")
 
   # Despawn when past camera
   if p.rel_z < 1.0:
