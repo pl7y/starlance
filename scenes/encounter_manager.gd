@@ -1,6 +1,7 @@
 extends Node
 class_name EncounterManager
 
+@export var disabled: bool = false
 @export var enemy_scene: PackedScene
 @export var spawn_ahead_z: float = 95.0
 
@@ -22,7 +23,7 @@ func _ready() -> void:
   _start_next_chunk()
 
 func _process(delta: float) -> void:
-  if rig == null or enemy_scene == null:
+  if disabled or rig == null or enemy_scene == null:
     return
 
   if _state == "rest":
