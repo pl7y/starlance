@@ -11,7 +11,7 @@ class_name Enemy
 
 enum MovePattern {STATIC, DRIFT, SINE_STRAFE, DIVE_AT_PLAYER, SWOOP, ORBIT}
 
-@export var hp: int = 3
+@export var hp: int = 30
 @export var hit_radius_px: float = 18.0
 
 # Shooting
@@ -41,6 +41,8 @@ enum MovePattern {STATIC, DRIFT, SINE_STRAFE, DIVE_AT_PLAYER, SWOOP, ORBIT}
 @export var orbit_speed: float = 1.5
 
 @onready var sprite := %Sprite2D
+
+@export var explosion_scene: PackedScene
 
 var _fire_t: float = 0.0
 var _age: float = 0.0
@@ -145,10 +147,17 @@ func _fire() -> void:
   b.vel = dir * bullet_speed
 
 func take_hit(dmg: int) -> void:
+  _flash_white()
+
+  var explosion = explosion_scene.instantiate()
+  get_parent().add_child(explosion)
+  explosion.world_pos = world_pos
+
   hp -= dmg
   if hp <= 0:
     queue_free()
 
+func _flash_white() -> void:
   # Flash white on hit
   if sprite != null:
     sprite.modulate = Color("ff0000")

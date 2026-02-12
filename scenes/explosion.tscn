@@ -1,0 +1,68 @@
+[gd_scene format=3 uid="uid://ljkd8f8efq38"]
+
+[ext_resource type="Script" uid="uid://dbh0nipjxjj3w" path="res://scenes/explosion.gd" id="1_nfeox"]
+[ext_resource type="Texture2D" uid="uid://c4pjv41pkiu5g" path="res://assets/Fire Effect and Bullet 16x16.png" id="2_aw4cw"]
+
+[sub_resource type="Animation" id="Animation_l5glv"]
+length = 0.001
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Sprite2D:frame")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [343]
+}
+
+[sub_resource type="Animation" id="Animation_eoqba"]
+resource_name = "default"
+length = 0.8
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Sprite2D:frame")
+tracks/0/interp = 1
+tracks/0/loop_wrap = false
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.6),
+"transitions": PackedFloat32Array(1, 1),
+"update": 0,
+"values": [138, 143]
+}
+tracks/1/type = "method"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath(".")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0.8),
+"transitions": PackedFloat32Array(1),
+"values": [{
+"args": [],
+"method": &"queue_free"
+}]
+}
+
+[sub_resource type="AnimationLibrary" id="AnimationLibrary_qncy5"]
+_data = {
+&"RESET": SubResource("Animation_l5glv"),
+&"default": SubResource("Animation_eoqba")
+}
+
+[node name="Explosion" type="Node2D" unique_id=1906372644]
+script = ExtResource("1_nfeox")
+
+[node name="Sprite2D" type="Sprite2D" parent="." unique_id=335325533]
+texture = ExtResource("2_aw4cw")
+hframes = 36
+vframes = 13
+frame = 343
+
+[node name="AnimationPlayer" type="AnimationPlayer" parent="." unique_id=821903804]
+libraries/ = SubResource("AnimationLibrary_qncy5")
+autoplay = &"default"

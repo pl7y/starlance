@@ -3,10 +3,12 @@
 [ext_resource type="Script" uid="uid://bxboq3da63h70" path="res://scenes/enemy.gd" id="1_md0e3"]
 [ext_resource type="PackedScene" uid="uid://br8xdfa088ssa" path="res://scenes/enemy_bullet.tscn" id="2_4ra3w"]
 [ext_resource type="Texture2D" uid="uid://cupq3ytok6bx6" path="res://scenes/enemy.png" id="2_md0e3"]
+[ext_resource type="PackedScene" uid="uid://ljkd8f8efq38" path="res://scenes/explosion.tscn" id="3_5uy6h"]
 
 [node name="Enemy" type="Node2D" unique_id=625918716 groups=["enemies"]]
 script = ExtResource("1_md0e3")
 bullet_scene = ExtResource("2_4ra3w")
+explosion_scene = ExtResource("3_5uy6h")
 max_scale = 16.0
 
 [node name="Sprite2D" type="Sprite2D" parent="." unique_id=1333454786]
