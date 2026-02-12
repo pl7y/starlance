@@ -31,47 +31,36 @@ tile_z = 1.0
 tile_outline_alpha = 0.0
 camera_height = 0.7
 
-[node name="CanvasLayer" type="CanvasLayer" parent="." unique_id=2128261619]
-
-[node name="Enemy100" parent="CanvasLayer" unique_id=625918716 instance=ExtResource("4_skn3q")]
-world_pos = Vector3(-100, 0, 100)
-
-[node name="Enemy200" parent="CanvasLayer" unique_id=843687141 instance=ExtResource("4_skn3q")]
-world_pos = Vector3(0, 0, 200)
-
-[node name="Enemy300" parent="CanvasLayer" unique_id=891730611 instance=ExtResource("4_skn3q")]
-world_pos = Vector3(100, 0, 300)
-
-[node name="Enemy301" parent="CanvasLayer" unique_id=816519242 instance=ExtResource("4_skn3q")]
-world_pos = Vector3(300, 0, 300)
-
-[node name="PlayerLayer" type="CanvasLayer" parent="." unique_id=1463780327]
+[node name="ObjectsLayer" type="CanvasLayer" parent="." unique_id=1463780327]
 layer = 2
 
-[node name="Player" parent="PlayerLayer" unique_id=1077760697 groups=["player"] instance=ExtResource("5_157wf")]
+[node name="Player" parent="ObjectsLayer" unique_id=1077760697 groups=["player"] instance=ExtResource("5_157wf")]
 modulate = Color(1, 1, 1, 0.42745098)
 player_z_offset = 128.0
 
-[node name="PlayerLabel" type="Label" parent="PlayerLayer/Player" unique_id=1240337173]
+[node name="PlayerLabel" type="Label" parent="ObjectsLayer/Player" unique_id=1240337173]
 unique_name_in_owner = true
 offset_right = 40.0
 offset_bottom = 23.0
 text = "hello"
+metadata/_edit_use_anchors_ = true
 
-[node name="Shooter" type="Node" parent="." unique_id=1335539520]
+[node name="Shooter" type="Node" parent="." unique_id=1335539520 node_paths=PackedStringArray("world")]
 script = ExtResource("6_j70vx")
 bullet_scene = ExtResource("7_qu4b3")
+world = NodePath("../ObjectsLayer")
 metadata/_custom_type_script = "uid://kpbt6n1fjt4"
 
 [node name="CollisionSystem" type="Node" parent="." unique_id=40909830]
 script = ExtResource("7_iverm")
 metadata/_custom_type_script = "uid://4v63tpfjjf7a"
 
-[node name="EncounterManager" type="Node" parent="." unique_id=1827593536]
+[node name="EncounterManager" type="Node" parent="." unique_id=1827593536 node_paths=PackedStringArray("world")]
 script = ExtResource("9_mcs8y")
 enemy_scene = ExtResource("4_skn3q")
 spawn_ahead_z = 195.0
 rest_time = 10.0
+world = NodePath("../ObjectsLayer")
 metadata/_custom_type_script = "uid://cqqqpa6yalyl0"
 
 [node name="PlayerController" type="Node" parent="." unique_id=634795422]

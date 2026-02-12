@@ -10,7 +10,7 @@ class_name EncounterManager
 @export var rest_time: float = 1.0
 
 @onready var rig: CameraRig = get_tree().get_first_node_in_group("camera_rig") as CameraRig
-@onready var world := $"../World"
+@export var world: Node
 
 
 var _time_in_chunk: float = 0.0

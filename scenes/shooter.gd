@@ -8,7 +8,7 @@ class_name Shooter
 @export var muzzle_y_offset: float = -0.5 # tiny lift if you want
 
 @onready var rig: CameraRig = get_tree().get_first_node_in_group("camera_rig") as CameraRig
-@onready var world := $"../World"
+@export var world: Node
 
 @onready var player: Player = get_tree().get_first_node_in_group("player") as Player
 
