@@ -1,6 +1,9 @@
 extends Node2D
 
-@export var horizon_ratio := 0.35
+@export var horizon_ratio := 0.75
+var _horizon_ratio := horizon_ratio
+var _horizon_ratio_target := horizon_ratio
+
 @export var focal := 320.0
 
 @export var near_z := 6.0
@@ -36,17 +39,29 @@ var cam_z := 0.0
 
 var rig: CameraRig
 
+var player: Player
+
 func _ready() -> void:
   rig = get_tree().get_first_node_in_group("camera_rig") as CameraRig
+  player = get_tree().get_first_node_in_group("player") as Player
 
 func _process(delta: float) -> void:
   cam_z += speed * delta
   # cam_z = rig.camera_world_position.z
   queue_redraw()
 
+  # Get screen position of player wrt viewport height
+  var vp := get_viewport_rect().size
+  var horizon_r := player.position.y / vp.y
+
+  # Move horizon height up if player is low on the screen (e.g. falling), 
+  # down if high (e.g. jumping).  
+  _horizon_ratio_target = horizon_ratio + (horizon_r - horizon_ratio) * 0.5
+  _horizon_ratio = lerp(_horizon_ratio, _horizon_ratio_target, 0.1)
+
 func _draw() -> void:
   var vp := get_viewport_rect().size
-  var horizon_y := vp.y * horizon_ratio
+  var horizon_y := vp.y * _horizon_ratio
   var cx := vp.x * 0.5
 
   # Optional sky fill
