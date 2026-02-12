@@ -40,6 +40,8 @@ enum MovePattern {STATIC, DRIFT, SINE_STRAFE, DIVE_AT_PLAYER, SWOOP, ORBIT}
 @export var orbit_radius: float = 6.0
 @export var orbit_speed: float = 1.5
 
+@onready var sprite := %Sprite2D
+
 var _fire_t: float = 0.0
 var _age: float = 0.0
 var _spawn_pos: Vector3
@@ -146,3 +148,8 @@ func take_hit(dmg: int) -> void:
   hp -= dmg
   if hp <= 0:
     queue_free()
+
+  # Flash white on hit
+  if sprite != null:
+    sprite.modulate = Color("ff0000")
+    get_tree().create_timer(0.1).timeout.connect(func(): sprite.modulate = Color(1, 1, 1, 1))

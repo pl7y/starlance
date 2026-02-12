@@ -1,0 +1,6 @@
+[gd_scene format=3 uid="uid://bg0kp05kamupk"]
+
+[ext_resource type="Script" uid="uid://b5iuh3e27u3c" path="res://scenes/ground_road.gd" id="1_tm6nk"]
+
+[node name="GroundRoad" type="Node2D" unique_id=1216453340]
+script = ExtResource("1_tm6nk")

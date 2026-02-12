@@ -9,36 +9,50 @@
 [ext_resource type="PackedScene" uid="uid://cbk5xftc2r2mk" path="res://scenes/bullet.tscn" id="7_qu4b3"]
 [ext_resource type="Script" uid="uid://clwdi74exmma7" path="res://scenes/player_controllr.gd" id="9_iniog"]
 [ext_resource type="Script" uid="uid://cqqqpa6yalyl0" path="res://scenes/encounter_manager.gd" id="9_mcs8y"]
+[ext_resource type="PackedScene" uid="uid://bg0kp05kamupk" path="res://scenes/ground_road.tscn" id="10_iniog"]
 
 [node name="GameplayScreen" type="Node2D" unique_id=158736197]
 
 [node name="CameraRig" parent="." unique_id=2025045557 groups=["camera_rig"] instance=ExtResource("1_nl8x0")]
 
 [node name="Ground" parent="." unique_id=444447118 instance=ExtResource("2_gej26")]
+visible = false
 
 [node name="World" type="Node" parent="." unique_id=242347781]
 
-[node name="Player" type="CanvasLayer" parent="." unique_id=1463780327]
+[node name="WorldLayer" type="CanvasLayer" parent="." unique_id=1382012560]
+visible = false
 
-[node name="Node2D" parent="Player" unique_id=1077760697 groups=["player"] instance=ExtResource("5_157wf")]
+[node name="GroundRoad" parent="WorldLayer" unique_id=1216453340 instance=ExtResource("10_iniog")]
+horizon_ratio = 0.65
+speed = 5.0
+tile_x = 56.0
+tile_z = 1.0
+tile_outline_alpha = 0.0
+camera_height = 0.7
+
+[node name="CanvasLayer" type="CanvasLayer" parent="." unique_id=2128261619]
+
+[node name="Enemy100" parent="CanvasLayer" unique_id=625918716 instance=ExtResource("4_skn3q")]
+world_pos = Vector3(-100, 0, 500)
+
+[node name="Enemy200" parent="CanvasLayer" unique_id=843687141 instance=ExtResource("4_skn3q")]
+world_pos = Vector3(0, 0, 1000)
+
+[node name="Enemy300" parent="CanvasLayer" unique_id=891730611 instance=ExtResource("4_skn3q")]
+world_pos = Vector3(100, 0, 1500)
+
+[node name="Enemy301" parent="CanvasLayer" unique_id=816519242 instance=ExtResource("4_skn3q")]
+world_pos = Vector3(300, 0, 1500)
+
+[node name="PlayerLayer" type="CanvasLayer" parent="." unique_id=1463780327]
+layer = 2
+
+[node name="Player" parent="PlayerLayer" unique_id=1077760697 groups=["player"] instance=ExtResource("5_157wf")]
 modulate = Color(1, 1, 1, 0.42745098)
-hp = null
-invuln_seconds = null
-hurt_radius_px = null
 player_z_offset = 128.0
-lock_scale = null
-locked_scale = null
-flash_speed = null
-ground_y = null
-grounded_threshold = null
-gravity = null
-lift_speed = null
-max_altitude = null
-world_pos = null
-min_scale = null
-max_scale = null
 
-[node name="PlayerLabel" type="Label" parent="Player/Node2D" unique_id=1240337173]
+[node name="PlayerLabel" type="Label" parent="PlayerLayer/Player" unique_id=1240337173]
 unique_name_in_owner = true
 offset_right = 40.0
 offset_bottom = 23.0
@@ -55,6 +69,7 @@ metadata/_custom_type_script = "uid://4v63tpfjjf7a"
 
 [node name="EncounterManager" type="Node" parent="." unique_id=1827593536]
 script = ExtResource("9_mcs8y")
+disabled = true
 enemy_scene = ExtResource("4_skn3q")
 metadata/_custom_type_script = "uid://cqqqpa6yalyl0"
 

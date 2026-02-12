@@ -8,7 +8,7 @@ func _process(_delta: float) -> void:
   var enemies := get_tree().get_nodes_in_group("enemies")
 
   var checks := 0
-  for b in bullets:
+  for b: Bullet in bullets:
     if not is_instance_valid(b) or not b.visible:
       continue
     if not (b is Bullet):
@@ -17,7 +17,7 @@ func _process(_delta: float) -> void:
     var bpos: Vector2 = b.position
     var br: float = b.hit_radius_px * b.scale.x
 
-    for e in enemies:
+    for e: Enemy in enemies:
       checks += 1
       if checks > max_checks_per_frame:
         return
@@ -27,13 +27,22 @@ func _process(_delta: float) -> void:
       if not (e is Enemy):
         continue
 
-      var epos: Vector2 = e.position
-      var er: float = e.hit_radius_px * e.scale.x
+      # var epos: Vector2 = e.position
+      # var er: float = e.hit_radius_px * e.scale.x
+ 
+      # if bpos.distance_to(epos) <= (br + er):
+      #   (e as Enemy).take_hit((b as Bullet).damage)
+      #   b.queue_free()
+      #   break
 
-      if bpos.distance_to(epos) <= (br + er):
-        (e as Enemy).take_hit((b as Bullet).damage)
+      var bullet_hit_radius_px: float = b.hit_radius_px
+      var player_hurt_radius_px: float = e.hit_radius_px
+      var hit = b.world_pos.distance_to(e.world_pos) < bullet_hit_radius_px + player_hurt_radius_px
+      if hit:
+        e.take_hit((b as Bullet).damage)
         b.queue_free()
         break
+
 
   # Enemy bullets -> Player
   var players := get_tree().get_nodes_in_group("player")
@@ -50,11 +59,20 @@ func _process(_delta: float) -> void:
     if not (eb is EnemyBullet):
       continue
 
-    var bpos: Vector2 = eb.position
-    var br: float = (eb as EnemyBullet).hit_radius_px * eb.scale.x
-    var pr: float = player.hurt_radius_px
-
-    if bpos.distance_to(player.position) <= (br + pr):
+#    var bpos: Vector2 = eb.position
+#    var br: float = (eb as EnemyBullet).hit_radius_px * eb.scale.x
+#    var pr: float = player.hurt_radius_px
+#
+#    if bpos.distance_to(player.position) <= (br + pr):
+#      player.take_hit((eb as EnemyBullet).damage)
+#      eb.queue_free()
+#      break
+    
+    var enemy_bullet = eb as EnemyBullet
+    var bullet_hit_radius_px: float = (eb as EnemyBullet).hit_radius_px
+    var player_hurt_radius_px: float = player.hurt_radius_px
+    var hit = player.world_pos.distance_to(enemy_bullet.world_pos) < bullet_hit_radius_px + player_hurt_radius_px
+    if hit:
       player.take_hit((eb as EnemyBullet).damage)
       eb.queue_free()
       break

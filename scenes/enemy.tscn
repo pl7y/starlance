@@ -2,7 +2,7 @@
 
 [ext_resource type="Script" uid="uid://bxboq3da63h70" path="res://scenes/enemy.gd" id="1_md0e3"]
 [ext_resource type="PackedScene" uid="uid://br8xdfa088ssa" path="res://scenes/enemy_bullet.tscn" id="2_4ra3w"]
-[ext_resource type="Texture2D" uid="uid://cupq3ytok6bx6" path="res://scenes/enemy.png" id="2_md0e3"]
+[ext_resource type="Texture2D" uid="uid://dt3o64y8e8ry" path="res://assets/sh_player2.png" id="3_4ra3w"]
 
 [node name="Enemy" type="Node2D" unique_id=625918716 groups=["enemies"]]
 script = ExtResource("1_md0e3")
@@ -10,4 +10,5 @@ bullet_scene = ExtResource("2_4ra3w")
 max_scale = 16.0
 
 [node name="Sprite2D" type="Sprite2D" parent="." unique_id=1333454786]
-texture = ExtResource("2_md0e3")
+unique_name_in_owner = true
+texture = ExtResource("3_4ra3w")
