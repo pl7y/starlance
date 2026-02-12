@@ -157,10 +157,8 @@ func take_hit(dmg: int) -> void:
     get_parent().add_child(explosion)
     queue_free()
   else:
-    prints("Enemy hit! HP remaining: %d" % hp)
     add_child(explosion)
     
-
 func _flash_white() -> void:
   # Flash white on hit
   if sprite != null:

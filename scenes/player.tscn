@@ -2,6 +2,8 @@
 
 [ext_resource type="Script" uid="uid://b716w5y0cpxg7" path="res://scenes/player.gd" id="1_ywjxs"]
 [ext_resource type="Texture2D" uid="uid://mvtm7wt0w2w6" path="res://assets/sh_player.png" id="2_7x7gm"]
+[ext_resource type="Script" uid="uid://kpbt6n1fjt4" path="res://scenes/shooter.component.gd" id="3_dqkch"]
+[ext_resource type="PackedScene" uid="uid://cbk5xftc2r2mk" path="res://scenes/bullet.tscn" id="4_qlg0r"]
 
 [node name="Player" type="Node2D" unique_id=1077760697]
 script = ExtResource("1_ywjxs")
@@ -10,3 +12,10 @@ script = ExtResource("1_ywjxs")
 unique_name_in_owner = true
 scale = Vector2(0.5, 0.5)
 texture = ExtResource("2_7x7gm")
+
+[node name="Shooter" type="Node" parent="." unique_id=1545092926 node_paths=PackedStringArray("world")]
+script = ExtResource("3_dqkch")
+bullet_scene = ExtResource("4_qlg0r")
+fire_rate = 5.0
+world = NodePath("")
+metadata/_custom_type_script = "uid://kpbt6n1fjt4"

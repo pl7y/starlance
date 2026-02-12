@@ -1,11 +1,10 @@
 extends Node
-class_name Shooter
+class_name ShooterComponent
 
 @export var bullet_scene: PackedScene
 @export var fire_rate: float = 12.0 # bullets/sec
 @export var muzzle_ahead_z: float = 6.0 # spawn a bit in front
-# ???
-@export var muzzle_y_offset: float = -0.5 # tiny lift if you want
+@export var muzzle_y_offset: float = -0.5 # tiny lift
 
 @onready var rig: CameraRig = get_tree().get_first_node_in_group("camera_rig") as CameraRig
 @export var world: Node
@@ -26,7 +25,8 @@ func _process(delta: float) -> void:
 
 func _fire() -> void:
   var b := bullet_scene.instantiate() as Node
-  world.add_child(b)
+
+  owner.get_parent().add_child(b)
 
   if player:
     var spawn := player.world_pos
