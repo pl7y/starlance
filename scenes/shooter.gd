@@ -33,5 +33,9 @@ func _fire() -> void:
     spawn.z += muzzle_ahead_z
     b.world_pos = spawn
 
+    # Get player offset from viewport center
+    var horizontal_offset: float = player.world_pos.x / rig.focal
+    b.velocity_direction = Vector3(horizontal_offset, 0, 1).normalized()
+
     # Group for collision system
     b.add_to_group("bullets")

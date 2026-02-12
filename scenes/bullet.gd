@@ -6,11 +6,13 @@ class_name Bullet
 @export var damage: int = 1
 @export var hit_radius_px: float = 6.0 # collision radius in screen pixels
 
+var velocity_direction: Vector3 = Vector3.ZERO
+
 var _t: float = 0.0
 
 func _process(delta: float) -> void:
-  # Move forward in world space.
-  world_pos.z += bullet_speed_z * delta
+  # Move forward in world space along velocity direction
+  world_pos += velocity_direction * bullet_speed_z * delta
 
   _t += delta
   if _t >= life_seconds:

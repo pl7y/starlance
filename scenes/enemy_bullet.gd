@@ -7,6 +7,7 @@ class_name EnemyBullet
 @export var hit_radius_px: float = 10.0
 
 var vel: Vector3 = Vector3.ZERO
+var vel_direction: Vector3 = Vector3.ZERO
 var _t: float = 0.0
 
 func _ready() -> void:
@@ -14,8 +15,8 @@ func _ready() -> void:
   add_to_group("enemy_bullets")
 
 func _process(delta: float) -> void:
-  # Move in world space
-  world_pos += vel * delta
+  # Move in world space along the velocity direction
+  world_pos += vel_direction * speed * delta
 
   _t += delta
   if _t >= life_seconds:

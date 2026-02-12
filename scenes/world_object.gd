@@ -8,7 +8,13 @@
 extends Node2D
 class_name WorldObject
 
-@export var world_pos: Vector3 = Vector3.ZERO
+@export var world_pos: Vector3 = Vector3.ZERO:
+  set(value):
+    world_pos = value
+    _update()
+  get:
+    return world_pos
+
 @export var min_scale: float = 0.02
 @export var max_scale: float = 6.0
 
@@ -19,6 +25,9 @@ func _ready() -> void:
     push_error("CameraRig not found. Did you add it to group 'camera_rig'?")
 
 func _process(_delta: float) -> void:
+  _update()
+
+func _update() -> void:
   if rig == null:
     return
 

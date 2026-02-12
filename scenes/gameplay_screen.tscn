@@ -34,16 +34,16 @@ camera_height = 0.7
 [node name="CanvasLayer" type="CanvasLayer" parent="." unique_id=2128261619]
 
 [node name="Enemy100" parent="CanvasLayer" unique_id=625918716 instance=ExtResource("4_skn3q")]
-world_pos = Vector3(-100, 0, 500)
+world_pos = Vector3(-100, 0, 100)
 
 [node name="Enemy200" parent="CanvasLayer" unique_id=843687141 instance=ExtResource("4_skn3q")]
-world_pos = Vector3(0, 0, 1000)
+world_pos = Vector3(0, 0, 200)
 
 [node name="Enemy300" parent="CanvasLayer" unique_id=891730611 instance=ExtResource("4_skn3q")]
-world_pos = Vector3(100, 0, 1500)
+world_pos = Vector3(100, 0, 300)
 
 [node name="Enemy301" parent="CanvasLayer" unique_id=816519242 instance=ExtResource("4_skn3q")]
-world_pos = Vector3(300, 0, 1500)
+world_pos = Vector3(300, 0, 300)
 
 [node name="PlayerLayer" type="CanvasLayer" parent="." unique_id=1463780327]
 layer = 2
