@@ -7,6 +7,7 @@
 
 [node name="Enemy" type="Node2D" unique_id=625918716 groups=["enemies"]]
 script = ExtResource("1_md0e3")
+hit_radius_px = 10.0
 bullet_scene = ExtResource("2_4ra3w")
 explosion_scene = ExtResource("3_5uy6h")
 max_scale = 16.0
