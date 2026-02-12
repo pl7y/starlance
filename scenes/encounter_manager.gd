@@ -4,12 +4,14 @@ class_name EncounterManager
 @export var disabled: bool = false
 @export var enemy_scene: PackedScene
 @export var spawn_ahead_z: float = 95.0
+@export var height_over_horizon: float = -30.0
 
 # How long to rest between chunks
 @export var rest_time: float = 1.0
 
 @onready var rig: CameraRig = get_tree().get_first_node_in_group("camera_rig") as CameraRig
 @onready var world := $"../World"
+
 
 var _time_in_chunk: float = 0.0
 var _state: String = "idle" # "playing", "rest"
@@ -141,7 +143,7 @@ func _chunk_swarm() -> Array:
       var x := start_x + c * spacing_x
       var y := start_y + r * spacing_y
       evs.append(SpawnEvent.new(
-        t, x, y, 0.0,
+        t, x, y + height_over_horizon, 0.0,
         1, 999.0, 0.0,
         Enemy.MovePattern.SINE_STRAFE
       ))
@@ -159,7 +161,7 @@ func _chunk_lane_wall() -> Array:
       continue
     var x: float = lerp(-half_w, half_w, float(i) / float(lanes - 1))
     evs.append(SpawnEvent.new(
-      t0, x, randf_range(-2.0, 2.0), 0.0,
+      t0, x, randf_range(-2.0, 2.0) + height_over_horizon, 0.0,
       2, 1.5, 85.0,
       Enemy.MovePattern.SWOOP
     ))
@@ -173,7 +175,7 @@ func _chunk_snipers() -> Array:
     var x := randf_range(-12.0, 12.0)
     var y := randf_range(-6.0, 6.0)
     evs.append(SpawnEvent.new(
-      t, x, y, k * 10.0,
+      t, x, y + height_over_horizon, k * 10.0,
       4, 1.9, 130.0,
       Enemy.MovePattern.DRIFT
     ))
@@ -184,8 +186,8 @@ func _chunk_mini_boss_intro() -> Array:
   # Escorts first
   for i in range(4):
     var t := 0.3 + i * 0.25
-    evs.append(SpawnEvent.new(t, -10.0 + i * 6.5, randf_range(-4.0, 4.0), 0.0, 2, 1.6, 85.0))
+    evs.append(SpawnEvent.new(t, -10.0 + i * 6.5, randf_range(-4.0, 4.0) + height_over_horizon, 0.0, 2, 1.6, 85.0))
 
   # “Boss” (for now just a tanky enemy)
-  evs.append(SpawnEvent.new(1.4, 0.0, 0.0, 0.0, 18, 0.9, 95.0))
+  evs.append(SpawnEvent.new(1.4, 0.0, 0.0 + height_over_horizon, 0.0, 18, 0.9, 95.0))
   return evs

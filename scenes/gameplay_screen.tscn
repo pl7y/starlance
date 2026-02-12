@@ -69,8 +69,9 @@ metadata/_custom_type_script = "uid://4v63tpfjjf7a"
 
 [node name="EncounterManager" type="Node" parent="." unique_id=1827593536]
 script = ExtResource("9_mcs8y")
-disabled = true
 enemy_scene = ExtResource("4_skn3q")
+spawn_ahead_z = 195.0
+rest_time = 10.0
 metadata/_custom_type_script = "uid://cqqqpa6yalyl0"
 
 [node name="PlayerController" type="Node" parent="." unique_id=634795422]
