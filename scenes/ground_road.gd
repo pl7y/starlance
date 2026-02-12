@@ -9,8 +9,6 @@ var _horizon_ratio_target := horizon_ratio
 @export var near_z := 6.0
 @export var far_z := 220.0
 
-@export var speed := 35.0
-
 # Curve (OutRun-ish optional bend)
 @export var curve_strength := 0.0
 @export var curve_freq := 0.12
@@ -46,6 +44,7 @@ func _ready() -> void:
   player = get_tree().get_first_node_in_group("player") as Player
 
 func _process(delta: float) -> void:
+  var speed = player.speed / 50.0
   cam_z += speed * delta
   # cam_z = rig.camera_world_position.z
   queue_redraw()
