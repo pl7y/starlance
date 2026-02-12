@@ -22,7 +22,7 @@ visible = false
 
 [node name="GroundRoad" parent="WorldLayer" unique_id=1216453340 instance=ExtResource("10_iniog")]
 horizon_ratio = 0.65
-speed = 5.0
+speed = 1.0
 tile_x = 56.0
 tile_z = 1.0
 tile_outline_alpha = 0.0
@@ -34,6 +34,8 @@ layer = 2
 [node name="Player" parent="ObjectsLayer" unique_id=1077760697 groups=["player"] instance=ExtResource("5_157wf")]
 modulate = Color(1, 1, 1, 0.42745098)
 player_z_offset = 128.0
+ground_y = 20.0
+speed = 20.0
 
 [node name="PlayerLabel" type="Label" parent="ObjectsLayer/Player" unique_id=1240337173]
 unique_name_in_owner = true

@@ -29,6 +29,7 @@ var invuln_t: float = 0.0
 @export var min_altitude: float = 3.0 # minimum height when running
 @export var grounded_threshold: float = min_altitude + 1.0 # how close to ground counts as grounded
 
+@export var speed = 1.0
 
 func _ready() -> void:
   super._ready()
@@ -40,6 +41,10 @@ func _process(delta: float) -> void:
 
   # Keep player at a constant depth in front of camera
   world_pos.z = rig.camera_world_position.z + player_z_offset
+
+
+  world_pos.z += speed * delta
+
 
   # Ground at y = 0. Higher altitude = NEGATIVE y.
   var up := Input.get_action_strength("move_up")

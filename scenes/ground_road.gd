@@ -39,9 +39,9 @@ var rig: CameraRig
 func _ready() -> void:
   rig = get_tree().get_first_node_in_group("camera_rig") as CameraRig
 
-func _process(_delta: float) -> void:
-  # cam_z += speed * delta
-  cam_z = rig.camera_world_position.z
+func _process(delta: float) -> void:
+  cam_z += speed * delta
+  # cam_z = rig.camera_world_position.z
   queue_redraw()
 
 func _draw() -> void:
