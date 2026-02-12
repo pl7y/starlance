@@ -37,7 +37,7 @@ func _update() -> void:
     return
 
   visible = true
-  position = p.screen
+  global_position = p.screen
 
   var s: float = clamp(p.scale, min_scale, max_scale)
   scale = Vector2(s, s)

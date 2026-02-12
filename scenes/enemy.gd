@@ -149,13 +149,17 @@ func _fire() -> void:
 func take_hit(dmg: int) -> void:
   _flash_white()
 
-  var explosion = explosion_scene.instantiate()
-  get_parent().add_child(explosion)
+  var explosion: Explosion = explosion_scene.instantiate()
   explosion.world_pos = world_pos
 
   hp -= dmg
   if hp <= 0:
+    get_parent().add_child(explosion)
     queue_free()
+  else:
+    prints("Enemy hit! HP remaining: %d" % hp)
+    add_child(explosion)
+    
 
 func _flash_white() -> void:
   # Flash white on hit

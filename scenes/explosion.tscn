@@ -55,6 +55,7 @@ _data = {
 }
 
 [node name="Explosion" type="Node2D" unique_id=1906372644]
+top_level = true
 script = ExtResource("1_nfeox")
 
 [node name="Sprite2D" type="Sprite2D" parent="." unique_id=335325533]
