@@ -9,9 +9,8 @@ var _horizon_ratio_target := horizon_ratio
 @export var near_z := 6.0
 @export var far_z := 220.0
 
-# Curve (OutRun-ish optional bend)
-@export var curve_strength := 0.0
-@export var curve_freq := 0.12
+# Vanishing point position (0.0 = left edge, 0.5 = center, 1.0 = right edge)
+@export_range(0.0, 1.0) var vanishing_point := 0.5
 
 # ROAD placement in world units (still used for optional edge lines)
 @export var road_half_width_world := 10.0
@@ -44,6 +43,15 @@ func _ready() -> void:
   player = get_tree().get_first_node_in_group("player") as Player
 
 func _process(delta: float) -> void:
+  # Update vanishing_point to be opposite of player position 
+  # (e.g. if player is on left side of screen, vanishing point 
+  # moves to right) damped for smoothness and reduced by some
+  # factor. Horizontal movement is allowed to one third from 
+  # center in either direction before vanishing point hits the edge.
+  var target_vp := 0.5 - (player.position.x / get_viewport_rect().size.x - 0.5) * 0.33
+  vanishing_point = lerp(vanishing_point, target_vp, 0.01)
+
+
   var speed = player.speed / 50.0
   cam_z += speed * delta
   # cam_z = rig.camera_world_position.z
@@ -56,12 +64,12 @@ func _process(delta: float) -> void:
   # Move horizon height up if player is low on the screen (e.g. falling), 
   # down if high (e.g. jumping).  
   _horizon_ratio_target = horizon_ratio + (horizon_r - horizon_ratio) * 0.5
-  _horizon_ratio = lerp(_horizon_ratio, _horizon_ratio_target, 0.1)
+  _horizon_ratio = lerp(_horizon_ratio, _horizon_ratio_target, 0.01)
 
 func _draw() -> void:
   var vp := get_viewport_rect().size
   var horizon_y := vp.y * _horizon_ratio
-  var cx := vp.x * 0.5
+  var cx := vp.x * vanishing_point
 
   # Optional sky fill
   draw_rect(Rect2(Vector2.ZERO, Vector2(vp.x, horizon_y + 1.0)), sky_color, true)
@@ -74,14 +82,7 @@ func _draw() -> void:
     # Perspective: row -> distance
 
     var z := (camera_height * focal) / dy
-
-
     var scale_ := focal / z
-
-    # Curve offset in pixels (falls off with distance)
-    var curve := sin((cam_z + z) * curve_freq) * curve_strength
-    var x_shift_px := curve * 220.0 * (1.0 / (1.0 + z * 0.02))
-    var center_x := cx + x_shift_px
 
     # World Z position for tiling (scrolling)
     var wz := cam_z + z
@@ -91,8 +92,8 @@ func _draw() -> void:
     var fog := pow(fog_t, fog_power) * fog_strength
 
     # Convert screen edges into world X range visible on this scanline
-    var wx0 := (0.0 - center_x) / scale_
-    var wx1 := (vp.x - center_x) / scale_
+    var wx0 := (0.0 - cx) / scale_
+    var wx1 := (vp.x - cx) / scale_
     if wx0 > wx1:
       var tmp := wx0
       wx0 = wx1
@@ -111,8 +112,8 @@ func _draw() -> void:
       var wx_b := float(ix + 1) * tile_x
 
       # Convert back to screen
-      var sx_a := center_x + wx_a * scale_
-      var sx_b := center_x + wx_b * scale_
+      var sx_a := cx + wx_a * scale_
+      var sx_b := cx + wx_b * scale_
 
       # Clamp to viewport
       var x_a := clampf(minf(sx_a, sx_b), 0.0, vp.x)
@@ -139,8 +140,8 @@ func _draw() -> void:
 
     # Optional: draw “road edges” over the tiles (OutRun flavor)
     var road_half_px := road_half_width_world * scale_
-    var x1 := center_x - road_half_px
-    var x2 := center_x + road_half_px
+    var x1 := cx - road_half_px
+    var x2 := cx + road_half_px
     var edge := Color(1, 1, 1, 0.10).lerp(sky_color, fog)
     draw_line(Vector2(clampf(x1, 0, vp.x), y), Vector2(clampf(x1, 0, vp.x), y), edge, 2.0)
     draw_line(Vector2(clampf(x2, 0, vp.x), y), Vector2(clampf(x2, 0, vp.x), y), edge, 2.0)
