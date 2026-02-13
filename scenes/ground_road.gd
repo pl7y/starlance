@@ -32,6 +32,9 @@ var _horizon_ratio_target := horizon_ratio
 
 @export var camera_height := 12.0
 
+# Lerp factors for camera-driven ground perspective (x: vanishing point, y: horizon)
+@export var camera_ground_lerp := Vector2(0.01, 0.01)
+
 var cam_z := 0.0
 
 var rig: CameraRig
@@ -49,7 +52,7 @@ func _process(delta: float) -> void:
   # factor. Horizontal movement is allowed to one third from 
   # center in either direction before vanishing point hits the edge.
   var target_vp := 0.5 - (player.position.x / get_viewport_rect().size.x - 0.5) * 0.33
-  vanishing_point = lerp(vanishing_point, target_vp, 0.01)
+  vanishing_point = lerp(vanishing_point, target_vp, camera_ground_lerp.x)
 
 
   var speed = player.speed / 50.0
@@ -64,7 +67,7 @@ func _process(delta: float) -> void:
   # Move horizon height up if player is low on the screen (e.g. falling), 
   # down if high (e.g. jumping).  
   _horizon_ratio_target = horizon_ratio + (horizon_r - horizon_ratio) * 0.5
-  _horizon_ratio = lerp(_horizon_ratio, _horizon_ratio_target, 0.01)
+  _horizon_ratio = lerp(_horizon_ratio, _horizon_ratio_target, camera_ground_lerp.y)
 
 func _draw() -> void:
   var vp := get_viewport_rect().size
