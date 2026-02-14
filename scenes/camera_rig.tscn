@@ -2,7 +2,7 @@
 
 [ext_resource type="Script" uid="uid://3cabw80icv4s" path="res://scenes/camera_rig.gd" id="1_txy7i"]
 
-[node name="CameraRig" type="Node2D" unique_id=2025045557]
+[node name="CameraRig" type="Node2D" unique_id=2025045557 groups=["camera_rig"]]
 script = ExtResource("1_txy7i")
 
 [node name="Label" type="Label" parent="." unique_id=662905781]

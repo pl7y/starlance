@@ -25,8 +25,8 @@ func _process(delta: float) -> void:
 
   super._process(delta)
 
-  # Despawn once it passes the camera (i.e., gets too close/behind)
+  # Despawn once it passes behind the camera (negative z is ahead, positive is behind)
   if rig != null:
     var rel_z := world_pos.z - rig.camera_world_position.z
-    if rel_z < 0.8:
+    if rel_z > 0.8:
       queue_free()

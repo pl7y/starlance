@@ -24,9 +24,9 @@ func _process(delta: float) -> void:
   var e := enemy_scene.instantiate()
   world.add_child(e)
 
-  # spawn in world space ahead of camera
+  # spawn in world space ahead of camera (negative z is ahead)
   var x := randf_range(-spawn_x_range, spawn_x_range)
   var y := randf_range(-spawn_y_range, spawn_y_range)
-  var z := rig.camera_world_position.z + spawn_ahead_z + randf_range(0.0, 30.0)
+  var z := rig.camera_world_position.z - spawn_ahead_z - randf_range(0.0, 30.0)
 
   e.world_pos = Vector3(x, y, z)

@@ -12,7 +12,7 @@ shadow_sprite = NodePath("Shadow")
 
 [node name="Sprite2D" type="Sprite2D" parent="." unique_id=1836268859]
 unique_name_in_owner = true
-position = Vector2(0, -13)
+position = Vector2(0, -15)
 scale = Vector2(0.5, 0.5)
 texture = ExtResource("2_7x7gm")
 
@@ -27,6 +27,7 @@ modulate = Color(1, 1, 1, 0.5411765)
 position = Vector2(0, 3)
 
 [node name="ShadowSprite" type="Sprite2D" parent="Shadow" unique_id=1883007060]
+position = Vector2(0, -3)
 scale = Vector2(0.5, 0.375)
 texture = ExtResource("5_qlg0r")
 

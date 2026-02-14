@@ -1,153 +1,115 @@
+#   _________ __               .__                              
+#  /   _____//  |______ _______|  | _____    ____   ____  ____  
+#  \_____  \\   __\__  \\_  __ \  | \__  \  /    \_/ ___\/ __ \ 
+#  /        \|  |  / __ \|  | \/  |__/ __ \|   |  \  \__\  ___/ 
+# /_______  /|__| (____  /__|  |____(____  /___|  /\___  >___  >
+#         \/           \/                \/     \/     \/    \/ 
+# (c) 2026 Pl7y.com
+# Space Harrier-style pseudo-3D ground plane renderer
+
 extends Node2D
+class_name GroundRoad
 
-@export var horizon_ratio := 0.75
-var _horizon_ratio := horizon_ratio
-var _horizon_ratio_target := horizon_ratio
+# Ground rendering parameters
 
-@export var focal := 320.0
+@export var z_bias: float = 1.0 # Prevents division by zero and adjusts near distance
+@export var tile_size_x: float = 50.0 # Width of ground tiles in world units
+@export var tile_size_z: float = 50.0 # Depth of ground tiles in world units
 
-@export var near_z := 6.0
-@export var far_z := 220.0
+# Visual styling
+@export var color_1: Color = Color(0.2, 0.6, 0.2) # Green checker
+@export var color_2: Color = Color(0.15, 0.5, 0.15) # Darker green
+@export var fog_color: Color = Color(0.4, 0.6, 0.8) # Sky/haze color
+@export var fog_start: float = 0.3 # Start fog at this ratio from horizon (0-1)
+@export var fog_end: float = 1.0 # Full fog at this ratio
 
-# Vanishing point position (0.0 = left edge, 0.5 = center, 1.0 = right edge)
-@export_range(0.0, 1.0) var vanishing_point := 0.5
+# Rendering optimization
+@export var scanline_step: int = 1 # Draw every Nth scanline (1=all, 2=half, etc.)
 
-# ROAD placement in world units (still used for optional edge lines)
-@export var road_half_width_world := 10.0
-@export var shoulder_world := 5.0
+# Cache
+var camera_rig: CameraRig
+var screen_width: int
+var screen_height: int
+var horizon_y: int
 
-# --- TILE PATTERN (this is the Space Harrier/OutRun banded squares/rectangles) ---
-@export var tile_x := 8.0 # tile width in WORLD units
-@export var tile_z := 6.0 # tile depth in WORLD units (set != tile_x for rectangles)
-@export var tile_color_a := Color(0.07, 0.22, 0.10, 1.0)
-@export var tile_color_b := Color(0.05, 0.18, 0.09, 1.0)
-
-# optional outline lines between tiles
-@export var tile_outline_alpha := 0.12
-
-# Fog toward horizon
-@export var sky_color := Color(0.55, 0.35, 0.75, 1.0)
-@export var fog_strength := 1.0
-@export var fog_power := 1.6
-
-@export var camera_height := 12.0
-
-# Lerp factors for camera-driven ground perspective (x: vanishing point, y: horizon)
-@export var camera_ground_lerp := Vector2(0.01, 0.01)
-
-var cam_z := 0.0
-
-var rig: CameraRig
-
-var player: Player
 
 func _ready() -> void:
-  rig = get_tree().get_first_node_in_group("camera_rig") as CameraRig
-  player = get_tree().get_first_node_in_group("player") as Player
-
-func _process(delta: float) -> void:
-  # Update vanishing_point to be opposite of player position 
-  # (e.g. if player is on left side of screen, vanishing point 
-  # moves to right) damped for smoothness and reduced by some
-  # factor. Horizontal movement is allowed to one third from 
-  # center in either direction before vanishing point hits the edge.
-  var target_vp := 0.5 - (player.position.x / get_viewport_rect().size.x - 0.5) * 0.33
-  vanishing_point = lerp(vanishing_point, target_vp, camera_ground_lerp.x)
+	# Find camera rig in scene tree
+	camera_rig = get_tree().get_first_node_in_group("camera_rig") as CameraRig
+	if camera_rig == null:
+		push_error("GroundRoad: No CameraRig found in 'camera_rig' group!")
+	_update_screen_params()
 
 
-  var speed = player.speed / 50.0
-  cam_z += speed * delta
-  # cam_z = rig.camera_world_position.z
+func _process(_delta: float) -> void:
+	queue_redraw() # Request redraw every frame for animation
 
-  # Get screen position of player wrt viewport height
-  var vp := get_viewport_rect().size
-  var horizon_r := player.position.y / vp.y
 
-  # Move horizon height up if player is low on the screen (e.g. falling), 
-  # down if high (e.g. jumping).  
-  _horizon_ratio_target = horizon_ratio + (horizon_r - horizon_ratio) * 0.5
-  _horizon_ratio = _horizon_ratio_target # lerp(_horizon_ratio, _horizon_ratio_target, camera_ground_lerp.y)
+func _update_screen_params() -> void:
+	var vp := get_viewport().get_visible_rect().size
+	screen_width = int(vp.x)
+	screen_height = int(vp.y)
+	if camera_rig:
+		horizon_y = int(camera_rig.horizon_y)
 
-  camera_height = 1 - horizon_r
-
-  queue_redraw()
 
 func _draw() -> void:
-  var vp := get_viewport_rect().size
-  var horizon_y := vp.y * _horizon_ratio
-  var cx := vp.x * vanishing_point
-
-  # Optional sky fill
-  draw_rect(Rect2(Vector2.ZERO, Vector2(vp.x, horizon_y + 1.0)), sky_color, true)
-
-  for y in range(int(horizon_y), int(vp.y)):
-    var dy := float(y) - horizon_y
-    if dy < 1.0:
-      continue
-
-    # Perspective: row -> distance
-
-    var z := (camera_height * focal) / dy
-    var scale_ := focal / z
-
-    # World Z position for tiling (scrolling)
-    var wz := cam_z + z
-
-    # Fog factor (0 near -> 1 far)
-    var fog_t: float = clamp((z - near_z) / max(far_z - near_z, 0.001), 0.0, 1.0)
-    var fog := pow(fog_t, fog_power) * fog_strength
-
-    # Convert screen edges into world X range visible on this scanline
-    var wx0 := (0.0 - cx) / scale_
-    var wx1 := (vp.x - cx) / scale_
-    if wx0 > wx1:
-      var tmp := wx0
-      wx0 = wx1
-      wx1 = tmp
-
-    # Which tile row are we in? (constant for this scanline)
-    var iz := int(floor(wz / tile_z))
-
-    # Tile column range visible
-    var i0 := int(floor(wx0 / tile_x)) - 1
-    var i1 := int(floor(wx1 / tile_x)) + 1
-
-    # Draw the tiled ground across the whole width (or clamp to a “ground plane” width if you want)
-    for ix in range(i0, i1 + 1):
-      var wx_a := float(ix) * tile_x
-      var wx_b := float(ix + 1) * tile_x
-
-      # Convert back to screen
-      var sx_a := cx + wx_a * scale_
-      var sx_b := cx + wx_b * scale_
-
-      # Clamp to viewport
-      var x_a := clampf(minf(sx_a, sx_b), 0.0, vp.x)
-      var x_b := clampf(maxf(sx_a, sx_b), 0.0, vp.x)
-      if x_b <= x_a:
-        continue
-
-      # Checker parity (squares/rectangles)
-      var parity := (ix + iz) & 1
-      var base_col := tile_color_a if parity == 0 else tile_color_b
-
-      # Fog toward sky color
-      var col := base_col.lerp(sky_color, fog)
-
-      # Fill this scanline segment
-      draw_line(Vector2(x_a, y), Vector2(x_b, y), col, 1.0)
-
-      # Optional thin outline at tile boundary (helps “square” read)
-      if tile_outline_alpha > 0.0:
-        var edge_col := Color(1, 1, 1, tile_outline_alpha).lerp(sky_color, fog)
-        # draw boundary at the start of the tile
-        if x_a > 0.0 and x_a < vp.x:
-          draw_line(Vector2(x_a, y), Vector2(x_a, y), edge_col, 1.0)
-
-    # Optional: draw “road edges” over the tiles (OutRun flavor)
-    var road_half_px := road_half_width_world * scale_
-    var x1 := cx - road_half_px
-    var x2 := cx + road_half_px
-    var edge := Color(1, 1, 1, 0.10).lerp(sky_color, fog)
-    draw_line(Vector2(clampf(x1, 0, vp.x), y), Vector2(clampf(x1, 0, vp.x), y), edge, 2.0)
-    draw_line(Vector2(clampf(x2, 0, vp.x), y), Vector2(clampf(x2, 0, vp.x), y), edge, 2.0)
+	if camera_rig == null:
+		return
+		
+	_update_screen_params()
+	
+	var focal_len := camera_rig.focal
+	var cam_x := camera_rig.camera_world_position.x
+	var cam_y := camera_rig.camera_world_position.y
+	var cam_z := camera_rig.camera_world_position.z
+	var bank := camera_rig.bank
+	var bank_offset := bank * camera_rig.bank_pixels
+	
+	var half_width := screen_width * 0.5
+	
+	# Render scanlines from horizon to bottom of screen
+	for y in range(horizon_y + 1, screen_height, scanline_step):
+		# Compute distance from camera for this scanline
+		# The ground is at world Y=0, camera is at cam_y above it
+		# Uses same perspective calculation as camera rig projection
+		var scanline_offset := float(y - horizon_y)
+		var z_distance := (focal_len * cam_y) / (scanline_offset + z_bias)
+		
+		# Fog factor based on scanline proximity to horizon (0 = at horizon, 1 = bottom)
+		var fog_ratio: float = clamp((scanline_offset / (screen_height - horizon_y) - fog_start) / (fog_end - fog_start), 0.0, 1.0)
+		
+		# Draw horizontal line for this scanline
+		var prev_color: Color
+		var segment_start_x := 0
+		
+		for x in range(screen_width):
+			# Compute world X coordinate for this pixel
+			# Account for camera banking effect on vanishing point
+			var screen_x_offset := float(x) - half_width - bank_offset
+			var x_world := (screen_x_offset * z_distance) / focal_len + cam_x
+			
+			# Compute world Z coordinate (negative Z is forward in this system)
+			var z_world := cam_z - z_distance
+			
+			# Sample pattern using floor division for tile coordinates
+			var tile_x := int(floor(x_world / tile_size_x))
+			var tile_z := int(floor(z_world / tile_size_z))
+			
+			# Checkerboard pattern: alternate colors based on parity of tile sum
+			var tile_parity := (tile_x + tile_z) % 2
+			var base_color := color_1 if tile_parity == 0 else color_2
+			
+			# Apply fog
+			var final_color := base_color.lerp(fog_color, fog_ratio)
+			
+			# Batch horizontal segments of same color for performance
+			if x == 0:
+				prev_color = final_color
+				segment_start_x = 0
+			elif final_color != prev_color or x == screen_width - 1:
+				# Draw the segment
+				var segment_end_x := x if final_color != prev_color else x + 1
+				draw_line(Vector2(segment_start_x, y), Vector2(segment_end_x, y), prev_color, scanline_step)
+				prev_color = final_color
+				segment_start_x = x

@@ -16,12 +16,22 @@ shadow_sprite = NodePath("Shadow")
 
 [node name="Sprite2D" type="Sprite2D" parent="." unique_id=1333454786]
 unique_name_in_owner = true
+position = Vector2(0, -21.866665)
+scale = Vector2(2.7333336, 2.7333338)
 texture = ExtResource("2_md0e3")
 
-[node name="Shadow" type="Node2D" parent="." unique_id=1315612872]
+[node name="Label" type="Label" parent="." unique_id=943031402]
+unique_name_in_owner = true
+offset_right = 40.0
+offset_bottom = 23.0
+theme_override_font_sizes/font_size = 8
+text = "hello"
+
+[node name="Shadow" type="Node2D" parent="." unique_id=707858521]
+modulate = Color(1, 1, 1, 0.5411765)
 position = Vector2(0, 3)
 
-[node name="ShadowSprite" type="Sprite2D" parent="Shadow" unique_id=1115755616]
-position = Vector2(0, 8)
-scale = Vector2(0.25, 0.375)
+[node name="ShadowSprite" type="Sprite2D" parent="Shadow" unique_id=1021593529]
+position = Vector2(0, -3)
+scale = Vector2(0.5, 0.375)
 texture = ExtResource("5_c4w8v")

@@ -40,10 +40,10 @@ func _process(delta: float) -> void:
     return
 
   # Keep player at a constant depth in front of camera
-  world_pos.z = rig.camera_world_position.z + player_z_offset
+  world_pos.z = rig.camera_world_position.z - player_z_offset
 
 
-  world_pos.z += speed * delta
+  world_pos.z -= speed * delta
 
 
   # Ground at y = 0. Higher altitude = POSITIVE y.

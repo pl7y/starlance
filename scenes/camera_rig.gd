@@ -45,10 +45,13 @@ func _process(delta: float) -> void:
     camera_world_position.x = lerp(camera_world_position.x, player.world_pos.x * follow_strength, 1.0 - exp(-follow_smoothing * delta))
     camera_world_position.y = lerp(camera_world_position.y, player.world_pos.y * follow_strength, 1.0 - exp(-follow_smoothing * delta))
     
+  camera_world_position.x = 0.0
+  camera_world_position.y = 50.0
+
   # camera_world_position.x = player.world_pos.x
   # camera_world_position.y = player.world_pos.y
-  # camera_world_position.z += forward_speed * delta
-  camera_world_position.z = player.world_pos.z - player.player_z_offset
+  # camera_world_position.z -= forward_speed * delta
+  camera_world_position.z = player.world_pos.z + player.player_z_offset
   _update_screen_params()
 
 func _update_screen_params() -> void:
@@ -58,13 +61,15 @@ func _update_screen_params() -> void:
 
 func project(world_pos: Vector3) -> Projection2D:
   var rel := world_pos - camera_world_position
-  if rel.z <= 0.1:
+  # Negative z is ahead, so use -rel.z for distance
+  var depth := -rel.z
+  if depth <= 0.1:
     return Projection2D.new(false, Vector2.ZERO, 1.0, 0.0)
 
-  var scale := focal / rel.z
+  var scale := focal / depth
   # var sx := center.x + rel.x * scale
   # Apply camera banking: shift the horizontal center by bank amount for tilt effect
   var sx := (center.x + bank * bank_pixels) + rel.x * scale
 
   var sy := horizon_y - rel.y * scale
-  return Projection2D.new(true, Vector2(sx, sy), scale, rel.z)
+  return Projection2D.new(true, Vector2(sx, sy), scale, depth)

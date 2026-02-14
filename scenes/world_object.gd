@@ -49,12 +49,13 @@ func _update() -> void:
   global_position = p.screen
 
   var s: float = clamp(p.scale, min_scale, max_scale)
-  scale = Vector2(s, s)
+  global_scale = Vector2(s, s)
 
   # Painter’s algorithm: nearer = higher z_index
+  # Painter's algorithm: nearer = higher z_index (smaller depth = higher z_index)
   # Tune multiplier for your game scale.
   # z_index = int(4096 - p.rel_z * 10.0)
-  z_index = - int(p.rel_z)
+  z_index = -int(p.rel_z)
   if z_index < RenderingServer.CANVAS_ITEM_Z_MIN:
     push_warning("Object is too far away and may not render correctly. Consider adjusting the scale or z_index calculation.")
   elif z_index > RenderingServer.CANVAS_ITEM_Z_MAX:
@@ -63,7 +64,7 @@ func _update() -> void:
   # Update shadow projection
   _update_shadow()
 
-  # Despawn when past camera
+  # Despawn when behind camera (depth becomes negative when behind)
   if p.rel_z < 1.0:
     queue_free()
 
@@ -86,7 +87,7 @@ func _update_shadow() -> void:
   
   # Scale shadow based on projection
   var shadow_scale := clampf(shadow_p.scale, shadow_min_scale, shadow_max_scale)
-  shadow_sprite.scale = Vector2(shadow_scale, shadow_scale)
+  shadow_sprite.global_scale = Vector2(shadow_scale, shadow_scale)
 
   shadow_sprite.modulate.a = 0.5
 

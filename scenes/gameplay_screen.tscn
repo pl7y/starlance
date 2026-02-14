@@ -12,7 +12,7 @@
 [node name="GameplayScreen" type="Node2D" unique_id=158736197]
 
 [node name="CameraRig" parent="." unique_id=2025045557 groups=["camera_rig"] instance=ExtResource("1_nl8x0")]
-horizon_ratio = 0.9
+horizon_ratio = 0.85
 
 [node name="Ground" parent="." unique_id=444447118 instance=ExtResource("2_gej26")]
 visible = false
@@ -22,11 +22,9 @@ visible = false
 [node name="WorldLayer" type="CanvasLayer" parent="." unique_id=1382012560]
 
 [node name="GroundRoad" parent="WorldLayer" unique_id=1216453340 instance=ExtResource("10_iniog")]
-tile_x = 0.5
-tile_z = 1.0
-tile_outline_alpha = 0.0
-camera_height = 0.5
-camera_ground_lerp = Vector2(0.03, 0.03)
+z_bias = 0.0
+tile_size_x = 200.0
+tile_size_z = 200.0
 
 [node name="ObjectsLayer" type="CanvasLayer" parent="." unique_id=1463780327]
 layer = 2
@@ -35,7 +33,16 @@ layer = 2
 modulate = Color(1, 1, 1, 0.42745098)
 player_z_offset = 128.0
 min_altitude = -50.0
-speed = 20.0
+speed = 200.0
+
+[node name="Enemy" parent="ObjectsLayer" unique_id=625918716 instance=ExtResource("4_skn3q")]
+world_pos = Vector3(-50, 0, -100)
+
+[node name="Enemy2" parent="ObjectsLayer" unique_id=1446348071 instance=ExtResource("4_skn3q")]
+world_pos = Vector3(-50, 0, -1540)
+
+[node name="Enemy3" parent="ObjectsLayer" unique_id=1201927467 instance=ExtResource("4_skn3q")]
+world_pos = Vector3(0, 0, -2000)
 
 [node name="CollisionSystem" type="Node" parent="." unique_id=40909830]
 script = ExtResource("7_iverm")
