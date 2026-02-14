@@ -4,7 +4,10 @@ extends ColorRect
 
 @export var near_z: float = 5.0
 @export var far_z: float = 2000.0
-@export var tile_size: float = 20.0 # Size of checkerboard tiles in world units
+@export var tile_size: float = 20.0 # Size of tiles/stripes in world units
+
+@export_enum("Checkers", "Hatched", "Horizontal Stripes") var pattern: int = 0
+@export var band_width: float = 0.4 # Width of bands for hatched pattern (0.0-1.0)
 
 func _ready() -> void:
 	# Fill the entire viewport
@@ -34,3 +37,5 @@ func _process(_delta: float) -> void:
 	material.set_shader_parameter("near_z", near_z)
 	material.set_shader_parameter("far_z", far_z)
 	material.set_shader_parameter("tile_size", tile_size)
+	material.set_shader_parameter("pattern", pattern)
+	material.set_shader_parameter("band_width", band_width)

@@ -39,9 +39,6 @@ func _process(delta: float) -> void:
     return
 
   # Keep player at a constant depth in front of camera
-  world_pos.z = 0.0
-
-
   world_pos.z -= speed * delta
 
 

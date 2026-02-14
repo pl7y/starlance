@@ -65,7 +65,6 @@ func _process(delta: float) -> void:
 func _update_screen_params() -> void:
   # Update horizon ratio based on camera altitude
   var altitude_t = inverse_lerp(min_altitude, max_altitude, camera_world_position.y)
-  prints("altitude_t: %s %s %s:%s" % [min_altitude, max_altitude, camera_world_position.y, altitude_t])
   horizon_ratio = lerp(min_horizon_ratio, max_horizon_ratio, altitude_t)
   
   var vp := get_viewport().get_visible_rect().size
