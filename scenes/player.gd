@@ -15,7 +15,6 @@ class_name Player
 @export var invuln_seconds: float = 0.8
 @export var hurt_radius_px: float = 14.0
 
-@export var player_z_offset: float = 12.0 # player “plane” in front of camera
 @export var lock_scale: bool = false
 @export var locked_scale: float = 1.0
 
@@ -40,7 +39,7 @@ func _process(delta: float) -> void:
     return
 
   # Keep player at a constant depth in front of camera
-  world_pos.z = rig.camera_world_position.z - player_z_offset
+  world_pos.z = 0.0
 
 
   world_pos.z -= speed * delta

@@ -1,7 +1,6 @@
 [gd_scene format=3 uid="uid://5v7a0ra4elxi"]
 
 [ext_resource type="PackedScene" uid="uid://dfvx4shbdy2i0" path="res://scenes/camera_rig.tscn" id="1_nl8x0"]
-[ext_resource type="PackedScene" uid="uid://ehbcmyfcurbu" path="res://scenes/ground.tscn" id="2_gej26"]
 [ext_resource type="PackedScene" uid="uid://bk0r22e6fyjqg" path="res://scenes/enemy.tscn" id="4_skn3q"]
 [ext_resource type="PackedScene" uid="uid://b1q5gjhbfsuaq" path="res://scenes/player.tscn" id="5_157wf"]
 [ext_resource type="Script" uid="uid://4v63tpfjjf7a" path="res://scenes/collision_system.gd" id="7_iverm"]
@@ -16,24 +15,18 @@ follow_strength = 1.0
 min_horizon_ratio = 0.85
 max_horizon_ratio = 0.15
 
-[node name="Ground" parent="." unique_id=444447118 instance=ExtResource("2_gej26")]
-visible = false
-
 [node name="World" type="Node" parent="." unique_id=242347781]
 
 [node name="WorldLayer" type="CanvasLayer" parent="." unique_id=1382012560]
 
 [node name="GroundRoad" parent="WorldLayer" unique_id=1216453340 instance=ExtResource("10_iniog")]
 z_bias = 0.0
-tile_size_x = 200.0
-tile_size_z = 200.0
 
 [node name="ObjectsLayer" type="CanvasLayer" parent="." unique_id=1463780327]
 layer = 2
 
 [node name="Player" parent="ObjectsLayer" unique_id=1077760697 groups=["player"] instance=ExtResource("5_157wf")]
 modulate = Color(1, 1, 1, 0.42745098)
-player_z_offset = 128.0
 speed = 200.0
 
 [node name="Enemy" parent="ObjectsLayer" unique_id=625918716 instance=ExtResource("4_skn3q")]

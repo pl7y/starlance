@@ -26,6 +26,8 @@ var bank: float = 0.0
 
 @export var forward_speed: float = 35.0
 
+@export var camera_z_offset: float = 128.0 # how far behind player the camera is (positive value)
+
 # Altitude constraints for camera position
 @export var min_altitude: float = 10.0
 @export var max_altitude: float = 100.0
@@ -57,7 +59,7 @@ func _process(delta: float) -> void:
   # camera_world_position.x = player.world_pos.x
   # camera_world_position.y = player.world_pos.y
   # camera_world_position.z -= forward_speed * delta
-  camera_world_position.z = player.world_pos.z + player.player_z_offset
+  camera_world_position.z = player.world_pos.z + camera_z_offset
   _update_screen_params()
 
 func _update_screen_params() -> void:
