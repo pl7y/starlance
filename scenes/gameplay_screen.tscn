@@ -12,7 +12,9 @@
 [node name="GameplayScreen" type="Node2D" unique_id=158736197]
 
 [node name="CameraRig" parent="." unique_id=2025045557 groups=["camera_rig"] instance=ExtResource("1_nl8x0")]
-horizon_ratio = 0.85
+follow_strength = 1.0
+min_horizon_ratio = 0.85
+max_horizon_ratio = 0.15
 
 [node name="Ground" parent="." unique_id=444447118 instance=ExtResource("2_gej26")]
 visible = false
@@ -32,7 +34,6 @@ layer = 2
 [node name="Player" parent="ObjectsLayer" unique_id=1077760697 groups=["player"] instance=ExtResource("5_157wf")]
 modulate = Color(1, 1, 1, 0.42745098)
 player_z_offset = 128.0
-min_altitude = -50.0
 speed = 200.0
 
 [node name="Enemy" parent="ObjectsLayer" unique_id=625918716 instance=ExtResource("4_skn3q")]
