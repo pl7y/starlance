@@ -1,0 +1,33 @@
+[gd_scene format=3 uid="uid://vdrur6x32udr"]
+
+[ext_resource type="Script" uid="uid://vwcof2axrgqy" path="res://scenes/obstacle.gd" id="1_sh7k1"]
+[ext_resource type="Texture2D" uid="uid://cqjhm0klblrwu" path="res://assets/placeholders/rock.png" id="2_sh7k1"]
+[ext_resource type="Texture2D" uid="uid://cvgfki3bgh5gx" path="res://assets/placeholders/shadow.png" id="5_kxyuj"]
+[ext_resource type="PackedScene" uid="uid://cimdcjf2l38cy" path="res://scenes/pseudo_area_3d.tscn" id="6_ej62c"]
+
+[sub_resource type="SphereShape3D" id="SphereShape3D_nenq2"]
+radius = 5.0
+
+[node name="Obstacle" type="Node2D" unique_id=625918716 groups=["enemies"]]
+script = ExtResource("1_sh7k1")
+
+[node name="Sprite2D" type="Sprite2D" parent="." unique_id=1333454786]
+unique_name_in_owner = true
+position = Vector2(0, -45.000004)
+scale = Vector2(0.43434343, 0.43434346)
+texture = ExtResource("2_sh7k1")
+
+[node name="Shadow" type="Node2D" parent="." unique_id=707858521]
+modulate = Color(1, 1, 1, 0.5411765)
+position = Vector2(0, 3)
+
+[node name="ShadowSprite" type="Sprite2D" parent="Shadow" unique_id=1021593529]
+position = Vector2(0, -3)
+scale = Vector2(0.5, 0.375)
+texture = ExtResource("5_kxyuj")
+
+[node name="HurtBox" parent="." unique_id=839168076 node_paths=PackedStringArray("world_object") instance=ExtResource("6_ej62c")]
+world_object = NodePath("..")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="HurtBox" unique_id=1725933202]
+shape = SubResource("SphereShape3D_nenq2")

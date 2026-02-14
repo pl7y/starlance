@@ -1,0 +1,6 @@
+[gd_scene format=3 uid="uid://cimdcjf2l38cy"]
+
+[ext_resource type="Script" uid="uid://pqtbtnqk264g" path="res://scenes/pseudo_area_3d.gd" id="1_7e1cs"]
+
+[node name="Area3D" type="Area3D" unique_id=839168076]
+script = ExtResource("1_7e1cs")

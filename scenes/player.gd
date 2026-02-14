@@ -93,3 +93,7 @@ func take_hit(dmg: int) -> void:
   hp -= dmg
   invuln_t = invuln_seconds
   print("Player HP:", hp)
+
+
+func _on_hurt_box_area_entered(area: Area3D) -> void:
+  prints("Player hurt box entered by:", area)

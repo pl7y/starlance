@@ -5,6 +5,10 @@
 [ext_resource type="Texture2D" uid="uid://cupq3ytok6bx6" path="res://assets/placeholders/enemy.png" id="2_md0e3"]
 [ext_resource type="PackedScene" uid="uid://ljkd8f8efq38" path="res://scenes/explosion.tscn" id="3_5uy6h"]
 [ext_resource type="Texture2D" uid="uid://cvgfki3bgh5gx" path="res://assets/placeholders/shadow.png" id="5_c4w8v"]
+[ext_resource type="PackedScene" uid="uid://cimdcjf2l38cy" path="res://scenes/pseudo_area_3d.tscn" id="6_xwavj"]
+
+[sub_resource type="SphereShape3D" id="SphereShape3D_nenq2"]
+radius = 5.0
 
 [node name="Enemy" type="Node2D" unique_id=625918716 node_paths=PackedStringArray("shadow_sprite") groups=["enemies"]]
 script = ExtResource("1_md0e3")
@@ -35,3 +39,9 @@ position = Vector2(0, 3)
 position = Vector2(0, -3)
 scale = Vector2(0.5, 0.375)
 texture = ExtResource("5_c4w8v")
+
+[node name="HurtBox" parent="." unique_id=839168076 node_paths=PackedStringArray("world_object") instance=ExtResource("6_xwavj")]
+world_object = NodePath("..")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="HurtBox" unique_id=1725933202]
+shape = SubResource("SphereShape3D_nenq2")

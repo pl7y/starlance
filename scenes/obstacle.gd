@@ -1,0 +1,2 @@
+extends WorldObject
+class_name Obstacle

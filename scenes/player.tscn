@@ -1,10 +1,14 @@
 [gd_scene format=3 uid="uid://b1q5gjhbfsuaq"]
 
 [ext_resource type="Script" uid="uid://b716w5y0cpxg7" path="res://scenes/player.gd" id="1_ywjxs"]
-[ext_resource type="Texture2D" uid="uid://mvtm7wt0w2w6" path="res://assets/sh_player.png" id="2_7x7gm"]
+[ext_resource type="Texture2D" uid="uid://mvtm7wt0w2w6" path="res://assets/placeholders/sh_player.png" id="2_7x7gm"]
 [ext_resource type="Script" uid="uid://kpbt6n1fjt4" path="res://scenes/shooter.component.gd" id="3_dqkch"]
 [ext_resource type="PackedScene" uid="uid://cbk5xftc2r2mk" path="res://scenes/bullet.tscn" id="4_qlg0r"]
 [ext_resource type="Texture2D" uid="uid://cvgfki3bgh5gx" path="res://assets/placeholders/shadow.png" id="5_qlg0r"]
+[ext_resource type="PackedScene" uid="uid://cimdcjf2l38cy" path="res://scenes/pseudo_area_3d.tscn" id="6_tuyoq"]
+
+[sub_resource type="SphereShape3D" id="SphereShape3D_qlg0r"]
+radius = 5.0
 
 [node name="Player" type="Node2D" unique_id=1077760697 node_paths=PackedStringArray("shadow_sprite")]
 script = ExtResource("1_ywjxs")
@@ -38,3 +42,11 @@ offset_bottom = 23.0
 theme_override_font_sizes/font_size = 8
 text = "hello"
 metadata/_edit_use_anchors_ = true
+
+[node name="HurtBox" parent="." unique_id=839168076 node_paths=PackedStringArray("world_object") instance=ExtResource("6_tuyoq")]
+world_object = NodePath("..")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="HurtBox" unique_id=19288192]
+shape = SubResource("SphereShape3D_qlg0r")
+
+[connection signal="area_entered" from="HurtBox" to="." method="_on_hurt_box_area_entered"]
