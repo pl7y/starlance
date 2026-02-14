@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://devsituvvvqyb"
-path="res://.godot/imported/green_bullet.png-eedbfc4d136ecedb79da8ff98b86ddab.ctex"
+uid="uid://du6ql5gvltp4q"
+path="res://.godot/imported/glacial_mountains.png-065026aecfed37a10ed33e3d6f2786f3.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://assets/green_bullet.png"
-dest_files=["res://.godot/imported/green_bullet.png-eedbfc4d136ecedb79da8ff98b86ddab.ctex"]
+source_file="res://assets/packages/Glacial-mountains-parallax-background_vnitti/Layers/glacial_mountains.png"
+dest_files=["res://.godot/imported/glacial_mountains.png-065026aecfed37a10ed33e3d6f2786f3.ctex"]
 
 [params]
 

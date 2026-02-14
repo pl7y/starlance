@@ -1,7 +1,7 @@
 [gd_scene format=3 uid="uid://br8xdfa088ssa"]
 
 [ext_resource type="Script" uid="uid://cclvdrnqogmc3" path="res://scenes/enemy_bullet.gd" id="1_d2qol"]
-[ext_resource type="Texture2D" uid="uid://de1lqoss17mcx" path="res://assets/red_bullet.png" id="2_qx7rs"]
+[ext_resource type="Texture2D" uid="uid://de1lqoss17mcx" path="res://assets/placeholders/red_bullet.png" id="2_qx7rs"]
 
 [node name="EnemyBullet" type="Node2D" unique_id=560835996]
 script = ExtResource("1_d2qol")

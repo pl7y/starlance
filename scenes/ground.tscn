@@ -14,10 +14,10 @@ shader_parameter/near_z = 5.0
 shader_parameter/far_z = 2000.0
 shader_parameter/tile_size = 100.0
 shader_parameter/pattern = 1
-shader_parameter/color_a = Color(0.2, 0.6, 1, 1)
-shader_parameter/color_b = Color(0.495866, 0.6821613, 0.9686304, 1)
-shader_parameter/base_color = Color(0.18752277, 0.45324826, 0.81840205, 1)
-shader_parameter/band_width = 0.8
+shader_parameter/color_a = Color(0.49411765, 0.7764706, 0.96862745, 1)
+shader_parameter/color_b = Color(0.49411765, 0.7764706, 0.96862745, 1)
+shader_parameter/base_color = Color(0.39089102, 0.7280193, 0.94877535, 1)
+shader_parameter/band_width = 0.5
 
 [node name="Ground" type="ColorRect" unique_id=1065127099]
 material = SubResource("ShaderMaterial_lmksl")
@@ -27,4 +27,5 @@ anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
 script = ExtResource("1_pybca")
+tile_size = 100.0
 pattern = 1

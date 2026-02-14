@@ -11,7 +11,7 @@ uniform float bank_offset = 0.0; // bank * bank_pixels
 uniform float near_z = 5.0;
 uniform float far_z = 2000.0;
 uniform float tile_size = 20.0; // Size of each tile/stripe in world units
-uniform int pattern = 0; // 0=checkers, 1=hatched, 2=hstripe
+uniform int pattern: hint_enum("Checkers", "Hatched", "Horizontal Stripes") = 0;
 
 // Visual parameters
 uniform vec4 color_a : source_color = vec4(0.2, 0.6, 1.0, 1.0); // Primary color
