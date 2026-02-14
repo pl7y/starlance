@@ -17,6 +17,7 @@ class_name WorldObject
 
 @export var min_scale: float = 0.02
 @export var max_scale: float = 6.0
+@export var fixed_sprite: bool = false
 
 # Shadow settings
 @export_group("Shadow Settings")
@@ -48,8 +49,11 @@ func _update() -> void:
   visible = true
   global_position = p.screen
 
-  var s: float = clamp(p.scale, min_scale, max_scale)
-  global_scale = Vector2(s, s)
+  if fixed_sprite:
+    global_scale = Vector2(1, 1)
+  else:
+    var s: float = clamp(p.scale, min_scale, max_scale)
+    global_scale = Vector2(s, s)
 
   # Painter’s algorithm: nearer = higher z_index
   # Painter's algorithm: nearer = higher z_index (smaller depth = higher z_index)
@@ -86,8 +90,11 @@ func _update_shadow() -> void:
   shadow_sprite.global_position = shadow_p.screen
   
   # Scale shadow based on projection
-  var shadow_scale := clampf(shadow_p.scale, shadow_min_scale, shadow_max_scale)
-  shadow_sprite.global_scale = Vector2(shadow_scale, shadow_scale)
+  if fixed_sprite:
+    shadow_sprite.global_scale = Vector2(1, 1)
+  else:
+    var shadow_scale := clampf(shadow_p.scale, shadow_min_scale, shadow_max_scale)
+    shadow_sprite.global_scale = Vector2(shadow_scale, shadow_scale)
 
   shadow_sprite.modulate.a = 0.5
 

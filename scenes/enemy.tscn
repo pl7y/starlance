@@ -20,12 +20,13 @@ shadow_sprite = NodePath("Shadow")
 
 [node name="Sprite2D" type="Sprite2D" parent="." unique_id=1333454786]
 unique_name_in_owner = true
-position = Vector2(0, -21.866665)
+position = Vector2(0, -27.866665)
 scale = Vector2(2.7333336, 2.7333338)
 texture = ExtResource("2_md0e3")
 
 [node name="Label" type="Label" parent="." unique_id=943031402]
 unique_name_in_owner = true
+visible = false
 offset_right = 40.0
 offset_bottom = 23.0
 theme_override_font_sizes/font_size = 8
@@ -42,9 +43,10 @@ texture = ExtResource("5_c4w8v")
 
 [node name="HurtBox" parent="." unique_id=839168076 node_paths=PackedStringArray("world_object") instance=ExtResource("6_xwavj")]
 world_object = NodePath("..")
-offset = Vector3(0, 20, 0)
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="HurtBox" unique_id=1725933202]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 20, 0)
 shape = SubResource("SphereShape3D_nenq2")
+debug_color = Color(0, 0.6, 0.69803923, 1)
 
 [connection signal="area_entered" from="HurtBox" to="." method="_on_hurt_box_area_entered"]
