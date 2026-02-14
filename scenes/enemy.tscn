@@ -9,7 +9,7 @@
 [ext_resource type="Script" uid="uid://1xy52ril346j" path="res://scenes/hurtbox_debug_2d.gd" id="7_nenq2"]
 
 [sub_resource type="SphereShape3D" id="SphereShape3D_nenq2"]
-radius = 30.0
+radius = 20.0
 
 [node name="Enemy" type="Node2D" unique_id=625918716 node_paths=PackedStringArray("shadow_sprite") groups=["enemies"]]
 script = ExtResource("1_md0e3")
@@ -43,6 +43,7 @@ texture = ExtResource("5_c4w8v")
 
 [node name="HurtBox" parent="." unique_id=839168076 node_paths=PackedStringArray("world_object") instance=ExtResource("6_xwavj")]
 world_object = NodePath("..")
+offset = Vector3(0, 20, 0)
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="HurtBox" unique_id=1725933202]
 shape = SubResource("SphereShape3D_nenq2")

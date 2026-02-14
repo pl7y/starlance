@@ -176,5 +176,4 @@ func _flash_white() -> void:
 
 
 func _on_hurt_box_area_entered(area: Area3D) -> void:
-  prints("Enemy hit by area: ", area.name)
-    #take_hit(10) # TODO: use actual damage value from bullet
+  take_hit(1) # TODO: use actual damage value from bullet

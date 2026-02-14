@@ -57,16 +57,35 @@ func _draw_box(box: BoxShape3D, xf: Transform3D) -> void:
   for i in range(4):
     draw_line(pts2d[i], pts2d[i + 4], color, 2.0)
 
+enum CollisionPlane {XY, XZ, YZ}
+
 func _draw_sphere(s: SphereShape3D, xf: Transform3D) -> void:
-  # SphereShape3D uses a radius property. :contentReference[oaicite:2]{index=2}
   var center := xf.origin
   var r := s.radius
 
+  _draw_circle_on_plane(center, xf.basis, r, CollisionPlane.XY)
+  _draw_circle_on_plane(center, xf.basis, r, CollisionPlane.XZ)
+  _draw_circle_on_plane(center, xf.basis, r, CollisionPlane.YZ)
+
+func _draw_circle_on_plane(center: Vector3, basis: Basis, radius: float, plane: int) -> void:
   var prev: Vector2
+  
   for i in range(segments + 1):
     var a := TAU * float(i) / float(segments)
-    # Choose a plane to visualize (XZ here).
-    var wp := center + xf.basis * Vector3(cos(a) * r, 0.0, sin(a) * r)
+    var cos_a := cos(a)
+    var sin_a := sin(a)
+    
+    # Calculate point based on plane
+    var local_point: Vector3
+    match plane:
+      CollisionPlane.XY:
+        local_point = Vector3(cos_a * radius, sin_a * radius, 0.0)
+      CollisionPlane.XZ:
+        local_point = Vector3(cos_a * radius, 0.0, sin_a * radius)
+      CollisionPlane.YZ:
+        local_point = Vector3(0.0, cos_a * radius, sin_a * radius)
+    
+    var wp := center + basis * local_point
     var p2 := project_3d_to_2d(wp)
 
     if i > 0:
