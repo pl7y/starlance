@@ -24,7 +24,8 @@ visible = false
 tile_x = 0.5
 tile_z = 1.0
 tile_outline_alpha = 0.0
-camera_height = 0.7
+camera_height = 0.5
+camera_ground_lerp = Vector2(0.03, 0.03)
 
 [node name="ObjectsLayer" type="CanvasLayer" parent="." unique_id=1463780327]
 layer = 2
@@ -32,18 +33,8 @@ layer = 2
 [node name="Player" parent="ObjectsLayer" unique_id=1077760697 groups=["player"] instance=ExtResource("5_157wf")]
 modulate = Color(1, 1, 1, 0.42745098)
 player_z_offset = 128.0
-ground_y = 20.0
+min_altitude = -50.0
 speed = 20.0
-
-[node name="PlayerLabel" type="Label" parent="ObjectsLayer/Player" unique_id=1240337173]
-unique_name_in_owner = true
-offset_right = 40.0
-offset_bottom = 23.0
-text = "hello"
-metadata/_edit_use_anchors_ = true
-
-[node name="Enemy" parent="ObjectsLayer" unique_id=625918716 instance=ExtResource("4_skn3q")]
-world_pos = Vector3(0, 0, 100)
 
 [node name="CollisionSystem" type="Node" parent="." unique_id=40909830]
 script = ExtResource("7_iverm")

@@ -4,7 +4,7 @@ class_name ShooterComponent
 @export var bullet_scene: PackedScene
 @export var fire_rate: float = 12.0 # bullets/sec
 @export var muzzle_ahead_z: float = 6.0 # spawn a bit in front
-@export var muzzle_y_offset: float = -0.5 # tiny lift
+@export var muzzle_y_offset: float = 0.5 # tiny lift (currently unused)
 
 @onready var rig: CameraRig = get_tree().get_first_node_in_group("camera_rig") as CameraRig
 @export var world: Node

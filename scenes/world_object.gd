@@ -18,6 +18,15 @@ class_name WorldObject
 @export var min_scale: float = 0.02
 @export var max_scale: float = 6.0
 
+# Shadow settings
+@export_group("Shadow Settings")
+@export var casts_shadow: bool = true
+@export var shadow_sprite: Node2D
+@export var shadow_opacity_at_ground: float = 0.5
+@export var shadow_fade_distance: float = 10.0 # Height at which shadow fully fades
+@export var shadow_min_scale: float = 0.1
+@export var shadow_max_scale: float = 1.0
+
 @onready var rig: CameraRig = get_tree().get_first_node_in_group("camera_rig") as CameraRig
 
 func _ready() -> void:
@@ -51,6 +60,35 @@ func _update() -> void:
   elif z_index > RenderingServer.CANVAS_ITEM_Z_MAX:
     push_warning("Object is too close and may not render correctly. Consider adjusting the scale or z_index calculation.")
 
+  # Update shadow projection
+  _update_shadow()
+
   # Despawn when past camera
   if p.rel_z < 1.0:
     queue_free()
+
+func _update_shadow() -> void:
+  if not casts_shadow or shadow_sprite == null:
+    if shadow_sprite != null:
+      shadow_sprite.visible = false
+    return
+
+  # Project shadow onto the ground (y = 0)
+  var shadow_world_pos := Vector3(world_pos.x, 0.0, world_pos.z)
+  var shadow_p := rig.project(shadow_world_pos)
+
+  if not shadow_p.visible:
+    shadow_sprite.visible = false
+    return
+
+  shadow_sprite.visible = true
+  shadow_sprite.global_position = shadow_p.screen
+  
+  # Scale shadow based on projection
+  var shadow_scale := clampf(shadow_p.scale, shadow_min_scale, shadow_max_scale)
+  shadow_sprite.scale = Vector2(shadow_scale, shadow_scale)
+
+  shadow_sprite.modulate.a = 0.5
+
+  # Shadow should render below the object
+  shadow_sprite.z_index = z_index - 1

@@ -4,3 +4,8 @@
 
 [node name="CameraRig" type="Node2D" unique_id=2025045557]
 script = ExtResource("1_txy7i")
+
+[node name="Label" type="Label" parent="." unique_id=662905781]
+unique_name_in_owner = true
+offset_right = 40.0
+offset_bottom = 23.0

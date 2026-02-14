@@ -58,7 +58,6 @@ func _process(delta: float) -> void:
   var speed = player.speed / 50.0
   cam_z += speed * delta
   # cam_z = rig.camera_world_position.z
-  queue_redraw()
 
   # Get screen position of player wrt viewport height
   var vp := get_viewport_rect().size
@@ -67,7 +66,11 @@ func _process(delta: float) -> void:
   # Move horizon height up if player is low on the screen (e.g. falling), 
   # down if high (e.g. jumping).  
   _horizon_ratio_target = horizon_ratio + (horizon_r - horizon_ratio) * 0.5
-  _horizon_ratio = lerp(_horizon_ratio, _horizon_ratio_target, camera_ground_lerp.y)
+  _horizon_ratio = _horizon_ratio_target # lerp(_horizon_ratio, _horizon_ratio_target, camera_ground_lerp.y)
+
+  camera_height = 1 - horizon_r
+
+  queue_redraw()
 
 func _draw() -> void:
   var vp := get_viewport_rect().size

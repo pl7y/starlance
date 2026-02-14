@@ -46,20 +46,20 @@ func _process(delta: float) -> void:
   world_pos.z += speed * delta
 
 
-  # Ground at y = 0. Higher altitude = NEGATIVE y.
+  # Ground at y = 0. Higher altitude = POSITIVE y.
   var up := Input.get_action_strength("move_up")
   var down := Input.get_action_strength("move_down")
 
   if up > 0.1:
-    world_pos.y -= lift_speed * up * delta # go UP = more negative
+    world_pos.y += lift_speed * up * delta # go UP = more positive
   else:
-    world_pos.y += gravity * delta # fall DOWN = more positive
+    world_pos.y -= gravity * delta # fall DOWN = more negative
 
   if down > 0.1:
-    world_pos.y += (gravity * 0.8) * down * delta
+    world_pos.y -= (gravity * 0.8) * down * delta
 
-  # Clamp between max altitude (negative) and minimum altitude above ground
-  world_pos.y = clamp(world_pos.y, -max_altitude, ground_y - min_altitude)
+  # Clamp between ground level and max altitude (positive)
+  world_pos.y = clamp(world_pos.y, ground_y, max_altitude)
 
   # --- Iframes timer (keep your existing code) ---
   invuln_t = maxf(0.0, invuln_t - delta)
@@ -72,15 +72,14 @@ func _process(delta: float) -> void:
     scale = Vector2(locked_scale, locked_scale)
 
   # --- Run vs Fly state ---
-  var altitude := ground_y - world_pos.y
+  var altitude := world_pos.y - ground_y
   var grounded := altitude <= grounded_threshold
 
+  var status := "fly"
   if grounded:
-    if _label.text != "run":
-      _label.text = "run"
-  else:
-    if _label.text != "fly":
-      _label.text = "fly"
+    status = "run"
+  
+  _label.text = "%s/(%.1f, %.1f, %.1f)" % [status, world_pos.x, world_pos.y, world_pos.z]
 
   # Blink feedback during iframes (keep your existing blink code)
   if invuln_t > 0.0:

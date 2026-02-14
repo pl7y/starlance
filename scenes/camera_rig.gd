@@ -22,6 +22,7 @@ var bank: float = 0.0
 @export var damp: float = 10.0 # bigger = less overshoot (keep near accel)
 
 @export var follow_strength: float = 0.15 # 0 = fixed camera, 1 = camera fully follows
+@export var follow_smoothing: float = 8.0 # camera follow smoothing speed
 
 @export var forward_speed: float = 35.0
 
@@ -41,15 +42,14 @@ func _ready() -> void:
 func _process(delta: float) -> void:
   var player: Player = get_tree().get_first_node_in_group("player") as Player
   if player != null:
-    camera_world_position.x = lerp(camera_world_position.x, player.world_pos.x * follow_strength, 1.0 - exp(-8.0 * delta))
-    camera_world_position.y = lerp(camera_world_position.y, player.world_pos.y * follow_strength, 1.0 - exp(-8.0 * delta))
+    camera_world_position.x = lerp(camera_world_position.x, player.world_pos.x * follow_strength, 1.0 - exp(-follow_smoothing * delta))
+    camera_world_position.y = lerp(camera_world_position.y, player.world_pos.y * follow_strength, 1.0 - exp(-follow_smoothing * delta))
+    
   # camera_world_position.x = player.world_pos.x
   # camera_world_position.y = player.world_pos.y
-
   # camera_world_position.z += forward_speed * delta
   camera_world_position.z = player.world_pos.z - player.player_z_offset
   _update_screen_params()
-
 
 func _update_screen_params() -> void:
   var vp := get_viewport().get_visible_rect().size
@@ -66,5 +66,5 @@ func project(world_pos: Vector3) -> Projection2D:
   # Apply camera banking: shift the horizontal center by bank amount for tilt effect
   var sx := (center.x + bank * bank_pixels) + rel.x * scale
 
-  var sy := horizon_y + rel.y * scale
+  var sy := horizon_y - rel.y * scale
   return Projection2D.new(true, Vector2(sx, sy), scale, rel.z)

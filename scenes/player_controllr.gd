@@ -15,7 +15,7 @@ func _process(delta: float) -> void:
     return
 
   var ix := Input.get_action_strength("move_right") - Input.get_action_strength("move_left")
-  var iy := Input.get_action_strength("move_down") - Input.get_action_strength("move_up")
+  var iy := Input.get_action_strength("move_up") - Input.get_action_strength("move_down")
 
   var target_v := Vector2(ix * move_speed_x, iy * move_speed_y)
 
@@ -33,8 +33,8 @@ func _process(delta: float) -> void:
   var horizon_y := vp.y * rig.horizon_ratio
   
   var bounds_x := center_x / scale
-  var bounds_y_min := -horizon_y / scale
-  var bounds_y_max := (vp.y - horizon_y) / scale
+  var bounds_y_min := - (vp.y - horizon_y) / scale
+  var bounds_y_max := horizon_y / scale
   
   # Clamp within play area
   player.world_pos.x = clamp(player.world_pos.x, -bounds_x, bounds_x)

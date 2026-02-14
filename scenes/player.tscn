@@ -4,18 +4,36 @@
 [ext_resource type="Texture2D" uid="uid://mvtm7wt0w2w6" path="res://assets/sh_player.png" id="2_7x7gm"]
 [ext_resource type="Script" uid="uid://kpbt6n1fjt4" path="res://scenes/shooter.component.gd" id="3_dqkch"]
 [ext_resource type="PackedScene" uid="uid://cbk5xftc2r2mk" path="res://scenes/bullet.tscn" id="4_qlg0r"]
+[ext_resource type="Texture2D" uid="uid://cvgfki3bgh5gx" path="res://assets/shadow.png" id="5_qlg0r"]
 
-[node name="Player" type="Node2D" unique_id=1077760697]
+[node name="Player" type="Node2D" unique_id=1077760697 node_paths=PackedStringArray("shadow_sprite")]
 script = ExtResource("1_ywjxs")
+shadow_sprite = NodePath("Shadow")
 
 [node name="Sprite2D" type="Sprite2D" parent="." unique_id=1836268859]
 unique_name_in_owner = true
+position = Vector2(0, -13)
 scale = Vector2(0.5, 0.5)
 texture = ExtResource("2_7x7gm")
 
-[node name="Shooter" type="Node" parent="." unique_id=1545092926 node_paths=PackedStringArray("world")]
+[node name="Shooter" type="Node" parent="." unique_id=1545092926]
 script = ExtResource("3_dqkch")
 bullet_scene = ExtResource("4_qlg0r")
 fire_rate = 5.0
-world = NodePath("")
 metadata/_custom_type_script = "uid://kpbt6n1fjt4"
+
+[node name="Shadow" type="Node2D" parent="." unique_id=646253260]
+modulate = Color(1, 1, 1, 0.5411765)
+position = Vector2(0, 3)
+
+[node name="ShadowSprite" type="Sprite2D" parent="Shadow" unique_id=1883007060]
+scale = Vector2(0.5, 0.375)
+texture = ExtResource("5_qlg0r")
+
+[node name="PlayerLabel" type="Label" parent="." unique_id=1092200594]
+unique_name_in_owner = true
+offset_right = 40.0
+offset_bottom = 23.0
+theme_override_font_sizes/font_size = 8
+text = "hello"
+metadata/_edit_use_anchors_ = true
