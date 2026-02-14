@@ -1,6 +1,12 @@
 [gd_scene format=3 uid="uid://cimdcjf2l38cy"]
 
 [ext_resource type="Script" uid="uid://pqtbtnqk264g" path="res://scenes/pseudo_area_3d.gd" id="1_7e1cs"]
+[ext_resource type="Script" uid="uid://1xy52ril346j" path="res://scenes/hurtbox_debug_2d.gd" id="2_1j8pe"]
 
 [node name="Area3D" type="Area3D" unique_id=839168076]
 script = ExtResource("1_7e1cs")
+
+[node name="HurtboxDebug2D" type="Node2D" parent="." unique_id=802229266 node_paths=PackedStringArray("_area_3d")]
+script = ExtResource("2_1j8pe")
+_area_3d = NodePath("..")
+metadata/_custom_type_script = "uid://1xy52ril346j"

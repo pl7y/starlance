@@ -96,4 +96,5 @@ func take_hit(dmg: int) -> void:
 
 
 func _on_hurt_box_area_entered(area: Area3D) -> void:
-  prints("Player hurt box entered by:", area)
+  var parent = area.get_parent()
+  prints("Player hurt box entered by:", area, "parent:", parent)

@@ -23,6 +23,8 @@ func _draw() -> void:
     _draw_box(shape as BoxShape3D, _area_3d.global_transform)
   elif shape is SphereShape3D:
     _draw_sphere(shape as SphereShape3D, _area_3d.global_transform)
+  elif shape is CapsuleShape3D:
+    _draw_capsule(shape as CapsuleShape3D, _area_3d.global_transform)
   else:
     push_warning("Unsupported shape type for HurtboxDebug2D: " + str(shape))
   # Add CapsuleShape3D / CylinderShape3D etc. as needed.
@@ -66,6 +68,28 @@ func _draw_sphere(s: SphereShape3D, xf: Transform3D) -> void:
   _draw_circle_on_plane(center, xf.basis, r, CollisionPlane.XY)
   _draw_circle_on_plane(center, xf.basis, r, CollisionPlane.XZ)
   _draw_circle_on_plane(center, xf.basis, r, CollisionPlane.YZ)
+
+func _draw_capsule(c: CapsuleShape3D, xf: Transform3D) -> void:
+  var r := c.radius
+  var half_h := c.height * 0.5
+  var axis := xf.basis.y
+  var center := xf.origin
+  var cylinder_half := maxf(0.0, half_h - r)
+  var top_center := center + axis * cylinder_half
+  var bottom_center := center - axis * cylinder_half
+
+  _draw_circle_on_plane(top_center, xf.basis, r, CollisionPlane.XY)
+  _draw_circle_on_plane(top_center, xf.basis, r, CollisionPlane.XZ)
+  _draw_circle_on_plane(top_center, xf.basis, r, CollisionPlane.YZ)
+  _draw_circle_on_plane(bottom_center, xf.basis, r, CollisionPlane.XY)
+  _draw_circle_on_plane(bottom_center, xf.basis, r, CollisionPlane.XZ)
+  _draw_circle_on_plane(bottom_center, xf.basis, r, CollisionPlane.YZ)
+
+  var side_dirs: Array[Vector3] = [xf.basis.x, -xf.basis.x, xf.basis.z, -xf.basis.z]
+  for dir in side_dirs:
+    var p1 := bottom_center + dir * r
+    var p2 := top_center + dir * r
+    draw_line(project_3d_to_2d(p1), project_3d_to_2d(p2), color, 2.0)
 
 func _draw_circle_on_plane(center: Vector3, basis: Basis, radius: float, plane: int) -> void:
   var prev: Vector2

@@ -7,8 +7,9 @@
 [ext_resource type="Texture2D" uid="uid://cvgfki3bgh5gx" path="res://assets/placeholders/shadow.png" id="5_qlg0r"]
 [ext_resource type="PackedScene" uid="uid://cimdcjf2l38cy" path="res://scenes/pseudo_area_3d.tscn" id="6_tuyoq"]
 
-[sub_resource type="SphereShape3D" id="SphereShape3D_qlg0r"]
+[sub_resource type="CapsuleShape3D" id="CapsuleShape3D_tuyoq"]
 radius = 5.0
+height = 20.0
 
 [node name="Player" type="Node2D" unique_id=1077760697 node_paths=PackedStringArray("shadow_sprite")]
 script = ExtResource("1_ywjxs")
@@ -16,7 +17,7 @@ shadow_sprite = NodePath("Shadow")
 
 [node name="Sprite2D" type="Sprite2D" parent="." unique_id=1836268859]
 unique_name_in_owner = true
-position = Vector2(0, -15)
+position = Vector2(-1, -15)
 scale = Vector2(0.5, 0.5)
 texture = ExtResource("2_7x7gm")
 
@@ -48,6 +49,7 @@ metadata/_edit_use_anchors_ = true
 world_object = NodePath("..")
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="HurtBox" unique_id=19288192]
-shape = SubResource("SphereShape3D_qlg0r")
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 15, 0)
+shape = SubResource("CapsuleShape3D_tuyoq")
 
 [connection signal="area_entered" from="HurtBox" to="." method="_on_hurt_box_area_entered"]

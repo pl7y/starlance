@@ -6,7 +6,6 @@
 [ext_resource type="PackedScene" uid="uid://ljkd8f8efq38" path="res://scenes/explosion.tscn" id="3_5uy6h"]
 [ext_resource type="Texture2D" uid="uid://cvgfki3bgh5gx" path="res://assets/placeholders/shadow.png" id="5_c4w8v"]
 [ext_resource type="PackedScene" uid="uid://cimdcjf2l38cy" path="res://scenes/pseudo_area_3d.tscn" id="6_xwavj"]
-[ext_resource type="Script" uid="uid://1xy52ril346j" path="res://scenes/hurtbox_debug_2d.gd" id="7_nenq2"]
 
 [sub_resource type="SphereShape3D" id="SphereShape3D_nenq2"]
 radius = 20.0
@@ -47,10 +46,5 @@ offset = Vector3(0, 20, 0)
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="HurtBox" unique_id=1725933202]
 shape = SubResource("SphereShape3D_nenq2")
-
-[node name="HurtboxDebug2D" type="Node2D" parent="." unique_id=1636148292 node_paths=PackedStringArray("_area_3d")]
-script = ExtResource("7_nenq2")
-_area_3d = NodePath("../HurtBox")
-metadata/_custom_type_script = "uid://1xy52ril346j"
 
 [connection signal="area_entered" from="HurtBox" to="." method="_on_hurt_box_area_entered"]
