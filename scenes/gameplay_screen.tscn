@@ -34,34 +34,38 @@ scale = Vector2(1.9722223, 1.9722222)
 texture = ExtResource("8_mcs8y")
 
 [node name="Mountains" parent="WorldLayer" unique_id=2112781111 instance=ExtResource("2_mcs8y")]
+position = Vector2(0, -40)
 parallax_z_offset = -5000.0
 repeat_x = true
 
 [node name="Sprite2D" type="Sprite2D" parent="WorldLayer/Mountains" unique_id=901453193]
-position = Vector2(0, -72)
+position = Vector2(0, -104)
 texture = ExtResource("9_6gaaa")
 
 [node name="Cloud3" parent="WorldLayer" unique_id=144826513 instance=ExtResource("2_mcs8y")]
+position = Vector2(0, -54)
 parallax_z_offset = -2500.0
 repeat_x = true
 
 [node name="Sprite2D" type="Sprite2D" parent="WorldLayer/Cloud3" unique_id=26751890]
-position = Vector2(0, -72)
+position = Vector2(0, -104)
 texture = ExtResource("12_7ocsb")
 
 [node name="Cloud2" parent="WorldLayer" unique_id=1033381634 instance=ExtResource("2_mcs8y")]
+position = Vector2(0, -54)
 repeat_x = true
 
 [node name="Sprite2D" type="Sprite2D" parent="WorldLayer/Cloud2" unique_id=1480389750]
-position = Vector2(0, -72)
+position = Vector2(0, -104)
 texture = ExtResource("11_itntn")
 
 [node name="Cloud1" parent="WorldLayer" unique_id=539629075 instance=ExtResource("2_mcs8y")]
+position = Vector2(0, -54)
 parallax_z_offset = -1500.0
 repeat_x = true
 
 [node name="Sprite2D" type="Sprite2D" parent="WorldLayer/Cloud1" unique_id=1214918953]
-position = Vector2(0, -72)
+position = Vector2(0, -104)
 texture = ExtResource("10_cjr5t")
 
 [node name="Ground" parent="WorldLayer" unique_id=1065127099 instance=ExtResource("2_gej26")]
@@ -73,24 +77,15 @@ layer = 2
 modulate = Color(1, 1, 1, 0.42745098)
 speed = 200.0
 
-[node name="Enemy" parent="ObjectsLayer" unique_id=625918716 instance=ExtResource("4_skn3q")]
-world_pos = Vector3(-50, 0, -100)
-
-[node name="Enemy2" parent="ObjectsLayer" unique_id=1446348071 instance=ExtResource("4_skn3q")]
-world_pos = Vector3(-50, 0, -1540)
-
-[node name="Enemy3" parent="ObjectsLayer" unique_id=1201927467 instance=ExtResource("4_skn3q")]
-world_pos = Vector3(0, 0, -2000)
-
 [node name="CollisionSystem" type="Node" parent="." unique_id=40909830]
 script = ExtResource("7_iverm")
 metadata/_custom_type_script = "uid://4v63tpfjjf7a"
 
 [node name="EncounterManager" type="Node" parent="." unique_id=1827593536 node_paths=PackedStringArray("world")]
 script = ExtResource("9_mcs8y")
-disabled = true
 enemy_scene = ExtResource("4_skn3q")
-spawn_ahead_z = 195.0
+spawn_ahead_z = -2000.0
+height_over_horizon = 50.0
 rest_time = 10.0
 world = NodePath("../ObjectsLayer")
 metadata/_custom_type_script = "uid://cqqqpa6yalyl0"

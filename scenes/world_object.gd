@@ -55,7 +55,7 @@ func _update() -> void:
   # Painter's algorithm: nearer = higher z_index (smaller depth = higher z_index)
   # Tune multiplier for your game scale.
   # z_index = int(4096 - p.rel_z * 10.0)
-  z_index = -int(p.rel_z)
+  z_index = - int(p.rel_z)
   if z_index < RenderingServer.CANVAS_ITEM_Z_MIN:
     push_warning("Object is too far away and may not render correctly. Consider adjusting the scale or z_index calculation.")
   elif z_index > RenderingServer.CANVAS_ITEM_Z_MAX:
@@ -65,7 +65,7 @@ func _update() -> void:
   _update_shadow()
 
   # Despawn when behind camera (depth becomes negative when behind)
-  if p.rel_z < 1.0:
+  if p.rel_z < 0.0:
     queue_free()
 
 func _update_shadow() -> void:

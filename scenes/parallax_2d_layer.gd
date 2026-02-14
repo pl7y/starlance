@@ -2,11 +2,13 @@ extends Node2D
 class_name Parallax2DLayer
 
 # Base world position (x, y) - z is calculated from player + offset
+# World coordinates: +y is UP, -z is FORWARD
 @export var world_x: float = 0.0
 @export var world_y: float = 20.0
 
-# How far behind the player this layer is (positive = further back, more parallax)
-@export var parallax_z_offset: float = -2000.0
+# Z offset from player position (positive = behind player/background, negative = in front)
+# Since -z is forward, positive offset makes layer less negative (backward)
+@export var parallax_z_offset: float = 2000.0
 
 # Scale locking
 @export var lock_scale: bool = false

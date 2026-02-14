@@ -72,7 +72,7 @@ func _spawn_enemy(ev) -> void:
   world.add_child(e)
 
   # Negative z is ahead
-  var z: float = rig.camera_world_position.z - spawn_ahead_z - ev.z_offset
+  var z: float = rig.camera_world_position.z + spawn_ahead_z + ev.z_offset
   e.world_pos = Vector3(ev.x, ev.y, z)
 
   # Defaults
