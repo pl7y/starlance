@@ -6,18 +6,15 @@
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_lmksl"]
 shader = ExtResource("1_mi8v4")
 shader_parameter/focal = 320.0
-shader_parameter/screen_center = Vector2(256, 160)
-shader_parameter/horizon_y = 488.0
+shader_parameter/screen_center = Vector2(640, 360)
+shader_parameter/horizon_y = 468.0
 shader_parameter/camera_world_pos = Vector3(0, 50, 0)
 shader_parameter/bank_offset = 0.0
-shader_parameter/half_width = 171.0
-shader_parameter/near_z = 0.0
-shader_parameter/far_z = 535.0
-shader_parameter/lanes = 20.0
-shader_parameter/depth_lines = 28.0
-shader_parameter/lane_color = Color(1, 1, 0, 1)
-shader_parameter/depth_color = Color(1, 0.22745098, 0, 1)
-shader_parameter/line_width = 1.5
+shader_parameter/near_z = 5.0
+shader_parameter/far_z = 2000.0
+shader_parameter/tile_size = 20.0
+shader_parameter/color_a = Color(0.2, 0.6, 1.0, 1.0)
+shader_parameter/color_b = Color(0.1, 0.3, 0.6, 1.0)
 
 [node name="Ground" type="ColorRect" unique_id=1065127099]
 material = SubResource("ShaderMaterial_lmksl")
@@ -27,3 +24,6 @@ anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
 script = ExtResource("1_pybca")
+near_z = 5.0
+far_z = 2000.0
+tile_size = 20.0

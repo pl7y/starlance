@@ -2,13 +2,9 @@ extends ColorRect
 
 @onready var rig: CameraRig = get_tree().get_first_node_in_group("camera_rig") as CameraRig
 
-@export var half_width: float = 180.0 # world units left/right
 @export var near_z: float = 5.0
-@export var far_z: float = 600.0
-
-@export var lanes: int = 20 # vertical grid lines
-@export var depth_lines: int = 40 # horizontal grid lines
-@export var line_width: float = 3.0 # line thickness in pixels
+@export var far_z: float = 2000.0
+@export var tile_size: float = 20.0 # Size of checkerboard tiles in world units
 
 func _ready() -> void:
 	# Fill the entire viewport
@@ -35,9 +31,6 @@ func _process(_delta: float) -> void:
 	material.set_shader_parameter("bank_offset", rig.bank * rig.bank_pixels)
 	
 	# Update grid parameters
-	material.set_shader_parameter("half_width", half_width)
 	material.set_shader_parameter("near_z", near_z)
 	material.set_shader_parameter("far_z", far_z)
-	material.set_shader_parameter("lanes", float(lanes))
-	material.set_shader_parameter("depth_lines", float(depth_lines))
-	material.set_shader_parameter("line_width", line_width)
+	material.set_shader_parameter("tile_size", tile_size)
