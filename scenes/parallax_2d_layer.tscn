@@ -1,0 +1,8 @@
+[gd_scene format=3 uid="uid://cbio2ymsjjt45"]
+
+[ext_resource type="Script" uid="uid://7ieul6j28fm7" path="res://scenes/parallax_2d_layer.gd" id="1_dixp7"]
+
+[node name="Parallax2DLayer" type="Node2D" unique_id=1553533872]
+script = ExtResource("1_dixp7")
+world_y = 0.0
+lock_scale = true
