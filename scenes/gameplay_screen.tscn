@@ -69,16 +69,20 @@ position = Vector2(0, -104)
 texture = ExtResource("10_cjr5t")
 
 [node name="Ground" parent="WorldLayer" unique_id=1065127099 instance=ExtResource("2_gej26")]
+visible = false
 
 [node name="ObjectsLayer" type="CanvasLayer" parent="." unique_id=1463780327]
 layer = 2
 
 [node name="Player" parent="ObjectsLayer" unique_id=1077760697 groups=["player"] instance=ExtResource("5_157wf")]
 modulate = Color(1, 1, 1, 0.42745098)
-speed = 400.0
+speed = 0.0
 
 [node name="Obstacle" parent="ObjectsLayer" unique_id=625918716 instance=ExtResource("10_7ocsb")]
 world_pos = Vector3(50, 0, -500)
+
+[node name="Enemy" parent="ObjectsLayer" unique_id=1250839268 instance=ExtResource("4_skn3q")]
+world_pos = Vector3(0, 0, -300)
 
 [node name="EncounterManager" type="Node" parent="." unique_id=1827593536 node_paths=PackedStringArray("world")]
 script = ExtResource("9_mcs8y")
