@@ -3,15 +3,15 @@
 importer="texture"
 type="CompressedTexture2D"
 uid="uid://jtdhvpki0hm3"
-path="res://.godot/imported/sky.png-548f56c463d3100cd716b21062ce77d5.ctex"
+path="res://.godot/imported/sky.png-42184bb1ab75f569050aafeaacf084cf.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://scenes/sky.png"
-dest_files=["res://.godot/imported/sky.png-548f56c463d3100cd716b21062ce77d5.ctex"]
+source_file="res://assets/packages/Glacial-mountains-parallax-background_vnitti/Layers/sky.png"
+dest_files=["res://.godot/imported/sky.png-42184bb1ab75f569050aafeaacf084cf.ctex"]
 
 [params]
 

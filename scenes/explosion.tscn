@@ -1,7 +1,7 @@
 [gd_scene format=3 uid="uid://ljkd8f8efq38"]
 
 [ext_resource type="Script" uid="uid://dbh0nipjxjj3w" path="res://scenes/explosion.gd" id="1_nfeox"]
-[ext_resource type="Texture2D" uid="uid://c4pjv41pkiu5g" path="res://assets/Fire Effect and Bullet 16x16.png" id="2_aw4cw"]
+[ext_resource type="Texture2D" uid="uid://c4pjv41pkiu5g" path="res://assets/placeholders/Fire Effect and Bullet 16x16.png" id="2_aw4cw"]
 
 [sub_resource type="Animation" id="Animation_l5glv"]
 length = 0.001

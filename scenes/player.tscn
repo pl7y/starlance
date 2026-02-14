@@ -4,7 +4,7 @@
 [ext_resource type="Texture2D" uid="uid://mvtm7wt0w2w6" path="res://assets/sh_player.png" id="2_7x7gm"]
 [ext_resource type="Script" uid="uid://kpbt6n1fjt4" path="res://scenes/shooter.component.gd" id="3_dqkch"]
 [ext_resource type="PackedScene" uid="uid://cbk5xftc2r2mk" path="res://scenes/bullet.tscn" id="4_qlg0r"]
-[ext_resource type="Texture2D" uid="uid://cvgfki3bgh5gx" path="res://assets/shadow.png" id="5_qlg0r"]
+[ext_resource type="Texture2D" uid="uid://cvgfki3bgh5gx" path="res://assets/placeholders/shadow.png" id="5_qlg0r"]
 
 [node name="Player" type="Node2D" unique_id=1077760697 node_paths=PackedStringArray("shadow_sprite")]
 script = ExtResource("1_ywjxs")
