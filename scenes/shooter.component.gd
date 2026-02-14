@@ -29,7 +29,7 @@ func _fire() -> void:
   owner.get_parent().add_child(b)
 
   if player:
-    var spawn := player.world_pos
+    var spawn := player.world_pos + Vector3.UP * muzzle_y_offset
     spawn.z -= muzzle_ahead_z
     b.world_pos = spawn
 

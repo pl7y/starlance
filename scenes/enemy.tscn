@@ -8,7 +8,7 @@
 [ext_resource type="PackedScene" uid="uid://cimdcjf2l38cy" path="res://scenes/pseudo_area_3d.tscn" id="6_xwavj"]
 
 [sub_resource type="SphereShape3D" id="SphereShape3D_nenq2"]
-radius = 5.0
+radius = 30.0
 
 [node name="Enemy" type="Node2D" unique_id=625918716 node_paths=PackedStringArray("shadow_sprite") groups=["enemies"]]
 script = ExtResource("1_md0e3")
@@ -45,3 +45,5 @@ world_object = NodePath("..")
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="HurtBox" unique_id=1725933202]
 shape = SubResource("SphereShape3D_nenq2")
+
+[connection signal="area_entered" from="HurtBox" to="." method="_on_hurt_box_area_entered"]

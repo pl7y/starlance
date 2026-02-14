@@ -20,10 +20,11 @@ position = Vector2(0, -15)
 scale = Vector2(0.5, 0.5)
 texture = ExtResource("2_7x7gm")
 
-[node name="Shooter" type="Node" parent="." unique_id=1545092926]
+[node name="ShooterComponent" type="Node" parent="." unique_id=1545092926]
 script = ExtResource("3_dqkch")
 bullet_scene = ExtResource("4_qlg0r")
 fire_rate = 5.0
+muzzle_y_offset = 15.0
 metadata/_custom_type_script = "uid://kpbt6n1fjt4"
 
 [node name="Shadow" type="Node2D" parent="." unique_id=646253260]

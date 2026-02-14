@@ -5,7 +5,6 @@
 [ext_resource type="PackedScene" uid="uid://cbio2ymsjjt45" path="res://scenes/parallax_2d_layer.tscn" id="2_mcs8y"]
 [ext_resource type="PackedScene" uid="uid://bk0r22e6fyjqg" path="res://scenes/enemy.tscn" id="4_skn3q"]
 [ext_resource type="PackedScene" uid="uid://b1q5gjhbfsuaq" path="res://scenes/player.tscn" id="5_157wf"]
-[ext_resource type="Script" uid="uid://4v63tpfjjf7a" path="res://scenes/collision_system.gd" id="7_iverm"]
 [ext_resource type="Texture2D" uid="uid://jtdhvpki0hm3" path="res://assets/packages/Glacial-mountains-parallax-background_vnitti/Layers/sky.png" id="8_mcs8y"]
 [ext_resource type="Texture2D" uid="uid://cgke3ahrw3g0a" path="res://assets/packages/Glacial-mountains-parallax-background_vnitti/Layers/glacial_mountains_lightened.png" id="9_6gaaa"]
 [ext_resource type="Script" uid="uid://clwdi74exmma7" path="res://scenes/player_controllr.gd" id="9_iniog"]
@@ -76,14 +75,10 @@ layer = 2
 
 [node name="Player" parent="ObjectsLayer" unique_id=1077760697 groups=["player"] instance=ExtResource("5_157wf")]
 modulate = Color(1, 1, 1, 0.42745098)
-speed = 200.0
+speed = 400.0
 
 [node name="Obstacle" parent="ObjectsLayer" unique_id=625918716 instance=ExtResource("10_7ocsb")]
 world_pos = Vector3(50, 0, -500)
-
-[node name="CollisionSystem" type="Node" parent="." unique_id=40909830]
-script = ExtResource("7_iverm")
-metadata/_custom_type_script = "uid://4v63tpfjjf7a"
 
 [node name="EncounterManager" type="Node" parent="." unique_id=1827593536 node_paths=PackedStringArray("world")]
 script = ExtResource("9_mcs8y")

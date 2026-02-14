@@ -2,6 +2,7 @@
 
 [ext_resource type="Script" uid="uid://dnyxbyg7md21x" path="res://scenes/bullet.gd" id="1_mkf8s"]
 [ext_resource type="Texture2D" uid="uid://c4pjv41pkiu5g" path="res://assets/placeholders/Fire Effect and Bullet 16x16.png" id="2_y25gk"]
+[ext_resource type="Script" uid="uid://pqtbtnqk264g" path="res://scenes/pseudo_area_3d.gd" id="3_l5glv"]
 
 [sub_resource type="Animation" id="Animation_l5glv"]
 length = 0.001
@@ -41,9 +42,12 @@ _data = {
 &"default": SubResource("Animation_eoqba")
 }
 
+[sub_resource type="SphereShape3D" id="SphereShape3D_eoqba"]
+radius = 5.0
+
 [node name="Bullet" type="Node2D" unique_id=1906372644 groups=["bullets"]]
 script = ExtResource("1_mkf8s")
-bullet_speed_z = 360.0
+bullet_speed_z = 800.0
 
 [node name="Sprite2D" type="Sprite2D" parent="." unique_id=335325533]
 texture = ExtResource("2_y25gk")
@@ -54,3 +58,11 @@ frame = 343
 [node name="AnimationPlayer" type="AnimationPlayer" parent="." unique_id=821903804]
 libraries/ = SubResource("AnimationLibrary_qncy5")
 autoplay = &"default"
+
+[node name="PseudoArea3D" type="Area3D" parent="." unique_id=415201946 node_paths=PackedStringArray("world_object")]
+script = ExtResource("3_l5glv")
+world_object = NodePath("..")
+metadata/_custom_type_script = "uid://pqtbtnqk264g"
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="PseudoArea3D" unique_id=611026250]
+shape = SubResource("SphereShape3D_eoqba")
