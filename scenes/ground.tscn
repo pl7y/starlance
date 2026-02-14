@@ -1,9 +1,30 @@
 [gd_scene format=3 uid="uid://ehbcmyfcurbu"]
 
+[ext_resource type="Shader" uid="uid://bh073k6dpfp61" path="res://scenes/ground.gdshader" id="1_mi8v4"]
 [ext_resource type="Script" uid="uid://cay88h36qi2k8" path="res://scenes/ground.gd" id="1_pybca"]
 
-[node name="Ground" type="Node2D" unique_id=125099351]
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_lmksl"]
+shader = ExtResource("1_mi8v4")
+shader_parameter/focal = 320.0
+shader_parameter/screen_center = Vector2(640, 360)
+shader_parameter/horizon_y = 468.0
+shader_parameter/camera_world_pos = Vector3(0, 50, 0)
+shader_parameter/bank_offset = 0.0
+shader_parameter/near_z = 5.0
+shader_parameter/far_z = 2000.0
+shader_parameter/tile_size = 100.0
+shader_parameter/pattern = 1
+shader_parameter/color_a = Color(0.2, 0.6, 1, 1)
+shader_parameter/color_b = Color(0.495866, 0.6821613, 0.9686304, 1)
+shader_parameter/base_color = Color(0.18752277, 0.45324826, 0.81840205, 1)
+shader_parameter/band_width = 0.8
+
+[node name="Ground" type="ColorRect" unique_id=1065127099]
+material = SubResource("ShaderMaterial_lmksl")
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
 script = ExtResource("1_pybca")
-world_pos = null
-min_scale = null
-max_scale = null
+pattern = 1

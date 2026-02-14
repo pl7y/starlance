@@ -1,9 +1,9 @@
-#   ___________           __________                        __                 
-#  /   _____/  | _____.__.\______   \_______   ____ _____  |  | __ ___________ 
-#  \_____  \|  |/ <   |  | |    |  _/\_  __ \_/ __ \\__  \ |  |/ // __ \_  __ \
-#  /        \    < \___  | |    |   \ |  | \/\  ___/ / __ \|    <\  ___/|  | \/
-# /_______  /__|_ \/ ____| |______  / |__|    \___  >____  /__|_ \\___  >__|   
-#         \/     \/\/             \/              \/     \/     \/    \/       
+#   _________ __               .__                              
+#  /   _____//  |______ _______|  | _____    ____   ____  ____  
+#  \_____  \\   __\__  \\_  __ \  | \__  \  /    \_/ ___\/ __ \ 
+#  /        \|  |  / __ \|  | \/  |__/ __ \|   |  \  \__\  ___/ 
+# /_______  /|__| (____  /__|  |____(____  /___|  /\___  >___  >
+#         \/           \/                \/     \/     \/    \/ 
 # (c) 2026 Pl7y.com
 
 extends WorldObject
@@ -15,7 +15,6 @@ class_name Player
 @export var invuln_seconds: float = 0.8
 @export var hurt_radius_px: float = 14.0
 
-@export var player_z_offset: float = 12.0 # player “plane” in front of camera
 @export var lock_scale: bool = false
 @export var locked_scale: float = 1.0
 
@@ -40,26 +39,23 @@ func _process(delta: float) -> void:
     return
 
   # Keep player at a constant depth in front of camera
-  world_pos.z = rig.camera_world_position.z + player_z_offset
+  world_pos.z -= speed * delta
 
 
-  world_pos.z += speed * delta
-
-
-  # Ground at y = 0. Higher altitude = NEGATIVE y.
+  # Ground at y = 0. Higher altitude = POSITIVE y.
   var up := Input.get_action_strength("move_up")
   var down := Input.get_action_strength("move_down")
 
   if up > 0.1:
-    world_pos.y -= lift_speed * up * delta # go UP = more negative
+    world_pos.y += lift_speed * up * delta # go UP = more positive
   else:
-    world_pos.y += gravity * delta # fall DOWN = more positive
+    world_pos.y -= gravity * delta # fall DOWN = more negative
 
   if down > 0.1:
-    world_pos.y += (gravity * 0.8) * down * delta
+    world_pos.y -= (gravity * 0.8) * down * delta
 
-  # Clamp between max altitude (negative) and minimum altitude above ground
-  world_pos.y = clamp(world_pos.y, -max_altitude, ground_y - min_altitude)
+  # Clamp between ground level and max altitude (positive)
+  world_pos.y = clamp(world_pos.y, ground_y, max_altitude)
 
   # --- Iframes timer (keep your existing code) ---
   invuln_t = maxf(0.0, invuln_t - delta)
@@ -72,15 +68,14 @@ func _process(delta: float) -> void:
     scale = Vector2(locked_scale, locked_scale)
 
   # --- Run vs Fly state ---
-  var altitude := ground_y - world_pos.y
+  var altitude := world_pos.y - ground_y
   var grounded := altitude <= grounded_threshold
 
+  var status := "fly"
   if grounded:
-    if _label.text != "run":
-      _label.text = "run"
-  else:
-    if _label.text != "fly":
-      _label.text = "fly"
+    status = "run"
+  
+  _label.text = "%s/(%.1f, %.1f, %.1f)" % [status, world_pos.x, world_pos.y, world_pos.z]
 
   # Blink feedback during iframes (keep your existing blink code)
   if invuln_t > 0.0:

@@ -1,9 +1,9 @@
-#   ___________           __________                        __                 
-#  /   _____/  | _____.__.\______   \_______   ____ _____  |  | __ ___________ 
-#  \_____  \|  |/ <   |  | |    |  _/\_  __ \_/ __ \\__  \ |  |/ // __ \_  __ \
-#  /        \    < \___  | |    |   \ |  | \/\  ___/ / __ \|    <\  ___/|  | \/
-# /_______  /__|_ \/ ____| |______  / |__|    \___  >____  /__|_ \\___  >__|   
-#         \/     \/\/             \/              \/     \/     \/    \/       
+#   _________ __               .__                              
+#  /   _____//  |______ _______|  | _____    ____   ____  ____  
+#  \_____  \\   __\__  \\_  __ \  | \__  \  /    \_/ ___\/ __ \ 
+#  /        \|  |  / __ \|  | \/  |__/ __ \|   |  \  \__\  ___/ 
+# /_______  /|__| (____  /__|  |____(____  /___|  /\___  >___  >
+#         \/           \/                \/     \/     \/    \/ 
 # (c) 2026 Pl7y.com
 
 extends WorldObject
@@ -24,7 +24,7 @@ enum MovePattern {STATIC, DRIFT, SINE_STRAFE, DIVE_AT_PLAYER, SWOOP, ORBIT}
 
 # Movement
 @export var pattern: MovePattern = MovePattern.STATIC
-@export var speed_z: float = -12.0 # negative = moves toward camera (optional)
+@export var speed_z: float = -12.0 # negative = moves toward camera
 @export var speed_x: float = 0.0
 @export var speed_y: float = 0.0
 
@@ -43,6 +43,8 @@ enum MovePattern {STATIC, DRIFT, SINE_STRAFE, DIVE_AT_PLAYER, SWOOP, ORBIT}
 @onready var sprite := %Sprite2D
 
 @export var explosion_scene: PackedScene
+
+@onready var _label = %Label as Label
 
 var _fire_t: float = 0.0
 var _age: float = 0.0
@@ -68,6 +70,9 @@ func _process(delta: float) -> void:
 
   _update_movement(delta)
 
+  # Set label text to world_pos, rounded to first digit
+  _label.text = "Pos: (%.1f, %.1f, %.1f)" % [world_pos.x, world_pos.y, world_pos.z]
+
   # Project + place sprite
   super._process(delta)
 
@@ -86,17 +91,17 @@ func _update_movement(delta: float) -> void:
     MovePattern.DRIFT:
       world_pos.x += speed_x * delta
       world_pos.y += speed_y * delta
-      world_pos.z += speed_z * delta
+      world_pos.z -= speed_z * delta
 
     MovePattern.SINE_STRAFE:
       # Moves forward/back via speed_z, with sinusoidal x (and optional y)
-      world_pos.z += speed_z * delta
+      world_pos.z -= speed_z * delta
       world_pos.x = _spawn_pos.x + sin(_age * TAU * freq) * amp_x
       world_pos.y = _spawn_pos.y + sin(_age * TAU * (freq * 0.7)) * amp_y
 
     MovePattern.DIVE_AT_PLAYER:
       # Smoothly home towards camera X/Y while advancing in Z
-      world_pos.z += speed_z * delta
+      world_pos.z -= speed_z * delta
 
       var target_x := rig.camera_world_position.x
       var target_y := rig.camera_world_position.y
@@ -105,13 +110,13 @@ func _update_movement(delta: float) -> void:
 
     MovePattern.SWOOP:
       # A readable “arc”: starts offset, crosses center, exits
-      world_pos.z += speed_z * delta
+      world_pos.z -= speed_z * delta
       world_pos.x = _spawn_pos.x + sin(_age * TAU * freq) * amp_x
       world_pos.y = _spawn_pos.y + cos(_age * TAU * freq) * amp_y
 
     MovePattern.ORBIT:
       # Orbits around a point in front of camera (feels 3D-ish even in fake 3D)
-      world_pos.z += speed_z * delta
+      world_pos.z -= speed_z * delta
       _orbit_angle += orbit_speed * delta
       var cx := rig.camera_world_position.x
       var cy := rig.camera_world_position.y
@@ -126,8 +131,10 @@ func _try_shoot(delta: float) -> void:
   if _fire_t > 0.0:
     return
 
+  # Check depth (distance from camera) - negative z is ahead
   var rel_z := world_pos.z - rig.camera_world_position.z
-  if rel_z < fire_min_z or rel_z > fire_max_z:
+  var depth := -rel_z
+  if depth < fire_min_z or depth > fire_max_z:
     return
 
   _fire_t = fire_interval
@@ -139,11 +146,13 @@ func _fire() -> void:
 
   b.world_pos = world_pos
 
-  var target := Vector3(rig.camera_world_position.x, rig.camera_world_position.y + aim_lead_y, rig.camera_world_position.z + 10.0)
+  # Target slightly ahead of camera (negative z is ahead)
+  var target := Vector3(rig.camera_world_position.x, rig.camera_world_position.y + aim_lead_y, rig.camera_world_position.z - 10.0)
   var dir := target - b.world_pos
   if dir.length() < 0.001:
-    dir = Vector3(0, 0, -1)
+    dir = Vector3(0, 0, 1) # Default: toward positive z (toward camera)
   dir = dir.normalized()
+  b.vel_direction = dir
   b.vel = dir * bullet_speed
 
 func take_hit(dmg: int) -> void:

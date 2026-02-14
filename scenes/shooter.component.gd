@@ -4,7 +4,7 @@ class_name ShooterComponent
 @export var bullet_scene: PackedScene
 @export var fire_rate: float = 12.0 # bullets/sec
 @export var muzzle_ahead_z: float = 6.0 # spawn a bit in front
-@export var muzzle_y_offset: float = -0.5 # tiny lift
+@export var muzzle_y_offset: float = 0.5 # tiny lift (currently unused)
 
 @onready var rig: CameraRig = get_tree().get_first_node_in_group("camera_rig") as CameraRig
 @export var world: Node
@@ -30,13 +30,11 @@ func _fire() -> void:
 
   if player:
     var spawn := player.world_pos
-    spawn.z += muzzle_ahead_z
+    spawn.z -= muzzle_ahead_z
     b.world_pos = spawn
 
-    # Get player offset from viewport center
-    var horizontal_offset: float = player.world_pos.x / rig.focal
-    var vertical_offset: float = player.world_pos.y / rig.focal
-    b.velocity_direction = Vector3(horizontal_offset, vertical_offset, 1).normalized()
+    # Shoot straight ahead
+    b.velocity_direction = Vector3(0, 0, -1)
 
     # Group for collision system
     b.add_to_group("bullets")
