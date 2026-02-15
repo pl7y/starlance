@@ -13,7 +13,8 @@ height = 20.0
 
 [node name="Player" type="Node2D" unique_id=1077760697 node_paths=PackedStringArray("shadow_sprite")]
 script = ExtResource("1_ywjxs")
-fixed_sprite = true
+grounded_threshold = 4.0
+fixed_sprite = null
 shadow_sprite = NodePath("Shadow")
 
 [node name="Sprite2D" type="Sprite2D" parent="." unique_id=1836268859]

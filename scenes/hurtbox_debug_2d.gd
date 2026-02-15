@@ -18,6 +18,9 @@ func _draw() -> void:
   # Get first CollisionShape3d child of _area_3d and its shape.
   var collision_shape := _area_3d.get_node_or_null("CollisionShape3D") as CollisionShape3D
   var shape := collision_shape.shape
+  
+  if collision_shape.disabled:
+    return
 
   if shape is BoxShape3D:
     _draw_box(shape as BoxShape3D, _area_3d.global_transform)

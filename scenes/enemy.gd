@@ -175,5 +175,5 @@ func _flash_white() -> void:
     get_tree().create_timer(0.1).timeout.connect(func(): sprite.modulate = Color(1, 1, 1, 1))
 
 
-func _on_hurt_box_area_entered(area: Area3D) -> void:
+func _on_hurt_box_area_entered(_area: Area3D) -> void:
   take_hit(1) # TODO: use actual damage value from bullet

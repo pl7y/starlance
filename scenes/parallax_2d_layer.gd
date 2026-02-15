@@ -58,9 +58,9 @@ func _ready() -> void:
       
       # Create duplicates
       for offset in offsets:
-        var duplicate := sprite.duplicate() as Sprite2D
-        add_child(duplicate)
-        duplicate.position = sprite.position + offset
+        var duplicate2 := sprite.duplicate() as Sprite2D
+        add_child(duplicate2)
+        duplicate2.position = sprite.position + offset
 
 func _process(_delta: float) -> void:
   if camera_rig == null:
