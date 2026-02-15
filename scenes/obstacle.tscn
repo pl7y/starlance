@@ -5,8 +5,9 @@
 [ext_resource type="Texture2D" uid="uid://cvgfki3bgh5gx" path="res://assets/placeholders/shadow.png" id="5_kxyuj"]
 [ext_resource type="PackedScene" uid="uid://cimdcjf2l38cy" path="res://scenes/pseudo_area_3d.tscn" id="6_ej62c"]
 
-[sub_resource type="SphereShape3D" id="SphereShape3D_nenq2"]
-radius = 5.0
+[sub_resource type="CapsuleShape3D" id="CapsuleShape3D_sh7k1"]
+radius = 40.0
+height = 100.0
 
 [node name="Obstacle" type="Node2D" unique_id=625918716 groups=["enemies"]]
 script = ExtResource("1_sh7k1")
@@ -30,4 +31,5 @@ texture = ExtResource("5_kxyuj")
 world_object = NodePath("..")
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="HurtBox" unique_id=1725933202]
-shape = SubResource("SphereShape3D_nenq2")
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 50, 0)
+shape = SubResource("CapsuleShape3D_sh7k1")
