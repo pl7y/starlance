@@ -9,6 +9,9 @@
 extends WorldObject
 class_name Player
 
+## Emitted every frame with the cumulative distance travelled along the rail.
+signal distance_changed(distance: float)
+
 @onready var _label = %PlayerLabel as Label
 
 @export var hp: int = 5
@@ -28,7 +31,10 @@ var invuln_t: float = 0.0
 @export var min_altitude: float = 3.0 # minimum height when running
 @export var grounded_threshold: float = min_altitude + 1.0 # how close to ground counts as grounded
 
-@export var speed = 1.0
+@export var speed: float = 1.0
+
+## Cumulative distance travelled along the rail (always increasing).
+var _distance: float = 0.0
 
 func _ready() -> void:
   super._ready()
@@ -39,7 +45,10 @@ func _process(delta: float) -> void:
     return
 
   # Keep player at a constant depth in front of camera
-  world_pos.z -= speed * delta
+  var step := speed * delta
+  world_pos.z -= step
+  _distance += absf(step)
+  distance_changed.emit(_distance)
 
 
   # Ground at y = 0. Higher altitude = POSITIVE y.
