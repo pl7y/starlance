@@ -24,7 +24,7 @@ enum MovePattern {STATIC, DRIFT, SINE_STRAFE, DIVE_AT_PLAYER, SWOOP, ORBIT}
 
 # Movement
 @export var pattern: MovePattern = MovePattern.STATIC
-@export var speed_z: float = -12.0 # negative = moves toward camera
+@export var speed_z: float = 12.0 # negative = moves toward camera
 @export var speed_x: float = 0.0
 @export var speed_y: float = 0.0
 
@@ -91,17 +91,17 @@ func _update_movement(delta: float) -> void:
     MovePattern.DRIFT:
       world_pos.x += speed_x * delta
       world_pos.y += speed_y * delta
-      world_pos.z -= speed_z * delta
+      world_pos.z += speed_z * delta
 
     MovePattern.SINE_STRAFE:
       # Moves forward/back via speed_z, with sinusoidal x (and optional y)
-      world_pos.z -= speed_z * delta
+      world_pos.z += speed_z * delta
       world_pos.x = _spawn_pos.x + sin(_age * TAU * freq) * amp_x
       world_pos.y = _spawn_pos.y + sin(_age * TAU * (freq * 0.7)) * amp_y
 
     MovePattern.DIVE_AT_PLAYER:
       # Smoothly home towards camera X/Y while advancing in Z
-      world_pos.z -= speed_z * delta
+      world_pos.z += speed_z * delta
 
       var target_x := rig.camera_world_position.x
       var target_y := rig.camera_world_position.y
@@ -110,13 +110,13 @@ func _update_movement(delta: float) -> void:
 
     MovePattern.SWOOP:
       # A readable “arc”: starts offset, crosses center, exits
-      world_pos.z -= speed_z * delta
+      world_pos.z += speed_z * delta
       world_pos.x = _spawn_pos.x + sin(_age * TAU * freq) * amp_x
       world_pos.y = _spawn_pos.y + cos(_age * TAU * freq) * amp_y
 
     MovePattern.ORBIT:
       # Orbits around a point in front of camera (feels 3D-ish even in fake 3D)
-      world_pos.z -= speed_z * delta
+      world_pos.z += speed_z * delta
       _orbit_angle += orbit_speed * delta
       var cx := rig.camera_world_position.x
       var cy := rig.camera_world_position.y
@@ -176,4 +176,7 @@ func _flash_white() -> void:
 
 
 func _on_hurt_box_area_entered(_area: Area3D) -> void:
-  take_hit(1) # TODO: use actual damage value from bullet
+  var player = _area.get_parent() as Player
+  if player:
+    prints("* Enemy hit player!")
+    take_hit(1) # TODO: use actual damage value from bullet

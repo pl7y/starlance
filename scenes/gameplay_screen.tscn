@@ -3,16 +3,16 @@
 [ext_resource type="PackedScene" uid="uid://dfvx4shbdy2i0" path="res://scenes/camera_rig.tscn" id="1_nl8x0"]
 [ext_resource type="PackedScene" uid="uid://ehbcmyfcurbu" path="res://scenes/ground.tscn" id="2_gej26"]
 [ext_resource type="PackedScene" uid="uid://cbio2ymsjjt45" path="res://scenes/parallax_2d_layer.tscn" id="2_mcs8y"]
-[ext_resource type="PackedScene" uid="uid://bk0r22e6fyjqg" path="res://scenes/enemy.tscn" id="4_skn3q"]
 [ext_resource type="PackedScene" uid="uid://b1q5gjhbfsuaq" path="res://scenes/player.tscn" id="5_157wf"]
 [ext_resource type="Texture2D" uid="uid://jtdhvpki0hm3" path="res://assets/packages/Glacial-mountains-parallax-background_vnitti/Layers/sky.png" id="8_mcs8y"]
 [ext_resource type="Texture2D" uid="uid://cgke3ahrw3g0a" path="res://assets/packages/Glacial-mountains-parallax-background_vnitti/Layers/glacial_mountains_lightened.png" id="9_6gaaa"]
 [ext_resource type="Script" uid="uid://clwdi74exmma7" path="res://scenes/player_controllr.gd" id="9_iniog"]
-[ext_resource type="Script" uid="uid://cqqqpa6yalyl0" path="res://scenes/encounter_manager.gd" id="9_mcs8y"]
-[ext_resource type="PackedScene" uid="uid://vdrur6x32udr" path="res://scenes/obstacle.tscn" id="10_7ocsb"]
 [ext_resource type="Texture2D" uid="uid://cujsmm07hnsej" path="res://assets/packages/Glacial-mountains-parallax-background_vnitti/Layers/clouds_mg_1.png" id="10_cjr5t"]
 [ext_resource type="Texture2D" uid="uid://pi2m5lc3c6fp" path="res://assets/packages/Glacial-mountains-parallax-background_vnitti/Layers/clouds_mg_2.png" id="11_itntn"]
 [ext_resource type="Texture2D" uid="uid://c6nr8ekrc61va" path="res://assets/packages/Glacial-mountains-parallax-background_vnitti/Layers/clouds_mg_3.png" id="12_7ocsb"]
+[ext_resource type="Resource" uid="uid://cygc4mwlm1rxk" path="res://resources/1.encounter.tres" id="12_itntn"]
+[ext_resource type="Script" uid="uid://bx6f3uaf823k7" path="res://scenes/encounters/encounter_runner.gd" id="13_7ocsb"]
+[ext_resource type="Script" uid="uid://b7muo30j743j7" path="res://scenes/encounters/enemy_spawner.gd" id="14_6demn"]
 
 [node name="GameplayScreen" type="Node2D" unique_id=158736197]
 
@@ -76,27 +76,22 @@ layer = 2
 [node name="Player" parent="ObjectsLayer" unique_id=1077760697 groups=["player"] instance=ExtResource("5_157wf")]
 modulate = Color(1, 1, 1, 0.42745098)
 speed = 0.0
-fixed_sprite = true
-
-[node name="Obstacle" parent="ObjectsLayer" unique_id=625918716 instance=ExtResource("10_7ocsb")]
-world_pos = Vector3(50, 0, -500)
-
-[node name="Enemy" parent="ObjectsLayer" unique_id=1250839268 instance=ExtResource("4_skn3q")]
-world_pos = Vector3(0, 0, -300)
-
-[node name="Enemy2" parent="ObjectsLayer" unique_id=1290573573 instance=ExtResource("4_skn3q")]
 world_pos = Vector3(50, 0, 0)
-
-[node name="EncounterManager" type="Node" parent="." unique_id=1827593536 node_paths=PackedStringArray("world")]
-script = ExtResource("9_mcs8y")
-disabled = true
-enemy_scene = ExtResource("4_skn3q")
-spawn_ahead_z = -2000.0
-height_over_horizon = 50.0
-rest_time = 10.0
-world = NodePath("../ObjectsLayer")
-metadata/_custom_type_script = "uid://cqqqpa6yalyl0"
+fixed_sprite = true
 
 [node name="PlayerController" type="Node" parent="." unique_id=634795422]
 script = ExtResource("9_iniog")
 metadata/_custom_type_script = "uid://clwdi74exmma7"
+
+[node name="EncounterRunner" type="Node" parent="." unique_id=749903038 node_paths=PackedStringArray("spawner")]
+script = ExtResource("13_7ocsb")
+encounter = ExtResource("12_itntn")
+autostart = true
+spawner = NodePath("EnemySpawner")
+metadata/_custom_type_script = "uid://bx6f3uaf823k7"
+
+[node name="EnemySpawner" type="Node" parent="EncounterRunner" unique_id=54553492 node_paths=PackedStringArray("world", "camera_rig")]
+script = ExtResource("14_6demn")
+world = NodePath("../../ObjectsLayer")
+camera_rig = NodePath("../../CameraRig")
+metadata/_custom_type_script = "uid://b7muo30j743j7"
