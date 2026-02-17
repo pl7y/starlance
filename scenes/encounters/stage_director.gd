@@ -50,6 +50,28 @@ class_name StageDirector
 ## Default clock mode passed to the runner for normal segments.
 @export var default_clock: EncounterRunner.ClockMode = EncounterRunner.ClockMode.DISTANCE
 
+# ── Procedural generation (optional) ────────────────────────────────────────
+
+## Stage template for procedural generation.  When set (along with
+## encounter_pool), start_stage() builds segments automatically instead
+## of using the manual `segments` array.
+@export var stage_template: StageTemplate
+
+## Encounter pool to draw from when building procedurally.
+@export var encounter_pool: EncounterPool
+
+## Difficulty curve profile.  Null = flat difficulty (no scaling).
+@export var difficulty_profile: DifficultyProfile
+
+## Minimum breather gap between adjacent combat encounters.
+@export var min_breather_gap: float = 2.0
+
+## Maximum breather gap.
+@export var max_breather_gap: float = 6.0
+
+## If true, auto-insert breathers between adjacent combat encounters.
+@export var auto_breathers: bool = true
+
 # ── Signals ──────────────────────────────────────────────────────────────────
 
 ## Emitted when the stage begins.
@@ -80,6 +102,7 @@ var _running: bool = false
 var _rng := RandomNumberGenerator.new()
 var _saved_rail_speed: float = 0.0
 var _rail_paused: bool = false
+var _last_build_result: StageBuilder.BuildResult = null
 
 # ── Lifecycle ────────────────────────────────────────────────────────────────
 
@@ -110,10 +133,9 @@ func _connect_player_signals() -> void:
 # ── Public API ───────────────────────────────────────────────────────────────
 
 ## Start the stage from segment 0.
+## If stage_template + encounter_pool are set, builds segments procedurally.
+## Otherwise falls back to the manual `segments` array.
 func start_stage(seed_override: int = 0) -> void:
-  if segments.is_empty():
-    push_error("StageDirector: no segments to play.")
-    return
   if runner == null:
     push_error("StageDirector: no EncounterRunner assigned.")
     return
@@ -126,6 +148,26 @@ func start_stage(seed_override: int = 0) -> void:
     _rng.randomize()
     run_seed = _rng.randi()
     _rng.seed = run_seed
+
+  # ── Procedural build (if template + pool are set) ────────────────────
+  if stage_template != null and encounter_pool != null:
+    var builder := StageBuilder.new(stage_template, encounter_pool, difficulty_profile, _rng)
+    builder.min_gap = min_breather_gap
+    builder.max_gap = max_breather_gap
+    builder.auto_breathers = auto_breathers
+    _last_build_result = builder.build(run_seed)
+    segments = _last_build_result.segments
+    print("StageDirector: built %d segments (filled=%d, skipped=%d, breathers=%d, seed=%d)" % [
+      segments.size(),
+      _last_build_result.slots_filled,
+      _last_build_result.slots_skipped,
+      _last_build_result.breathers_inserted,
+      _last_build_result.seed_used,
+    ])
+
+  if segments.is_empty():
+    push_error("StageDirector: no segments to play.")
+    return
 
   _segment_index = -1
   _running = true
@@ -205,6 +247,16 @@ func current_segment_index() -> int:
 ## Is the stage currently running?
 func is_running() -> bool:
   return _running
+
+
+## Returns true if segments were built procedurally (template + pool).
+func is_procedural() -> bool:
+  return _last_build_result != null
+
+
+## Returns the last StageBuilder.BuildResult (null if manual segments).
+func last_build_result() -> StageBuilder.BuildResult:
+  return _last_build_result
 
 # ── Segment sequencing ───────────────────────────────────────────────────────
 

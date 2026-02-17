@@ -1,6 +1,6 @@
 # Downstar — Encounter & Stage System
 
-> **Phase 1 Architecture Documentation**
+> **Architecture Documentation**
 > Last updated: 2026-02-16
 
 ---
@@ -35,6 +35,15 @@
 14. [Authoring an Encounter (.tres)](#authoring-an-encounter-tres)
 15. [Example: Full Stage Plan](#example-full-stage-plan)
 16. [File Manifest](#file-manifest)
+17. [Procedural Generation Pipeline](#procedural-generation-pipeline)
+    - [StageTemplate](#stagetemplate)
+    - [SlotDefinition](#slotdefinition)
+    - [EncounterPool & EncounterPoolEntry](#encounterpool--encounterpoolentry)
+    - [EncounterDeck](#encounterdeck)
+    - [DifficultyProfile](#difficultyprofile)
+    - [RhythmSpacer](#rhythmspacer)
+    - [StageBuilder](#stagebuilder)
+    - [StageDirector Integration](#stagedirector-integration)
 
 ---
 
@@ -1009,21 +1018,29 @@ Events:
 
 All encounter system files live in `scenes/encounters/`:
 
-| File                  | Class             | Type     | Lines | Purpose                                      |
-| --------------------- | ----------------- | -------- | ----- | -------------------------------------------- |
-| `encounter.gd`        | `Encounter`       | Resource | 63    | Top-level encounter container                |
-| `encounter_event.gd`  | `EncounterEvent`  | Resource | 20    | Base event class                             |
-| `spawn_event.gd`      | `SpawnEvent`      | Resource | 38    | Spawn a group of enemies                     |
-| `gate_event.gd`       | `GateEvent`       | Resource | 30    | Pause progression until condition met        |
-| `phase_event.gd`      | `PhaseEvent`      | Resource | 9     | Named phase boundary                         |
-| `marker_event.gd`     | `MarkerEvent`     | Resource | 12    | Named marker with payload                    |
-| `signal_event.gd`     | `SignalEvent`     | Resource | 12    | Fire custom signal                           |
-| `formation.gd`        | `Formation`       | Resource | 64    | Spatial group arrangement                    |
-| `move_style.gd`       | `MoveStyle`       | Resource | 31    | Enemy movement descriptor                    |
-| `pattern.gd`          | `Pattern`         | Resource | 20    | Enemy firing config                          |
-| `encounter_runner.gd` | `EncounterRunner` | Node     | 360   | Micro layer: plays encounter timeline        |
-| `enemy_spawner.gd`    | `EnemySpawner`    | Node     | 111   | Factory: instantiates and configures enemies |
-| `stage_director.gd`   | `StageDirector`   | Node     | 268   | Macro layer: stage progression orchestrator  |
+| File                      | Class                | Type       | Purpose                                      |
+| ------------------------- | -------------------- | ---------- | -------------------------------------------- |
+| `encounter.gd`            | `Encounter`          | Resource   | Top-level encounter container                |
+| `encounter_event.gd`      | `EncounterEvent`     | Resource   | Base event class                             |
+| `spawn_event.gd`          | `SpawnEvent`         | Resource   | Spawn a group of enemies                     |
+| `gate_event.gd`           | `GateEvent`          | Resource   | Pause progression until condition met        |
+| `phase_event.gd`          | `PhaseEvent`         | Resource   | Named phase boundary                         |
+| `marker_event.gd`         | `MarkerEvent`        | Resource   | Named marker with payload                    |
+| `signal_event.gd`         | `SignalEvent`        | Resource   | Fire custom signal                           |
+| `formation.gd`            | `Formation`          | Resource   | Spatial group arrangement                    |
+| `move_style.gd`           | `MoveStyle`          | Resource   | Enemy movement descriptor                    |
+| `pattern.gd`              | `Pattern`            | Resource   | Enemy firing config                          |
+| `encounter_runner.gd`     | `EncounterRunner`    | Node       | Micro layer: plays encounter timeline        |
+| `enemy_spawner.gd`        | `EnemySpawner`       | Node       | Factory: instantiates and configures enemies |
+| `stage_director.gd`       | `StageDirector`      | Node       | Macro layer: stage progression orchestrator  |
+| `slot_definition.gd`      | `SlotDefinition`     | Resource   | One slot in a stage template                 |
+| `stage_template.gd`       | `StageTemplate`      | Resource   | Macro skeleton for procedural stage building |
+| `encounter_pool.gd`       | `EncounterPool`      | Resource   | Weighted collection of encounter entries     |
+| `encounter_pool_entry.gd` | `EncounterPoolEntry` | Resource   | One weighted entry in a pool                 |
+| `encounter_deck.gd`       | `EncounterDeck`      | RefCounted | Weighted bag-without-replacement draw system |
+| `difficulty_profile.gd`   | `DifficultyProfile`  | Resource   | Curve-based difficulty scaling               |
+| `rhythm_spacer.gd`        | `RhythmSpacer`       | RefCounted | Auto-inserts breather gaps between combat    |
+| `stage_builder.gd`        | `StageBuilder`       | RefCounted | Orchestrates procedural stage generation     |
 
 Related files outside `encounters/`:
 
@@ -1033,3 +1050,1073 @@ Related files outside `encounters/`:
 | `enemy.gd`        | `Enemy`       | No changes — `MoveStyle`/`Pattern` map to existing exports    |
 | `camera_rig.gd`   | `CameraRig`   | No changes — `EnemySpawner` reads `camera_world_position`     |
 | `world_object.gd` | `WorldObject` | No changes — base class for Player/Enemy                      |
+
+---
+
+## Procedural Generation Pipeline
+
+> **Phase 2 addition** — seven new classes that let `StageDirector` build
+> encounter sequences procedurally instead of requiring hand-authored
+> `segments` arrays.
+
+### Architecture Overview
+
+```
+StageTemplate (skeleton)  ─┐
+EncounterPool (content)   ─┤── StageBuilder.build() ──▸ Array[Encounter]
+DifficultyProfile (curves) ─┤                               │
+Seeded RNG                 ─┘                               ▼
+                                                    StageDirector.segments
+```
+
+When `StageDirector.stage_template` and `StageDirector.encounter_pool` are
+both set, `start_stage()` invokes `StageBuilder` to fill the `segments`
+array automatically. Manual segments still work — leave both null to use
+the original hand-authored workflow.
+
+### StageTemplate
+
+A `Resource` that defines the **macro skeleton** of a stage as an ordered
+list of `SlotDefinition` entries.
+
+**Exports:**
+
+- `display_name: String` — human-readable label
+- `slots: Array[SlotDefinition]` — ordered slot sequence
+- `tags: PackedStringArray` — biome / modifier filtering
+- `target_distance: float` — total distance budget (0 = sum of slots)
+
+**Helpers:** `combat_slot_count()`, `breather_slot_count()`, `all_required_tags()`
+
+### SlotDefinition
+
+Each slot describes **what kind of content** goes into that position:
+
+| Export              | Type                | Default  | Description                                   |
+| ------------------- | ------------------- | -------- | --------------------------------------------- |
+| `role`              | `Role` enum         | `COMBAT` | `COMBAT`, `BREATHER`, or `FIXED`              |
+| `required_tags`     | `PackedStringArray` | `[]`     | Encounter must have ALL of these              |
+| `excluded_tags`     | `PackedStringArray` | `[]`     | Encounter must have NONE of these             |
+| `min_tier`          | `int`               | `0`      | Minimum difficulty tier (0 = any)             |
+| `max_tier`          | `int`               | `0`      | Maximum difficulty tier (0 = any)             |
+| `duration_override` | `float`             | `0.0`    | Override encounter duration (0 = use default) |
+| `fixed_encounter`   | `Encounter`         | `null`   | Used when role = FIXED                        |
+| `optional`          | `bool`              | `false`  | Skip silently if no match                     |
+| `allow_repeat`      | `bool`              | `false`  | Allow recently-used encounters                |
+| `breather_duration` | `float`             | `3.0`    | Gap length when role = BREATHER               |
+
+### EncounterPool & EncounterPoolEntry
+
+**EncounterPoolEntry** wraps a single `Encounter` with selection metadata:
+
+- `encounter: Encounter` — the encounter resource
+- `weight: float` — selection weight (higher = more likely)
+- `tier: int` — difficulty tier for filtering
+- `extra_tags: PackedStringArray` — supplemental tags
+
+**EncounterPool** aggregates entries and provides `query()`:
+
+```gdscript
+pool.query(required_tags, excluded_tags, min_tier, max_tier, exclude_ids)
+# → Array[EncounterPoolEntry] matching all constraints
+```
+
+### EncounterDeck
+
+Weighted **bag-without-replacement** — draws encounters from the pool,
+removing them from the bag. Only refills when the bag is empty, preventing
+the same encounter from appearing back-to-back within a cycle.
+
+```gdscript
+var deck := EncounterDeck.new(pool, rng, history_limit)
+deck.refill()
+var enc := deck.draw(required_tags, excluded_tags, min_tier, max_tier)
+```
+
+If no match exists after refill, relaxes repeat constraints as a last resort.
+
+### DifficultyProfile
+
+Curve-based difficulty scaling. Each `Curve` resource maps normalised
+stage progress `[0.0 → 1.0]` to a multiplier:
+
+| Parameter     | Curve export        | Fallback scalar      | What it scales            |
+| ------------- | ------------------- | -------------------- | ------------------------- |
+| `hp`          | `hp_curve`          | `hp_scalar`          | Enemy hit points          |
+| `fire_rate`   | `fire_rate_curve`   | `fire_rate_scalar`   | Fire interval (inverse)   |
+| `spawn_count` | `spawn_count_curve` | `spawn_count_scalar` | Enemies per wave          |
+| `speed`       | `speed_curve`       | `speed_scalar`       | Enemy movement speed      |
+| `breather`    | `breather_curve`    | `breather_scalar`    | Breather gap duration     |
+| `intensity`   | `intensity_curve`   | `intensity_scalar`   | General pressure (custom) |
+
+```gdscript
+profile.sample(&"hp", 0.5)        # → curve value at halfway
+profile.sample_all(0.75)           # → Dictionary of all params at 75%
+```
+
+### RhythmSpacer
+
+Post-processes the built segment list, inserting **breather encounters**
+(empty, no events) between adjacent combat encounters:
+
+- Gap duration scales with `DifficultyProfile.breather` curve
+- Adds ±15% random jitter for organic feel
+- Works backwards through the list so insertions don't shift indices
+
+### StageBuilder
+
+The **orchestrator** that ties everything together:
+
+```gdscript
+var builder := StageBuilder.new(template, pool, profile, rng)
+builder.min_gap = 2.0
+builder.max_gap = 6.0
+builder.auto_breathers = true
+var result := builder.build(run_seed)
+# result.segments      → Array[Encounter] ready for StageDirector
+# result.slots_filled   → how many slots were filled
+# result.slots_skipped  → how many slots had no match
+# result.breathers_inserted → auto-breathers added by RhythmSpacer
+```
+
+**Pipeline steps:**
+
+1. Walk template slots sequentially
+2. COMBAT slots → draw from `EncounterDeck` matching slot constraints
+3. FIXED slots → use `slot.fixed_encounter` directly
+4. BREATHER slots → generate empty gap encounters
+5. **Mutate** combat encounters based on difficulty curves at their position
+6. **RhythmSpacer** inserts auto-breathers between adjacent combat slots
+7. Return `BuildResult` with segments + stats
+
+**Difficulty mutations** (applied per `SpawnEvent`):
+
+- HP scaled by `hp` curve
+- Spawn count scaled by `spawn_count` curve
+- Move style speeds scaled by `speed` curve
+- Fire interval divided by `fire_rate` curve (faster = shorter interval)
+- Sub-resources (MoveStyle, Pattern) are duplicated before mutation
+
+### StageDirector Integration
+
+`StageDirector` gained new exports for procedural generation:
+
+```gdscript
+@export var stage_template: StageTemplate
+@export var encounter_pool: EncounterPool
+@export var difficulty_profile: DifficultyProfile
+@export var min_breather_gap: float = 2.0
+@export var max_breather_gap: float = 6.0
+@export var auto_breathers: bool = true
+```
+
+**Behaviour:** When both `stage_template` and `encounter_pool` are set,
+`start_stage()` runs `StageBuilder.build()` and writes the result into
+`segments` before playing. This is **fully backwards-compatible** — leave
+both null and the original manual `segments` workflow is unchanged.
+
+New public API:
+
+- `is_procedural() → bool` — true if last run was built procedurally
+- `last_build_result() → StageBuilder.BuildResult` — build stats
+
+### Example: Procedural Stage Setup
+
+```
+StageTemplate "forest_standard":
+  Slot 0: COMBAT   required_tags=["opener"]  tier=1
+  Slot 1: BREATHER duration=3.0
+  Slot 2: COMBAT   tier=1-2
+  Slot 3: COMBAT   tier=2
+  Slot 4: BREATHER duration=2.5
+  Slot 5: COMBAT   required_tags=["elite"]  tier=3
+  Slot 6: FIXED    fixed_encounter=forest_boss
+
+EncounterPool "forest_all":
+  Entry: wave_scouts      w=3.0  tier=1  tags=[opener]
+  Entry: wave_drones       w=2.0  tier=1
+  Entry: wave_bombers      w=1.5  tier=2
+  Entry: wave_mixed_v      w=2.0  tier=2
+  Entry: wave_elite_squad  w=1.0  tier=3  tags=[elite]
+
+DifficultyProfile "normal":
+  hp_curve:         1.0 → 1.8 (linear)
+  fire_rate_curve:  1.0 → 1.5
+  spawn_count_curve: 1.0 → 1.3
+  breather_curve:   1.0 → 0.6 (shorter breathers later)
+```
+
+---
+
+## Source Code: Procedural Generation Pipeline
+
+Full implementation of all seven procedural generation classes.
+
+### slot_definition.gd
+
+```gdscript
+## Describes one slot in a StageTemplate.
+## Each slot pulls an encounter from the pool that matches its constraints.
+@tool
+extends Resource
+class_name SlotDefinition
+
+## ── Slot role ────────────────────────────────────────────────────────────────
+
+## What kind of content this slot expects.
+enum Role {
+	## A combat encounter pulled from the pool.
+	COMBAT,
+	## An empty breather gap (auto-generated, no pool query).
+	BREATHER,
+	## A fixed encounter — always uses `fixed_encounter`.
+	FIXED,
+}
+
+## Role of this slot in the stage rhythm.
+@export var role: Role = Role.COMBAT
+
+## ── Pool query constraints ──────────────────────────────────────────────────
+
+## Tags the encounter MUST have (all must match).
+@export var required_tags: PackedStringArray = PackedStringArray()
+
+## Tags the encounter must NOT have.
+@export var excluded_tags: PackedStringArray = PackedStringArray()
+
+## Minimum difficulty tier (inclusive).  0 = any.
+@export var min_tier: int = 0
+
+## Maximum difficulty tier (inclusive).  0 = any.
+@export var max_tier: int = 0
+
+## ── Overrides ───────────────────────────────────────────────────────────────
+
+## Duration override for the encounter placed here.  0 = use encounter default.
+@export var duration_override: float = 0.0
+
+## For FIXED role — the specific encounter to place.
+@export var fixed_encounter: Encounter
+
+## If true and no pool match is found, the builder skips the slot silently.
+## If false and no match is found, the builder logs a warning and skips.
+@export var optional: bool = false
+
+## Allow the same encounter to appear again even if it was recently used.
+@export var allow_repeat: bool = false
+
+## ── Breather settings ───────────────────────────────────────────────────────
+
+## Duration of the breather gap (only used when role == BREATHER).
+@export var breather_duration: float = 3.0
+```
+
+### stage_template.gd
+
+```gdscript
+## Defines the macro-structure of a stage as a sequence of slots.
+## Each slot is a SlotDefinition that the StageBuilder fills from an
+## EncounterPool + EncounterDeck.
+##
+## Author several templates per biome / planet type, then let the
+## StageBuilder pick encounters to fill them procedurally.
+@tool
+extends Resource
+class_name StageTemplate
+
+## Human-readable name for this template (e.g. "Forest — Standard Run").
+@export var display_name: String = ""
+
+## Ordered list of slots that define the stage skeleton.
+@export var slots: Array[SlotDefinition] = []
+
+## Tags for biome filtering / run modifier selection.
+@export var tags: PackedStringArray = PackedStringArray()
+
+## Target total distance budget for the stage.  0 = sum of slot durations.
+@export var target_distance: float = 0.0
+
+
+## Returns the number of combat slots in this template.
+func combat_slot_count() -> int:
+	var n := 0
+	for s in slots:
+		if s != null and s.role == SlotDefinition.Role.COMBAT:
+			n += 1
+	return n
+
+
+## Returns the number of breather slots.
+func breather_slot_count() -> int:
+	var n := 0
+	for s in slots:
+		if s != null and s.role == SlotDefinition.Role.BREATHER:
+			n += 1
+	return n
+
+
+## Returns all unique required tags across every combat slot.
+func all_required_tags() -> PackedStringArray:
+	var result: PackedStringArray = PackedStringArray()
+	for s in slots:
+		if s == null or s.role != SlotDefinition.Role.COMBAT:
+			continue
+		for t in s.required_tags:
+			if not result.has(t):
+				result.append(t)
+	return result
+```
+
+### encounter_pool_entry.gd
+
+```gdscript
+## One weighted entry in an EncounterPool.
+## Wraps an Encounter resource with selection metadata.
+@tool
+extends Resource
+class_name EncounterPoolEntry
+
+## The encounter this entry refers to.
+@export var encounter: Encounter
+
+## Base selection weight (higher = more likely to be drawn).
+@export_range(0.1, 100.0) var weight: float = 1.0
+
+## Difficulty tier.  Used by SlotDefinition min/max_tier constraints.
+@export_range(0, 10) var tier: int = 1
+
+## Tags for pool queries (in addition to the encounter's own tags).
+## Pool-level tags let you override/supplement encounter tags without
+## editing the encounter resource itself.
+@export var extra_tags: PackedStringArray = PackedStringArray()
+
+
+## Returns true if this entry's effective tags contain `tag`.
+func has_tag(tag: String) -> bool:
+	if extra_tags.has(tag):
+		return true
+	if encounter != null and encounter.tags.has(tag):
+		return true
+	return false
+
+
+## Returns the combined tag set (encounter tags + extra_tags).
+func effective_tags() -> PackedStringArray:
+	var result := PackedStringArray()
+	if encounter != null:
+		result.append_array(encounter.tags)
+	for t in extra_tags:
+		if not result.has(t):
+			result.append(t)
+	return result
+```
+
+### encounter_pool.gd
+
+```gdscript
+## A curated pool of encounter entries with weighted selection.
+## Used by EncounterDeck / StageBuilder to draw encounters that match
+## slot constraints.
+@tool
+extends Resource
+class_name EncounterPool
+
+## Human-readable pool name (e.g. "Forest — All Encounters").
+@export var display_name: String = ""
+
+## All available encounters with their weights and metadata.
+@export var entries: Array[EncounterPoolEntry] = []
+
+## Tags applied to the entire pool (biome, difficulty bracket, etc.).
+@export var tags: PackedStringArray = PackedStringArray()
+
+
+## Query the pool for entries matching the given constraints.
+## Returns a filtered Array[EncounterPoolEntry].
+##
+## [param required_tags]  — entry must have ALL of these.
+## [param excluded_tags]  — entry must have NONE of these.
+## [param min_tier]       — minimum tier (0 = no lower bound).
+## [param max_tier]       — maximum tier (0 = no upper bound).
+## [param exclude_ids]    — encounter IDs to skip (for repeat prevention).
+func query(
+	required_tags: PackedStringArray = PackedStringArray(),
+	excluded_tags: PackedStringArray = PackedStringArray(),
+	min_tier: int = 0,
+	max_tier: int = 0,
+	exclude_ids: PackedStringArray = PackedStringArray()
+) -> Array[EncounterPoolEntry]:
+	var result: Array[EncounterPoolEntry] = []
+
+	for entry in entries:
+		if entry == null or entry.encounter == null:
+			continue
+
+		# Tier filter
+		if min_tier > 0 and entry.tier < min_tier:
+			continue
+		if max_tier > 0 and entry.tier > max_tier:
+			continue
+
+		# Required tags — entry must have ALL
+		var tags_ok := true
+		for tag in required_tags:
+			if not entry.has_tag(tag):
+				tags_ok = false
+				break
+		if not tags_ok:
+			continue
+
+		# Excluded tags — entry must have NONE
+		var excluded := false
+		for tag in excluded_tags:
+			if entry.has_tag(tag):
+				excluded = true
+				break
+		if excluded:
+			continue
+
+		# Repeat prevention
+		if exclude_ids.has(entry.encounter.id):
+			continue
+
+		result.append(entry)
+
+	return result
+
+
+## Convenience: get all unique encounter IDs in the pool.
+func all_encounter_ids() -> PackedStringArray:
+	var ids: PackedStringArray = PackedStringArray()
+	for entry in entries:
+		if entry != null and entry.encounter != null:
+			if not ids.has(entry.encounter.id):
+				ids.append(entry.encounter.id)
+	return ids
+
+
+## Total number of valid (non-null) entries.
+func valid_count() -> int:
+	var n := 0
+	for entry in entries:
+		if entry != null and entry.encounter != null:
+			n += 1
+	return n
+```
+
+### encounter_deck.gd
+
+```gdscript
+## Weighted bag-without-replacement for encounter selection.
+## Draws encounters from a pool, only refilling the bag when empty.
+## Prevents repeats within a cycle while still respecting weights.
+##
+## This is a runtime helper — not a Resource.  StageBuilder creates one
+## per pool when building a stage.
+class_name EncounterDeck
+
+var _pool: EncounterPool
+var _rng: RandomNumberGenerator
+var _bag: Array[EncounterPoolEntry] = []
+var _history: PackedStringArray = PackedStringArray()
+var _history_limit: int = 3
+
+
+func _init(pool: EncounterPool, rng: RandomNumberGenerator, history_limit: int = 3) -> void:
+	_pool = pool
+	_rng = rng
+	_history_limit = history_limit
+
+
+## Draw an encounter matching the given constraints.
+## Returns null if no match exists even after a refill attempt.
+func draw(
+	required_tags: PackedStringArray = PackedStringArray(),
+	excluded_tags: PackedStringArray = PackedStringArray(),
+	min_tier: int = 0,
+	max_tier: int = 0,
+	allow_repeat: bool = false
+) -> Encounter:
+	# Build exclude list from recent history (unless repeats allowed)
+	var exclude_ids := PackedStringArray()
+	if not allow_repeat:
+		exclude_ids = _history.duplicate()
+
+	# Try drawing from the current bag first
+	var result := _try_draw_from_bag(required_tags, excluded_tags, min_tier, max_tier, exclude_ids)
+	if result != null:
+		_record(result)
+		return result.encounter
+
+	# Bag exhausted — refill and try once more
+	_refill()
+	result = _try_draw_from_bag(required_tags, excluded_tags, min_tier, max_tier, exclude_ids)
+	if result != null:
+		_record(result)
+		return result.encounter
+
+	# Still nothing — relax repeat constraint as last resort
+	if not allow_repeat and not exclude_ids.is_empty():
+		_refill()
+		result = _try_draw_from_bag(required_tags, excluded_tags, min_tier, max_tier, PackedStringArray())
+		if result != null:
+			_record(result)
+			return result.encounter
+
+	return null
+
+
+## Peek at how many entries remain in the current bag.
+func remaining() -> int:
+	return _bag.size()
+
+
+## Force a refill of the bag from the pool.
+func refill() -> void:
+	_refill()
+
+
+## Clear draw history (e.g. between stage phases).
+func reset_history() -> void:
+	_history.resize(0)
+
+
+# ── Internal ─────────────────────────────────────────────────────────────────
+
+func _refill() -> void:
+	_bag.clear()
+	for entry in _pool.entries:
+		if entry != null and entry.encounter != null:
+			_bag.append(entry)
+
+
+func _try_draw_from_bag(
+	required_tags: PackedStringArray,
+	excluded_tags: PackedStringArray,
+	min_tier: int,
+	max_tier: int,
+	exclude_ids: PackedStringArray
+) -> EncounterPoolEntry:
+	# Filter bag to candidates
+	var candidates: Array[EncounterPoolEntry] = []
+	var candidate_indices: Array[int] = []
+
+	for i in _bag.size():
+		var entry := _bag[i]
+		if _matches(entry, required_tags, excluded_tags, min_tier, max_tier, exclude_ids):
+			candidates.append(entry)
+			candidate_indices.append(i)
+
+	if candidates.is_empty():
+		return null
+
+	# Weighted random selection
+	var total_weight := 0.0
+	for c in candidates:
+		total_weight += c.weight
+
+	var roll := _rng.randf() * total_weight
+	var cumulative := 0.0
+
+	for idx in candidates.size():
+		cumulative += candidates[idx].weight
+		if roll <= cumulative:
+			# Remove from bag (no replacement within cycle)
+			var bag_idx := candidate_indices[idx]
+			_bag.remove_at(bag_idx)
+			return candidates[idx]
+
+	# Fallback (floating-point edge case)
+	var last_bag_idx := candidate_indices[candidates.size() - 1]
+	_bag.remove_at(last_bag_idx)
+	return candidates[candidates.size() - 1]
+
+
+func _matches(
+	entry: EncounterPoolEntry,
+	required_tags: PackedStringArray,
+	excluded_tags: PackedStringArray,
+	min_tier: int,
+	max_tier: int,
+	exclude_ids: PackedStringArray
+) -> bool:
+	if entry == null or entry.encounter == null:
+		return false
+
+	if min_tier > 0 and entry.tier < min_tier:
+		return false
+	if max_tier > 0 and entry.tier > max_tier:
+		return false
+
+	for tag in required_tags:
+		if not entry.has_tag(tag):
+			return false
+
+	for tag in excluded_tags:
+		if entry.has_tag(tag):
+			return false
+
+	if exclude_ids.has(entry.encounter.id):
+		return false
+
+	return true
+
+
+func _record(entry: EncounterPoolEntry) -> void:
+	if entry.encounter == null:
+		return
+	_history.append(entry.encounter.id)
+	while _history.size() > _history_limit:
+		_history.remove_at(0)
+```
+
+### difficulty_profile.gd
+
+```gdscript
+## Curve-based difficulty scaling profile.
+## Maps normalised stage progress (0.0 → 1.0) to multipliers for various
+## gameplay parameters.  StageBuilder reads these when mutating encounters
+## to fit their position in the stage.
+@tool
+extends Resource
+class_name DifficultyProfile
+
+## Human-readable name (e.g. "Normal", "Nightmare").
+@export var display_name: String = ""
+
+## ── Curve exports ───────────────────────────────────────────────────────────
+## Each Curve maps X = normalised progress [0..1] → Y = multiplier.
+## Leave null to use the fallback scalar instead.
+
+## Enemy HP multiplier over the stage.
+@export var hp_curve: Curve
+
+## Enemy fire-rate multiplier over the stage.
+@export var fire_rate_curve: Curve
+
+## Spawn count multiplier (rounds to int).
+@export var spawn_count_curve: Curve
+
+## Enemy speed multiplier.
+@export var speed_curve: Curve
+
+## Breather duration multiplier (lower = shorter breathers later).
+@export var breather_curve: Curve
+
+## Overall intensity / pressure value for custom systems.
+@export var intensity_curve: Curve
+
+## ── Fallback scalars ────────────────────────────────────────────────────────
+## Used when the corresponding curve is null.
+
+@export var hp_scalar: float = 1.0
+@export var fire_rate_scalar: float = 1.0
+@export var spawn_count_scalar: float = 1.0
+@export var speed_scalar: float = 1.0
+@export var breather_scalar: float = 1.0
+@export var intensity_scalar: float = 1.0
+
+
+## Sample a named parameter at the given normalised progress.
+## Returns the curve value if the curve exists, otherwise the scalar fallback.
+func sample(param: StringName, progress: float) -> float:
+	progress = clampf(progress, 0.0, 1.0)
+	match param:
+		&"hp":
+			return hp_curve.sample(progress) if hp_curve != null else hp_scalar
+		&"fire_rate":
+			return fire_rate_curve.sample(progress) if fire_rate_curve != null else fire_rate_scalar
+		&"spawn_count":
+			return spawn_count_curve.sample(progress) if spawn_count_curve != null else spawn_count_scalar
+		&"speed":
+			return speed_curve.sample(progress) if speed_curve != null else speed_scalar
+		&"breather":
+			return breather_curve.sample(progress) if breather_curve != null else breather_scalar
+		&"intensity":
+			return intensity_curve.sample(progress) if intensity_curve != null else intensity_scalar
+		_:
+			push_warning("DifficultyProfile: unknown param '%s'" % param)
+			return 1.0
+
+
+## Convenience: sample all params at once into a Dictionary.
+func sample_all(progress: float) -> Dictionary:
+	return {
+		&"hp": sample(&"hp", progress),
+		&"fire_rate": sample(&"fire_rate", progress),
+		&"spawn_count": sample(&"spawn_count", progress),
+		&"speed": sample(&"speed", progress),
+		&"breather": sample(&"breather", progress),
+		&"intensity": sample(&"intensity", progress),
+	}
+```
+
+### rhythm_spacer.gd
+
+```gdscript
+## Inserts breather gaps between combat encounters based on difficulty curves
+## and rhythm rules.
+##
+## The spacer operates on an already-built segment list, inserting empty
+## breather Encounters (no events, just duration) where needed.
+## This is a runtime helper, not a Resource.
+class_name RhythmSpacer
+
+## ── Configuration ───────────────────────────────────────────────────────────
+
+## Minimum gap duration (seconds / distance units) between combat encounters.
+var min_gap: float = 2.0
+
+## Maximum gap duration before the difficulty profile scales it down.
+var max_gap: float = 6.0
+
+## If true, always insert a breather after encounter slots even if the
+## template already has explicit BREATHER slots.
+var force_breathers: bool = false
+
+var _rng: RandomNumberGenerator
+var _profile: DifficultyProfile
+
+
+func _init(rng: RandomNumberGenerator, profile: DifficultyProfile = null,
+		p_min_gap: float = 2.0, p_max_gap: float = 6.0) -> void:
+	_rng = rng
+	_profile = profile
+	min_gap = p_min_gap
+	max_gap = p_max_gap
+
+
+## Process a flat list of segments and insert breather encounters where
+## two combat encounters sit back-to-back.
+##
+## [param segments]        — the built segment list (mutated in place).
+## [param total_slots]     — total slot count (used for progress normalisation).
+## [param combat_indices]  — indices in `segments` that are combat encounters.
+func insert_breathers(
+	segments: Array[Encounter],
+	total_slots: int,
+	combat_indices: Array[int]
+) -> void:
+	if combat_indices.size() < 2:
+		return
+
+	# Work backwards so insertions don't shift indices
+	var insert_count := 0
+	for i in range(combat_indices.size() - 1, 0, -1):
+		var current_idx := combat_indices[i] + insert_count
+		var prev_idx := combat_indices[i - 1] + insert_count
+
+		# Check if there's already a breather between these two combat slots
+		if current_idx - prev_idx > 1:
+			continue
+
+		# Calculate progress at this point in the stage
+		var progress := float(i) / float(maxi(total_slots, 1))
+
+		# Calculate gap duration
+		var gap := _calculate_gap(progress)
+
+		# Create breather encounter
+		var breather := _make_breather(gap)
+
+		# Insert after the previous combat encounter
+		segments.insert(prev_idx + 1, breather)
+		insert_count += 1
+
+
+## Calculate gap duration scaled by difficulty profile and jitter.
+func _calculate_gap(progress: float) -> float:
+	var base_gap := lerpf(max_gap, min_gap, progress)
+
+	# Apply difficulty curve scaling if available
+	if _profile != null:
+		var breather_mult := _profile.sample(&"breather", progress)
+		base_gap *= breather_mult
+
+	# Add small random jitter (±15%)
+	var jitter := _rng.randf_range(-0.15, 0.15)
+	base_gap *= (1.0 + jitter)
+
+	return clampf(base_gap, min_gap, max_gap)
+
+
+## Create an empty encounter that acts as a breather gap.
+func _make_breather(duration: float) -> Encounter:
+	var enc := Encounter.new()
+	enc.id = "breather_%d" % _rng.randi()
+	enc.display_name = "Breather"
+	enc.duration = duration
+	enc.tags = PackedStringArray(["breather", "auto_generated"])
+	# No events — just empty time / distance for the player to breathe
+	return enc
+```
+
+### stage_builder.gd
+
+```gdscript
+## Orchestrates procedural stage generation.
+##
+## Takes a StageTemplate (skeleton), an EncounterPool (content), and a
+## DifficultyProfile (curves), then outputs an Array[Encounter] ready to
+## be fed into StageDirector.segments.
+##
+## Pipeline:
+##   1. Walk template slots
+##   2. For each COMBAT slot → draw from EncounterDeck matching constraints
+##   3. For each FIXED slot  → use the slot's fixed_encounter directly
+##   4. For each BREATHER slot → generate an empty breather encounter
+##   5. Apply difficulty mutations based on slot position + curves
+##   6. Run RhythmSpacer to insert auto-breathers between adjacent combat slots
+##   7. Return the final segment array
+##
+## This is a runtime utility class — not a Node or Resource.
+class_name StageBuilder
+
+# ── Build result ─────────────────────────────────────────────────────────────
+
+## Returned by build() with the segment array and metadata.
+class BuildResult:
+	var segments: Array[Encounter] = []
+	var seed_used: int = 0
+	var slots_filled: int = 0
+	var slots_skipped: int = 0
+	var breathers_inserted: int = 0
+
+# ── Configuration ────────────────────────────────────────────────────────────
+
+var template: StageTemplate
+var pool: EncounterPool
+var profile: DifficultyProfile
+
+## Minimum breather gap between adjacent combat encounters (distance/seconds).
+var min_gap: float = 2.0
+## Maximum breather gap.
+var max_gap: float = 6.0
+## If true, the spacer inserts breathers between adjacent combat encounters
+## even if the template doesn't have explicit BREATHER slots between them.
+var auto_breathers: bool = true
+## How many recent draws to remember for repeat prevention.
+var history_limit: int = 3
+
+var _rng: RandomNumberGenerator
+var _deck: EncounterDeck
+
+
+func _init(
+	p_template: StageTemplate,
+	p_pool: EncounterPool,
+	p_profile: DifficultyProfile = null,
+	p_rng: RandomNumberGenerator = null
+) -> void:
+	template = p_template
+	pool = p_pool
+	profile = p_profile
+	_rng = p_rng if p_rng != null else RandomNumberGenerator.new()
+
+
+## Build the stage segments from the template + pool.
+## Returns a BuildResult with the segments array and stats.
+func build(run_seed: int = 0) -> BuildResult:
+	var result := BuildResult.new()
+
+	# Seed
+	if run_seed != 0:
+		_rng.seed = run_seed
+	else:
+		_rng.randomize()
+	result.seed_used = _rng.seed
+
+	# Create deck from pool
+	_deck = EncounterDeck.new(pool, _rng, history_limit)
+	_deck.refill()
+
+	var segments: Array[Encounter] = []
+	var combat_indices: Array[int] = [] # track where combat encounters land
+	var total_slots := template.slots.size()
+
+	# ── Walk slots ───────────────────────────────────────────────────────
+	for slot_idx in total_slots:
+		var slot := template.slots[slot_idx]
+		if slot == null:
+			continue
+
+		var progress := float(slot_idx) / float(maxi(total_slots - 1, 1))
+
+		match slot.role:
+			SlotDefinition.Role.COMBAT:
+				var enc := _fill_combat_slot(slot, progress)
+				if enc != null:
+					combat_indices.append(segments.size())
+					segments.append(enc)
+					result.slots_filled += 1
+				else:
+					result.slots_skipped += 1
+
+			SlotDefinition.Role.FIXED:
+				var enc := _fill_fixed_slot(slot)
+				if enc != null:
+					segments.append(enc)
+					result.slots_filled += 1
+				else:
+					result.slots_skipped += 1
+
+			SlotDefinition.Role.BREATHER:
+				var enc := _fill_breather_slot(slot, progress)
+				segments.append(enc)
+				result.slots_filled += 1
+
+	# ── Auto-breathers ───────────────────────────────────────────────────
+	if auto_breathers and combat_indices.size() > 1:
+		var spacer := RhythmSpacer.new(_rng, profile, min_gap, max_gap)
+		var before := segments.size()
+		spacer.insert_breathers(segments, total_slots, combat_indices)
+		result.breathers_inserted = segments.size() - before
+
+	result.segments = segments
+	return result
+
+
+# ── Slot filling ─────────────────────────────────────────────────────────────
+
+func _fill_combat_slot(slot: SlotDefinition, progress: float) -> Encounter:
+	var enc := _deck.draw(
+		slot.required_tags,
+		slot.excluded_tags,
+		slot.min_tier,
+		slot.max_tier,
+		slot.allow_repeat
+	)
+
+	if enc == null:
+		if not slot.optional:
+			push_warning("StageBuilder: no match for combat slot (tags=%s, tier=%d-%d)" % [
+				str(slot.required_tags), slot.min_tier, slot.max_tier])
+		return null
+
+	# Deep-duplicate so mutations don't affect the pool's originals
+	enc = enc.duplicate(true)
+
+	# Apply duration override
+	if slot.duration_override > 0.0:
+		enc.duration = slot.duration_override
+
+	# Apply difficulty mutations
+	if profile != null:
+		_mutate_encounter(enc, progress)
+
+	return enc
+
+
+func _fill_fixed_slot(slot: SlotDefinition) -> Encounter:
+	if slot.fixed_encounter == null:
+		push_warning("StageBuilder: FIXED slot has no fixed_encounter set.")
+		return null
+	# Duplicate so runtime mutations don't affect the authored resource
+	var enc := slot.fixed_encounter.duplicate(true) as Encounter
+	if slot.duration_override > 0.0:
+		enc.duration = slot.duration_override
+	return enc
+
+
+func _fill_breather_slot(slot: SlotDefinition, progress: float) -> Encounter:
+	var duration := slot.breather_duration
+	if profile != null:
+		duration *= profile.sample(&"breather", progress)
+	duration = maxf(duration, 1.0)
+
+	var enc := Encounter.new()
+	enc.id = "breather_%d" % _rng.randi()
+	enc.display_name = "Breather"
+	enc.duration = duration
+	enc.tags = PackedStringArray(["breather"])
+	return enc
+
+
+# ── Difficulty mutations ─────────────────────────────────────────────────────
+
+## Mutate an encounter's SpawnEvents based on the difficulty profile at the
+## given progress point.
+func _mutate_encounter(enc: Encounter, progress: float) -> void:
+	var scales := profile.sample_all(progress)
+
+	for ev in enc.events:
+		if ev == null:
+			continue
+		if ev is SpawnEvent:
+			_mutate_spawn_event(ev as SpawnEvent, scales)
+
+
+func _mutate_spawn_event(ev: SpawnEvent, scales: Dictionary) -> void:
+	# Scale HP
+	if ev.hp > 0:
+		ev.hp = maxi(roundi(float(ev.hp) * scales[&"hp"]), 1)
+
+	# Scale spawn count
+	var count_mult: float = scales[&"spawn_count"]
+	if count_mult != 1.0:
+		ev.count = maxi(roundi(float(ev.count) * count_mult), 1)
+
+	# Scale move style speed
+	if ev.move_style != null:
+		ev.move_style = ev.move_style.duplicate() as MoveStyle
+		ev.move_style.speed_x *= scales[&"speed"]
+		ev.move_style.speed_z *= scales[&"speed"]
+
+	# Scale pattern fire rate
+	if ev.pattern != null:
+		ev.pattern = ev.pattern.duplicate() as Pattern
+		var fr: float = scales[&"fire_rate"]
+		if fr > 0.0:
+			ev.pattern.fire_interval = maxf(ev.pattern.fire_interval / fr, 0.1)
+```
+
+### StageDirector changes (stage_director.gd)
+
+New exports added to `StageDirector`:
+
+```gdscript
+# ── Procedural generation (optional) ────────────────────────────────────────
+
+@export var stage_template: StageTemplate
+@export var encounter_pool: EncounterPool
+@export var difficulty_profile: DifficultyProfile
+@export var min_breather_gap: float = 2.0
+@export var max_breather_gap: float = 6.0
+@export var auto_breathers: bool = true
+```
+
+New internal state:
+
+```gdscript
+var _last_build_result: StageBuilder.BuildResult = null
+```
+
+Modified `start_stage()` — procedural build block:
+
+```gdscript
+func start_stage(seed_override: int = 0) -> void:
+  # ... seed setup ...
+
+  # ── Procedural build (if template + pool are set) ────────────────────
+  if stage_template != null and encounter_pool != null:
+    var builder := StageBuilder.new(stage_template, encounter_pool, difficulty_profile, _rng)
+    builder.min_gap = min_breather_gap
+    builder.max_gap = max_breather_gap
+    builder.auto_breathers = auto_breathers
+    _last_build_result = builder.build(run_seed)
+    segments = _last_build_result.segments
+
+  # ... rest unchanged ...
+```
+
+New public API:
+
+```gdscript
+## Returns true if segments were built procedurally (template + pool).
+func is_procedural() -> bool:
+  return _last_build_result != null
+
+## Returns the last StageBuilder.BuildResult (null if manual segments).
+func last_build_result() -> StageBuilder.BuildResult:
+  return _last_build_result
+```

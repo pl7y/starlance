@@ -13,6 +13,43 @@
 [ext_resource type="Resource" uid="uid://cygc4mwlm1rxk" path="res://resources/1.encounter.tres" id="12_itntn"]
 [ext_resource type="Script" uid="uid://bx6f3uaf823k7" path="res://scenes/encounters/encounter_runner.gd" id="13_7ocsb"]
 [ext_resource type="Script" uid="uid://b7muo30j743j7" path="res://scenes/encounters/enemy_spawner.gd" id="14_6demn"]
+[ext_resource type="Script" uid="uid://cs50vfhsfsego" path="res://scenes/encounters/stage_director.gd" id="14_7ocsb"]
+[ext_resource type="Script" uid="uid://b24sg000wsii0" path="res://scenes/encounters/difficulty_profile.gd" id="15_6demn"]
+[ext_resource type="Script" uid="uid://dbp6h4gvlg87c" path="res://scenes/encounters/encounter.gd" id="15_qfdku"]
+
+[sub_resource type="Curve" id="Curve_qfdku"]
+_data = [Vector2(0, 0), 0.0, 0.0, 0, 0, Vector2(1, 1), 0.0, 0.0, 0, 0]
+point_count = 2
+
+[sub_resource type="Curve" id="Curve_25g3s"]
+_data = [Vector2(0, 0), 0.0, 0.0, 0, 0, Vector2(1, 1), 0.0, 0.0, 0, 0]
+point_count = 2
+
+[sub_resource type="Curve" id="Curve_aagjl"]
+_data = [Vector2(0, 0), 0.0, 0.0, 0, 0, Vector2(1, 1), 0.0, 0.0, 0, 0]
+point_count = 2
+
+[sub_resource type="Curve" id="Curve_gnb8g"]
+_data = [Vector2(0, 0), 0.0, 0.0, 0, 0, Vector2(1, 1), 0.0, 0.0, 0, 0]
+point_count = 2
+
+[sub_resource type="Curve" id="Curve_t1iya"]
+_data = [Vector2(0, 0), 0.0, 0.0, 0, 0, Vector2(1, 1), 0.0, 0.0, 0, 0]
+point_count = 2
+
+[sub_resource type="Curve" id="Curve_jwwn1"]
+_data = [Vector2(0, 0), 0.0, 0.0, 0, 0, Vector2(1, 1), 0.0, 0.0, 0, 0]
+point_count = 2
+
+[sub_resource type="Resource" id="Resource_qfdku"]
+script = ExtResource("15_6demn")
+hp_curve = SubResource("Curve_aagjl")
+fire_rate_curve = SubResource("Curve_25g3s")
+spawn_count_curve = SubResource("Curve_t1iya")
+speed_curve = SubResource("Curve_jwwn1")
+breather_curve = SubResource("Curve_qfdku")
+intensity_curve = SubResource("Curve_gnb8g")
+metadata/_custom_type_script = "uid://b24sg000wsii0"
 
 [node name="GameplayScreen" type="Node2D" unique_id=158736197]
 
@@ -85,13 +122,22 @@ metadata/_custom_type_script = "uid://clwdi74exmma7"
 
 [node name="EncounterRunner" type="Node" parent="." unique_id=749903038 node_paths=PackedStringArray("spawner")]
 script = ExtResource("13_7ocsb")
-encounter = ExtResource("12_itntn")
 autostart = true
-spawner = NodePath("EnemySpawner")
+spawner = NodePath("../EnemySpawner")
 metadata/_custom_type_script = "uid://bx6f3uaf823k7"
 
-[node name="EnemySpawner" type="Node" parent="EncounterRunner" unique_id=54553492 node_paths=PackedStringArray("world", "camera_rig")]
+[node name="StageDirector" type="Node" parent="." unique_id=1937507698 node_paths=PackedStringArray("runner", "player")]
+script = ExtResource("14_7ocsb")
+runner = NodePath("../EncounterRunner")
+player = NodePath("../ObjectsLayer/Player")
+segments = Array[ExtResource("15_qfdku")]([ExtResource("12_itntn"), ExtResource("12_itntn")])
+run_seed = 1
+modifiers = PackedStringArray()
+autostart = true
+difficulty_profile = SubResource("Resource_qfdku")
+
+[node name="EnemySpawner" type="Node" parent="." unique_id=54553492 node_paths=PackedStringArray("world", "camera_rig")]
 script = ExtResource("14_6demn")
-world = NodePath("../../ObjectsLayer")
-camera_rig = NodePath("../../CameraRig")
+world = NodePath("../ObjectsLayer")
+camera_rig = NodePath("../CameraRig")
 metadata/_custom_type_script = "uid://b7muo30j743j7"
