@@ -22,7 +22,6 @@ class_name EnemySpawner
 ##
 ## Override this in your concrete spawner.
 func spawn_group(event: SpawnEvent, offsets: Array[Vector2], rng: RandomNumberGenerator) -> void:
-  prints("* EnemySpawner.spawn_group() called with event: ", event)
   if world == null:
     push_error("EnemySpawner: world node is not set.")
     return
@@ -33,7 +32,6 @@ func spawn_group(event: SpawnEvent, offsets: Array[Vector2], rng: RandomNumberGe
     push_warning("SpawnEvent has no enemy_scene — skipping.")
     return
 
-  prints("* Spawning group of ", event.count, " enemies with formation shape ", event.formation.shape)
   for i in offsets.size():
     var offset := offsets[i]
 
@@ -51,7 +49,6 @@ func spawn_group(event: SpawnEvent, offsets: Array[Vector2], rng: RandomNumberGe
 
     enemy.world_pos = Vector3(x, y, z)
     world.add_child(enemy)
-    prints("* Spawned enemy at ", enemy.world_pos)
 
     # Apply move style  →  map to Enemy.MovePattern integer
     _apply_move_style(enemy, event.move_style)

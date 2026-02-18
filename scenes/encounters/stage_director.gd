@@ -261,6 +261,8 @@ func last_build_result() -> StageBuilder.BuildResult:
 # ── Segment sequencing ───────────────────────────────────────────────────────
 
 func _play_next_segment() -> void:
+  prints("_play_next_segment: advancing from index %d" % _segment_index)
+  prints("Segments total: %d" % segments.size())
   _segment_index += 1
   if _segment_index >= segments.size():
     _finish_stage()
@@ -297,19 +299,19 @@ func _on_encounter_failed(reason: String) -> void:
 
 
 ## Pattern A: runner tells us a gate was hit → we pause the rail.
-func _on_gate_entered(gate: GateEvent) -> void:
+func _on_gate_entered(_gate: GateEvent) -> void:
   pause_rail()
   # Runner is already gated internally; rail speed goes to 0 so distance
   # stops advancing → Pattern B also satisfied.
 
 
 ## Gate cleared → resume the rail.
-func _on_gate_cleared(gate: GateEvent) -> void:
+func _on_gate_cleared(_gate: GateEvent) -> void:
   resume_rail()
 
 
 ## Phase changes — override or connect to react (music, camera, etc.).
-func _on_phase_changed(phase_name: String) -> void:
+func _on_phase_changed(_phase_name: String) -> void:
   # Subclass or connect a signal to handle phase transitions.
   pass
 

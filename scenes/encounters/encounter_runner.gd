@@ -7,6 +7,8 @@
 extends Node
 class_name EncounterRunner
 
+var _logger = EchoLogger.new("EncounterRunner", "purple", EchoLogger.LogLevel.DEBUG)
+
 # ── Clock mode ───────────────────────────────────────────────────────────────
 
 ## How the runner's internal progress counter advances.
@@ -33,7 +35,7 @@ enum ClockMode {
 @export var spawner: EnemySpawner
 
 ## Deterministic seed.  0 = pick a random seed at start.
-@export var seed: int = 0
+@export var _seed: int = 0
 
 ## Default clock mode (can be overridden per-start via start()).
 @export var clock_mode: ClockMode = ClockMode.DISTANCE
@@ -146,7 +148,7 @@ func start(enc: Encounter = null, run_seed: int = 0, mode: ClockMode = clock_mod
   _distance_origin = _last_distance
 
   # Seed the RNG
-  var effective_seed := run_seed if run_seed != 0 else seed
+  var effective_seed := run_seed if run_seed != 0 else _seed
   if effective_seed != 0:
     _rng.seed = effective_seed
   elif encounter.seed_hint != 0:
@@ -155,6 +157,7 @@ func start(enc: Encounter = null, run_seed: int = 0, mode: ClockMode = clock_mod
     _rng.randomize()
 
   set_process(true)
+  _logger.debug("Encounter started: %s" % encounter)
   encounter_started.emit(encounter)
 
 
@@ -202,6 +205,7 @@ func fail(reason: String = "aborted") -> void:
     return
   _running = false
   set_process(false)
+  _logger.debug("Encounter failed: %s" % reason)
   encounter_failed.emit(reason)
 
 
@@ -275,6 +279,7 @@ func _advance_events() -> void:
 
 
 func _dispatch(ev: EncounterEvent) -> void:
+  _logger.debug("Event fired: %s" % ev)
   event_fired.emit(ev)
 
   if ev is SpawnEvent:
@@ -282,12 +287,15 @@ func _dispatch(ev: EncounterEvent) -> void:
   elif ev is GateEvent:
     _enter_gate(ev as GateEvent)
   elif ev is PhaseEvent:
+    _logger.debug("Phase changed: %s" % (ev as PhaseEvent).phase_name)
     phase_changed.emit((ev as PhaseEvent).phase_name)
   elif ev is MarkerEvent:
     var me := ev as MarkerEvent
+    _logger.debug("Marker hit: %s Payload: %s" % [me.marker_name, me.payload])
     marker_hit.emit(me.marker_name, me.payload)
   elif ev is SignalEvent:
     var se := ev as SignalEvent
+    _logger.debug("Custom signal: %s Argument: %s" % [se.signal_name, se.argument])
     custom_signal.emit(se.signal_name, se.argument)
 
 
@@ -311,7 +319,7 @@ func _enter_gate(gate: GateEvent) -> void:
   _gate_active = true
   _active_gate = gate
   _gate_timer = 0.0
-  gate_entered.emit(gate)
+  _logger.debug("Gate entered: %s" % gate)
 
 
 func _update_gate(delta: float) -> void:
@@ -344,6 +352,7 @@ func _clear_gate() -> void:
   _active_gate = null
   _gate_timer = 0.0
   if cleared != null:
+    _logger.debug("Gate cleared: %s" % cleared)
     gate_cleared.emit(cleared)
 
 
@@ -357,4 +366,5 @@ func _finish() -> void:
   _finished = true
   _running = false
   set_process(false)
+  _logger.debug("Encounter finished: %s" % encounter)
   encounter_finished.emit(encounter)

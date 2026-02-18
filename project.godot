@@ -23,6 +23,10 @@ window/size/window_width_override=1024
 window/size/window_height_override=640
 window/stretch/mode="viewport"
 
+[editor_plugins]
+
+enabled=PackedStringArray("res://addons/pl7y_echo/plugin.cfg")
+
 [global_group]
 
 camera_rig=""

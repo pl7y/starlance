@@ -1,5 +1,6 @@
 [gd_scene format=3 uid="uid://5v7a0ra4elxi"]
 
+[ext_resource type="Script" uid="uid://52c0r8owfv4p" path="res://scenes/gameplay_screen.gd" id="1_25g3s"]
 [ext_resource type="PackedScene" uid="uid://dfvx4shbdy2i0" path="res://scenes/camera_rig.tscn" id="1_nl8x0"]
 [ext_resource type="PackedScene" uid="uid://ehbcmyfcurbu" path="res://scenes/ground.tscn" id="2_gej26"]
 [ext_resource type="PackedScene" uid="uid://cbio2ymsjjt45" path="res://scenes/parallax_2d_layer.tscn" id="2_mcs8y"]
@@ -10,12 +11,28 @@
 [ext_resource type="Texture2D" uid="uid://cujsmm07hnsej" path="res://assets/packages/Glacial-mountains-parallax-background_vnitti/Layers/clouds_mg_1.png" id="10_cjr5t"]
 [ext_resource type="Texture2D" uid="uid://pi2m5lc3c6fp" path="res://assets/packages/Glacial-mountains-parallax-background_vnitti/Layers/clouds_mg_2.png" id="11_itntn"]
 [ext_resource type="Texture2D" uid="uid://c6nr8ekrc61va" path="res://assets/packages/Glacial-mountains-parallax-background_vnitti/Layers/clouds_mg_3.png" id="12_7ocsb"]
+[ext_resource type="Script" uid="uid://dcmcy45m282ap" path="res://scenes/system_connector.gd" id="12_h7c6k"]
 [ext_resource type="Resource" uid="uid://cygc4mwlm1rxk" path="res://resources/1.encounter.tres" id="12_itntn"]
 [ext_resource type="Script" uid="uid://bx6f3uaf823k7" path="res://scenes/encounters/encounter_runner.gd" id="13_7ocsb"]
 [ext_resource type="Script" uid="uid://b7muo30j743j7" path="res://scenes/encounters/enemy_spawner.gd" id="14_6demn"]
 [ext_resource type="Script" uid="uid://cs50vfhsfsego" path="res://scenes/encounters/stage_director.gd" id="14_7ocsb"]
 [ext_resource type="Script" uid="uid://b24sg000wsii0" path="res://scenes/encounters/difficulty_profile.gd" id="15_6demn"]
 [ext_resource type="Script" uid="uid://dbp6h4gvlg87c" path="res://scenes/encounters/encounter.gd" id="15_qfdku"]
+[ext_resource type="Script" uid="uid://c0qggvj364owo" path="res://scenes/encounters/encounter_pool_entry.gd" id="16_gnb8g"]
+[ext_resource type="Script" uid="uid://cxhp7xriewxiu" path="res://scenes/encounters/encounter_pool.gd" id="17_t1iya"]
+
+[sub_resource type="Resource" id="Resource_jwwn1"]
+script = ExtResource("16_gnb8g")
+encounter = ExtResource("12_itntn")
+extra_tags = PackedStringArray()
+metadata/_custom_type_script = "uid://c0qggvj364owo"
+
+[sub_resource type="Resource" id="Resource_h7c6k"]
+script = ExtResource("17_t1iya")
+display_name = "123"
+entries = Array[ExtResource("16_gnb8g")]([SubResource("Resource_jwwn1"), SubResource("Resource_jwwn1"), SubResource("Resource_jwwn1"), SubResource("Resource_jwwn1"), SubResource("Resource_jwwn1")])
+tags = PackedStringArray()
+metadata/_custom_type_script = "uid://cxhp7xriewxiu"
 
 [sub_resource type="Curve" id="Curve_qfdku"]
 _data = [Vector2(0, 0), 0.0, 0.0, 0, 0, Vector2(1, 1), 0.0, 0.0, 0, 0]
@@ -52,6 +69,7 @@ intensity_curve = SubResource("Curve_gnb8g")
 metadata/_custom_type_script = "uid://b24sg000wsii0"
 
 [node name="GameplayScreen" type="Node2D" unique_id=158736197]
+script = ExtResource("1_25g3s")
 
 [node name="CameraRig" parent="." unique_id=2025045557 instance=ExtResource("1_nl8x0")]
 follow_strength = 1.0
@@ -112,7 +130,7 @@ layer = 2
 
 [node name="Player" parent="ObjectsLayer" unique_id=1077760697 groups=["player"] instance=ExtResource("5_157wf")]
 modulate = Color(1, 1, 1, 0.42745098)
-speed = 0.0
+speed = 200.0
 world_pos = Vector3(50, 0, 0)
 fixed_sprite = true
 
@@ -120,24 +138,40 @@ fixed_sprite = true
 script = ExtResource("9_iniog")
 metadata/_custom_type_script = "uid://clwdi74exmma7"
 
-[node name="EncounterRunner" type="Node" parent="." unique_id=749903038 node_paths=PackedStringArray("spawner")]
+[node name="SystemConnector" type="Node" parent="." unique_id=1333706372 node_paths=PackedStringArray("encounter_runner", "stage_director", "enemy_spawner")]
+script = ExtResource("12_h7c6k")
+encounter_runner = NodePath("EncounterRunner")
+stage_director = NodePath("StageDirector")
+enemy_spawner = NodePath("EnemySpawner")
+
+[node name="EncounterRunner" type="Node" parent="SystemConnector" unique_id=749903038 node_paths=PackedStringArray("spawner")]
 script = ExtResource("13_7ocsb")
 autostart = true
 spawner = NodePath("../EnemySpawner")
 metadata/_custom_type_script = "uid://bx6f3uaf823k7"
 
-[node name="StageDirector" type="Node" parent="." unique_id=1937507698 node_paths=PackedStringArray("runner", "player")]
+[node name="StageDirector" type="Node" parent="SystemConnector" unique_id=1937507698 node_paths=PackedStringArray("runner", "player")]
 script = ExtResource("14_7ocsb")
 runner = NodePath("../EncounterRunner")
-player = NodePath("../ObjectsLayer/Player")
-segments = Array[ExtResource("15_qfdku")]([ExtResource("12_itntn"), ExtResource("12_itntn")])
-run_seed = 1
+player = NodePath("../../ObjectsLayer/Player")
+segments = Array[ExtResource("15_qfdku")]([ExtResource("12_itntn"), ExtResource("12_itntn"), ExtResource("12_itntn"), ExtResource("12_itntn"), ExtResource("12_itntn")])
+run_seed = 2
+rail_speed = 200.0
 modifiers = PackedStringArray()
 autostart = true
+encounter_pool = SubResource("Resource_h7c6k")
 difficulty_profile = SubResource("Resource_qfdku")
 
-[node name="EnemySpawner" type="Node" parent="." unique_id=54553492 node_paths=PackedStringArray("world", "camera_rig")]
+[node name="EnemySpawner" type="Node" parent="SystemConnector" unique_id=54553492 node_paths=PackedStringArray("world", "camera_rig")]
 script = ExtResource("14_6demn")
-world = NodePath("../ObjectsLayer")
-camera_rig = NodePath("../CameraRig")
+world = NodePath("../../ObjectsLayer")
+camera_rig = NodePath("../../CameraRig")
 metadata/_custom_type_script = "uid://b7muo30j743j7"
+
+[connection signal="rail_paused" from="SystemConnector/StageDirector" to="." method="_on_stage_director_rail_paused"]
+[connection signal="rail_resumed" from="SystemConnector/StageDirector" to="." method="_on_stage_director_rail_resumed"]
+[connection signal="segment_finished" from="SystemConnector/StageDirector" to="." method="_on_stage_director_segment_finished"]
+[connection signal="segment_started" from="SystemConnector/StageDirector" to="." method="_on_stage_director_segment_started"]
+[connection signal="stage_failed" from="SystemConnector/StageDirector" to="." method="_on_stage_director_stage_failed"]
+[connection signal="stage_finished" from="SystemConnector/StageDirector" to="." method="_on_stage_director_stage_finished"]
+[connection signal="stage_started" from="SystemConnector/StageDirector" to="." method="_on_stage_director_stage_started"]
