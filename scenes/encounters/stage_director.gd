@@ -104,6 +104,20 @@ var _saved_rail_speed: float = 0.0
 var _rail_paused: bool = false
 var _last_build_result: StageBuilder.BuildResult = null
 
+# ── Segment distance mapping ─────────────────────────────────────────────────
+
+## Absolute distance at which each segment starts.
+var _segment_starts: PackedFloat64Array = PackedFloat64Array()
+
+## Total stage distance (sum of all segment durations).
+var _total_stage_distance: float = 0.0
+
+## Current absolute distance received from the player.
+var _current_distance: float = 0.0
+
+## Whether we're waiting for the player to reach the next segment start.
+var _waiting_for_distance: bool = false
+
 # ── Lifecycle ────────────────────────────────────────────────────────────────
 
 func _ready() -> void:
@@ -126,9 +140,11 @@ func _connect_runner_signals() -> void:
 func _connect_player_signals() -> void:
   if player == null:
     return
-  # Feed player distance into the runner (Pattern B: runner pulls from rail).
+  # Feed player distance into the runner (micro: events within encounter).
   if runner != null:
     player.distance_changed.connect(runner._on_distance_changed)
+  # Feed player distance into the director (macro: which segment is active).
+  player.distance_changed.connect(_on_distance_changed)
 
 # ── Public API ───────────────────────────────────────────────────────────────
 
@@ -169,15 +185,26 @@ func start_stage(seed_override: int = 0) -> void:
     push_error("StageDirector: no segments to play.")
     return
 
+  # Build the distance map — segments are placed end-to-end on the rail
+  _build_distance_map()
+
   _segment_index = -1
+  _current_distance = 0.0
+  _waiting_for_distance = false
   _running = true
   _rail_paused = false
+
+  # Record player's current distance as our origin
+  if player != null:
+    _current_distance = player._distance
 
   # Apply base rail speed
   _set_rail_speed(rail_speed)
 
   stage_started.emit()
-  _play_next_segment()
+
+  # Start first segment immediately
+  _start_segment(0)
 
 
 ## Manually advance to next segment (skip current).
@@ -185,7 +212,7 @@ func skip_segment() -> void:
   if not _running:
     return
   runner.stop()
-  _play_next_segment()
+  _queue_next_segment()
 
 
 ## Stop the entire stage.
@@ -258,27 +285,87 @@ func is_procedural() -> bool:
 func last_build_result() -> StageBuilder.BuildResult:
   return _last_build_result
 
+# ── Segment distance mapping ─────────────────────────────────────────────────
+
+## Compute absolute start distances for each segment.
+## Segments are placed end-to-end: segment[i] starts where segment[i-1] ends.
+func _build_distance_map() -> void:
+  _segment_starts.clear()
+  var cursor: float = 0.0
+  for seg in segments:
+    _segment_starts.append(cursor)
+    if seg.duration <= 0.0:
+      push_warning("StageDirector: segment '%s' has zero duration, defaulting to 20.0" % seg.id)
+      seg.duration = 20.0
+    cursor += seg.duration
+  _total_stage_distance = cursor
+  print("StageDirector: distance map — %d segments, %.1f total distance" % [segments.size(), _total_stage_distance])
+  for i in segments.size():
+    print("  [%d] %s starts at %.1f, duration %.1f" % [i, segments[i].id, _segment_starts[i], segments[i].duration])
+
 # ── Segment sequencing ───────────────────────────────────────────────────────
 
-func _play_next_segment() -> void:
-  prints("_play_next_segment: advancing from index %d" % _segment_index)
-  prints("Segments total: %d" % segments.size())
-  _segment_index += 1
-  if _segment_index >= segments.size():
+## Called every frame the player moves.  Drives segment transitions.
+func _on_distance_changed(distance: float) -> void:
+  _current_distance = distance
+
+  if not _running:
+    return
+  if _rail_paused:
+    return
+
+  # Check if we should start the next segment
+  if _waiting_for_distance:
+    var next_index := _segment_index + 1
+    if next_index < segments.size():
+      var next_start := _segment_starts[next_index]
+      if _current_distance >= next_start:
+        _waiting_for_distance = false
+        _start_segment(next_index)
+
+
+## Start a specific segment immediately.
+func _start_segment(index: int) -> void:
+  if index < 0 or index >= segments.size():
     _finish_stage()
     return
 
+  _segment_index = index
   var enc := segments[_segment_index]
+
   if enc == null:
     push_warning("StageDirector: segment %d is null, skipping." % _segment_index)
-    _play_next_segment()
+    _queue_next_segment()
     return
 
   # Derive a per-segment seed from the run seed
   var seg_seed := _rng.randi()
 
+  print("StageDirector: starting segment [%d] '%s' at distance %.1f" % [
+    _segment_index, enc.id, _current_distance
+  ])
+
   segment_started.emit(_segment_index, enc)
   runner.start(enc, seg_seed, default_clock)
+
+
+## Queue the next segment — waits for the player to reach its start distance.
+func _queue_next_segment() -> void:
+  var next_index := _segment_index + 1
+  if next_index >= segments.size():
+    _finish_stage()
+    return
+
+  var next_start := _segment_starts[next_index]
+
+  # If the player is already past the start point, start immediately.
+  if _current_distance >= next_start:
+    _start_segment(next_index)
+  else:
+    _waiting_for_distance = true
+    print("StageDirector: waiting for distance %.1f to start segment [%d] '%s' (current: %.1f)" % [
+      next_start, next_index, segments[next_index].id, _current_distance
+    ])
 
 
 func _finish_stage() -> void:
@@ -291,7 +378,7 @@ func _on_encounter_finished(enc: Encounter) -> void:
   if not _running:
     return
   segment_finished.emit(_segment_index, enc)
-  _play_next_segment()
+  _queue_next_segment()
 
 
 func _on_encounter_failed(reason: String) -> void:

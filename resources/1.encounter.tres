@@ -67,6 +67,7 @@ metadata/_custom_type_script = "uid://c8om0jd1cjoha"
 script = ExtResource("2_4a1j6")
 id = "first_ecounter"
 display_name = "First encounter"
+duration = 1000.0
 events = Array[ExtResource("1_48tfx")]([SubResource("Resource_7rqy2"), SubResource("Resource_blkvj")])
 tags = PackedStringArray()
 metadata/_custom_type_script = "uid://dbp6h4gvlg87c"

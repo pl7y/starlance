@@ -40,7 +40,7 @@ func _on_encounter_started(enc: Encounter) -> void:
 
 func _on_encounter_finished(enc: Encounter) -> void:
     _logger.debug("Segment finished: %s" % enc.id)
-    stage_director._play_next_segment()
+    stage_director._queue_next_segment()
 
 
 func _on_encounter_failed(reason: String) -> void:
