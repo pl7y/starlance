@@ -40,6 +40,11 @@ enum ClockMode {
 ## Default clock mode (can be overridden per-start via start()).
 @export var clock_mode: ClockMode = ClockMode.DISTANCE
 
+## When true, the encounter finishes early once all events have been
+## dispatched AND no enemies from the "enemies" group remain alive.
+## Prevents dead gaps when the player clears waves quickly.
+@export var finish_on_clear: bool = false
+
 # ── Signals (interaction contract) ───────────────────────────────────────────
 
 ## Emitted once when the encounter begins playing.
@@ -96,6 +101,12 @@ var _gate_flags: Dictionary = {}
 
 func _ready() -> void:
   set_process(false)
+  
+  # Connect to player's distance updates for DISTANCE mode
+  var player = get_tree().get_first_node_in_group("player") as Player
+  if player != null:
+    player.distance_changed.connect(_on_distance_changed)
+  
   if autostart and encounter != null:
     start()
 
@@ -117,8 +128,15 @@ func _process(delta: float) -> void:
   _advance_events()
 
   # ── End condition ──
-  if _progress >= encounter.duration or _all_events_fired():
+  if _progress >= encounter.duration:
     _finish()
+  elif _all_events_fired():
+    if finish_on_clear:
+      # All events dispatched — finish early only when no enemies remain
+      if get_tree().get_nodes_in_group("enemies").size() == 0:
+        _finish()
+    else:
+      _finish()
 
 # ── Public API ───────────────────────────────────────────────────────────────
 
@@ -320,7 +338,7 @@ func _enter_gate(gate: GateEvent) -> void:
   _active_gate = gate
   _gate_timer = 0.0
   _logger.debug("Gate entered: %s" % gate)
-
+  gate_entered.emit(gate)
 
 func _update_gate(delta: float) -> void:
   if _active_gate == null:

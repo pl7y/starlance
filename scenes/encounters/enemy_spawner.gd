@@ -85,6 +85,15 @@ func _apply_move_style(enemy: Node, style: MoveStyle) -> void:
     enemy.orbit_radius = style.orbit_radius
   if "orbit_speed" in enemy:
     enemy.orbit_speed = style.orbit_speed
+  if "follow_distance" in enemy:
+    enemy.follow_distance = style.follow_distance
+  if "rush_turn" in enemy:
+    enemy.rush_turn = style.rush_turn
+
+  # Custom AI logic — duplicate so each enemy gets its own state
+  if style.type == MoveStyle.Type.CUSTOM and style.custom_logic != null:
+    if "custom_move_logic" in enemy:
+      enemy.custom_move_logic = style.custom_logic.duplicate()
 
 
 ## Maps a Pattern resource onto enemy firing properties.

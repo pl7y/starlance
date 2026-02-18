@@ -1,0 +1,51 @@
+[gd_resource type="Resource" script_class="Encounter" format=3]
+
+[ext_resource type="Script" path="res://scenes/encounters/encounter_event.gd" id="1_a4ah8"]
+[ext_resource type="PackedScene" path="res://scenes/enemy.tscn" id="2_tqgit"]
+[ext_resource type="Script" path="res://scenes/encounters/formation.gd" id="3_48qdw"]
+[ext_resource type="Script" path="res://scenes/encounters/ai/swarm_move_logic.gd" id="4_hmlxc"]
+[ext_resource type="Script" path="res://scenes/encounters/move_style.gd" id="5_1bccn"]
+[ext_resource type="Script" path="res://scenes/encounters/pattern.gd" id="6_ctlvi"]
+[ext_resource type="Script" path="res://scenes/encounters/spawn_event.gd" id="7_utsbp"]
+[ext_resource type="Script" path="res://scenes/encounters/encounter.gd" id="8_hd2uc"]
+
+[sub_resource type="Resource" id="Resource_b1okn"]
+script = ExtResource("3_48qdw")
+shape = 4
+spacing = Vector2(0, 0)
+columns = 1
+radius = 50.0
+
+[sub_resource type="Resource" id="Resource_a4fws"]
+script = ExtResource("4_hmlxc")
+
+[sub_resource type="Resource" id="Resource_1k10m"]
+script = ExtResource("5_1bccn")
+type = 7
+custom_logic = SubResource("Resource_a4fws")
+
+[sub_resource type="Resource" id="Resource_6272t"]
+script = ExtResource("6_ctlvi")
+fire_interval = 2.0
+bullet_speed = 70.0
+
+[sub_resource type="Resource" id="Resource_ox6xm"]
+script = ExtResource("7_utsbp")
+enemy_scene = ExtResource("2_tqgit")
+count = 6
+formation = SubResource("Resource_b1okn")
+z_start = -500.0
+move_style = SubResource("Resource_1k10m")
+pattern = SubResource("Resource_6272t")
+hp = 20
+spread = Vector2(30, 20)
+height_offset = 10.0
+tags = PackedStringArray()
+
+[resource]
+script = ExtResource("8_hd2uc")
+id = "hive_swarm"
+display_name = "Hive Swarm"
+duration = 200.0
+events = Array[ExtResource("1_a4ah8")]([SubResource("Resource_ox6xm")])
+tags = PackedStringArray("mid", "ai", "swarm")

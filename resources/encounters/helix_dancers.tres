@@ -1,0 +1,45 @@
+[gd_resource type="Resource" script_class="Encounter" format=3]
+
+[ext_resource type="Script" path="res://scenes/encounters/encounter_event.gd" id="1_7j2dc"]
+[ext_resource type="PackedScene" path="res://scenes/enemy.tscn" id="2_wtnet"]
+[ext_resource type="Script" path="res://scenes/encounters/formation.gd" id="3_eqsbm"]
+[ext_resource type="Script" path="res://scenes/encounters/ai/helix_move_logic.gd" id="4_g5ls2"]
+[ext_resource type="Script" path="res://scenes/encounters/move_style.gd" id="5_5ob10"]
+[ext_resource type="Script" path="res://scenes/encounters/pattern.gd" id="6_dlu1x"]
+[ext_resource type="Script" path="res://scenes/encounters/spawn_event.gd" id="7_eho6v"]
+[ext_resource type="Script" path="res://scenes/encounters/encounter.gd" id="8_ds3ep"]
+
+[sub_resource type="Resource" id="Resource_4shus"]
+script = ExtResource("3_eqsbm")
+
+[sub_resource type="Resource" id="Resource_pvmsg"]
+script = ExtResource("4_g5ls2")
+
+[sub_resource type="Resource" id="Resource_13eb3"]
+script = ExtResource("5_5ob10")
+type = 7
+custom_logic = SubResource("Resource_pvmsg")
+
+[sub_resource type="Resource" id="Resource_p8cuc"]
+script = ExtResource("6_dlu1x")
+
+[sub_resource type="Resource" id="Resource_462aa"]
+script = ExtResource("7_eho6v")
+enemy_scene = ExtResource("2_wtnet")
+count = 4
+formation = SubResource("Resource_4shus")
+z_start = -500.0
+move_style = SubResource("Resource_13eb3")
+pattern = SubResource("Resource_p8cuc")
+hp = 40
+spread = Vector2(10, 10)
+height_offset = 10.0
+tags = PackedStringArray()
+
+[resource]
+script = ExtResource("8_ds3ep")
+id = "helix_dancers"
+display_name = "Helix Dancers"
+duration = 200.0
+events = Array[ExtResource("1_7j2dc")]([SubResource("Resource_462aa")])
+tags = PackedStringArray("elite", "ai", "helix")

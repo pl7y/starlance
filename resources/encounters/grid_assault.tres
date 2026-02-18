@@ -1,0 +1,43 @@
+[gd_resource type="Resource" script_class="Encounter" format=3]
+
+[ext_resource type="Script" path="res://scenes/encounters/encounter_event.gd" id="1_73uwc"]
+[ext_resource type="PackedScene" path="res://scenes/enemy.tscn" id="2_lxcsq"]
+[ext_resource type="Script" path="res://scenes/encounters/formation.gd" id="3_eorhg"]
+[ext_resource type="Script" path="res://scenes/encounters/move_style.gd" id="4_4m1s1"]
+[ext_resource type="Script" path="res://scenes/encounters/pattern.gd" id="5_oya18"]
+[ext_resource type="Script" path="res://scenes/encounters/spawn_event.gd" id="6_nf3d8"]
+[ext_resource type="Script" path="res://scenes/encounters/encounter.gd" id="7_qos1w"]
+
+[sub_resource type="Resource" id="Resource_q1l7r"]
+script = ExtResource("3_eorhg")
+shape = 3
+spacing = Vector2(40, 30)
+
+[sub_resource type="Resource" id="Resource_xmr57"]
+script = ExtResource("4_4m1s1")
+type = 1
+speed_z = 120.0
+
+[sub_resource type="Resource" id="Resource_p8cuc"]
+script = ExtResource("5_oya18")
+
+[sub_resource type="Resource" id="Resource_mb04t"]
+script = ExtResource("6_nf3d8")
+enemy_scene = ExtResource("2_lxcsq")
+count = 6
+formation = SubResource("Resource_q1l7r")
+z_start = -500.0
+move_style = SubResource("Resource_xmr57")
+pattern = SubResource("Resource_p8cuc")
+hp = 30
+spread = Vector2(20, 15)
+height_offset = 20.0
+tags = PackedStringArray()
+
+[resource]
+script = ExtResource("7_qos1w")
+id = "grid_assault"
+display_name = "Grid Assault"
+duration = 150.0
+events = Array[ExtResource("1_73uwc")]([SubResource("Resource_mb04t")])
+tags = PackedStringArray("mid", "grid")

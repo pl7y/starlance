@@ -9,7 +9,7 @@
 extends WorldObject
 class_name Enemy
 
-enum MovePattern {STATIC, DRIFT, SINE_STRAFE, DIVE_AT_PLAYER, SWOOP, ORBIT}
+enum MovePattern {STATIC, DRIFT, SINE_STRAFE, DIVE_AT_PLAYER, SWOOP, ORBIT, RUSH_FOLLOW, CUSTOM}
 
 @export var hp: int = 30
 @export var hit_radius_px: float = 18.0
@@ -40,6 +40,16 @@ enum MovePattern {STATIC, DRIFT, SINE_STRAFE, DIVE_AT_PLAYER, SWOOP, ORBIT}
 @export var orbit_radius: float = 6.0
 @export var orbit_speed: float = 1.5
 
+# Rush-follow params
+## Z-distance ahead of camera where the enemy "locks in" after rushing.
+@export var follow_distance: float = 30.0
+## How fast the enemy homes onto the follow position during the rush phase.
+@export var rush_turn: float = 4.0
+
+## Custom AI logic resource (only used when pattern == CUSTOM).
+## Set by EnemySpawner — each instance gets its own duplicate.
+var custom_move_logic: MoveLogic = null
+
 @onready var sprite := %Sprite2D
 
 @export var explosion_scene: PackedScene
@@ -50,6 +60,7 @@ var _fire_t: float = 0.0
 var _age: float = 0.0
 var _spawn_pos: Vector3
 var _orbit_angle: float = 0.0
+var _rush_arrived: bool = false
 
 func _ready() -> void:
   super._ready()
@@ -58,6 +69,10 @@ func _ready() -> void:
   _age = 0.0
   _spawn_pos = world_pos
   _orbit_angle = randf_range(0.0, TAU)
+
+  # Let custom AI initialize per-instance state
+  if pattern == MovePattern.CUSTOM and custom_move_logic != null:
+    custom_move_logic.setup(self , rig)
 
 func configure(p_hp: int, p_fire_interval: float, p_bullet_speed: float, p_pattern := MovePattern.STATIC) -> void:
   hp = p_hp
@@ -122,6 +137,34 @@ func _update_movement(delta: float) -> void:
       var cy := rig.camera_world_position.y
       world_pos.x = cx + cos(_orbit_angle) * orbit_radius
       world_pos.y = cy + sin(_orbit_angle) * (orbit_radius * 0.6)
+
+    MovePattern.RUSH_FOLLOW:
+      # Phase 1: Rush toward a point `follow_distance` ahead of camera.
+      # Phase 2: Once arrived, orbit at that distance like an escort.
+      var target_z := rig.camera_world_position.z - follow_distance
+      var target_x := rig.camera_world_position.x
+      var target_y := rig.camera_world_position.y
+
+      if not _rush_arrived:
+        # Approach phase — fast homing toward the lock-on point
+        world_pos.z = lerp(world_pos.z, target_z, 1.0 - exp(-rush_turn * delta))
+        world_pos.x = lerp(world_pos.x, target_x, 1.0 - exp(-rush_turn * delta))
+        world_pos.y = lerp(world_pos.y, target_y, 1.0 - exp(-rush_turn * delta))
+
+        # Check if close enough to transition
+        var dist_sq := (world_pos - Vector3(target_x, target_y, target_z)).length_squared()
+        if dist_sq < 4.0: # within ~2 world units
+          _rush_arrived = true
+      else:
+        # Follow phase — orbit around the player at fixed Z offset
+        _orbit_angle += orbit_speed * delta
+        world_pos.z = lerp(world_pos.z, target_z, 1.0 - exp(-2.0 * delta)) # gently track Z
+        world_pos.x = target_x + cos(_orbit_angle) * orbit_radius
+        world_pos.y = target_y + sin(_orbit_angle) * (orbit_radius * 0.6)
+
+    MovePattern.CUSTOM:
+      if custom_move_logic != null:
+        custom_move_logic.update(self , rig, delta)
 
 func _try_shoot(delta: float) -> void:
   if rig == null or bullet_scene == null:

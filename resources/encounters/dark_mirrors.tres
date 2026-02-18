@@ -1,0 +1,49 @@
+[gd_resource type="Resource" script_class="Encounter" format=3]
+
+[ext_resource type="Script" path="res://scenes/encounters/encounter_event.gd" id="1_m01id"]
+[ext_resource type="PackedScene" path="res://scenes/enemy.tscn" id="2_27dyq"]
+[ext_resource type="Script" path="res://scenes/encounters/formation.gd" id="3_dos2q"]
+[ext_resource type="Script" path="res://scenes/encounters/ai/mimic_move_logic.gd" id="4_xt23d"]
+[ext_resource type="Script" path="res://scenes/encounters/move_style.gd" id="5_b2aiy"]
+[ext_resource type="Script" path="res://scenes/encounters/pattern.gd" id="6_n3bw2"]
+[ext_resource type="Script" path="res://scenes/encounters/spawn_event.gd" id="7_uvhbi"]
+[ext_resource type="Script" path="res://scenes/encounters/encounter.gd" id="8_2edm1"]
+
+[sub_resource type="Resource" id="Resource_jy8uu"]
+script = ExtResource("3_dos2q")
+shape = 1
+spacing = Vector2(40, 0)
+
+[sub_resource type="Resource" id="Resource_ubkxk"]
+script = ExtResource("4_xt23d")
+
+[sub_resource type="Resource" id="Resource_pfxay"]
+script = ExtResource("5_b2aiy")
+type = 7
+custom_logic = SubResource("Resource_ubkxk")
+
+[sub_resource type="Resource" id="Resource_6272t"]
+script = ExtResource("6_n3bw2")
+fire_interval = 2.0
+bullet_speed = 70.0
+
+[sub_resource type="Resource" id="Resource_h2ww6"]
+script = ExtResource("7_uvhbi")
+enemy_scene = ExtResource("2_27dyq")
+count = 2
+formation = SubResource("Resource_jy8uu")
+z_start = -500.0
+move_style = SubResource("Resource_pfxay")
+pattern = SubResource("Resource_6272t")
+hp = 35
+spread = Vector2(5, 5)
+height_offset = 0.0
+tags = PackedStringArray()
+
+[resource]
+script = ExtResource("8_2edm1")
+id = "dark_mirrors"
+display_name = "Dark Mirrors"
+duration = 220.0
+events = Array[ExtResource("1_m01id")]([SubResource("Resource_h2ww6")])
+tags = PackedStringArray("mid", "ai", "creepy")

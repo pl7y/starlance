@@ -4,7 +4,7 @@
 # /____/\___/__,__/_//_/___/\__/\_,_/_/   
 # (c) Pl7y.com 2026
                                                                                                                                                                             
-                                        
+                                       
 ## StageDirector — macro layer for level progression.
 ##
 ## Owns the sequence of encounter segments that make up a stage/planet run.
@@ -19,6 +19,8 @@
 ##          └─ EnemySpawner
 extends Node
 class_name StageDirector
+
+var _logger = EchoLogger.new("StageDirector", "cyan", EchoLogger.LogLevel.DEBUG)
 
 # ── Exports ──────────────────────────────────────────────────────────────────
 
@@ -123,26 +125,26 @@ var _waiting_for_distance: bool = false
 func _ready() -> void:
   _connect_runner_signals()
   _connect_player_signals()
-  if autostart and not segments.is_empty():
+  if autostart:
     start_stage()
 
 
 func _connect_runner_signals() -> void:
   if runner == null:
     return
+  runner.encounter_started.connect(_on_encounter_started)
   runner.encounter_finished.connect(_on_encounter_finished)
   runner.encounter_failed.connect(_on_encounter_failed)
   runner.gate_entered.connect(_on_gate_entered)
   runner.gate_cleared.connect(_on_gate_cleared)
   runner.phase_changed.connect(_on_phase_changed)
+  runner.marker_hit.connect(_on_marker_hit)
+  runner.event_fired.connect(_on_event_fired)
 
 
 func _connect_player_signals() -> void:
   if player == null:
     return
-  # Feed player distance into the runner (micro: events within encounter).
-  if runner != null:
-    player.distance_changed.connect(runner._on_distance_changed)
   # Feed player distance into the director (macro: which segment is active).
   player.distance_changed.connect(_on_distance_changed)
 
@@ -152,6 +154,7 @@ func _connect_player_signals() -> void:
 ## If stage_template + encounter_pool are set, builds segments procedurally.
 ## Otherwise falls back to the manual `segments` array.
 func start_stage(seed_override: int = 0) -> void:
+  prints("StageDirector: start_stage called with seed_override=%d" % seed_override)
   if runner == null:
     push_error("StageDirector: no EncounterRunner assigned.")
     return
@@ -165,7 +168,18 @@ func start_stage(seed_override: int = 0) -> void:
     run_seed = _rng.randi()
     _rng.seed = run_seed
 
+  # ── Validate mode exclusivity ──────────────────────────────────────
+  if stage_template != null and not segments.is_empty():
+    push_warning("StageDirector: stage_template is set but segments array is not empty — procedural build will overwrite manual segments.")
+  if stage_template != null and encounter_pool == null:
+    push_warning("StageDirector: stage_template is set but encounter_pool is null — procedural build requires both. Falling back to manual segments.")
+  if encounter_pool != null and stage_template == null:
+    push_warning("StageDirector: encounter_pool is set but stage_template is null — pool will be unused. Set a stage_template to enable procedural build.")
+  if difficulty_profile != null and (stage_template == null or encounter_pool == null):
+    push_warning("StageDirector: difficulty_profile is set but procedural build is not active (needs stage_template + encounter_pool). Profile will be unused.")
+
   # ── Procedural build (if template + pool are set) ────────────────────
+  prints("StageDirector: starting stage with seed %d" % run_seed)
   if stage_template != null and encounter_pool != null:
     var builder := StageBuilder.new(stage_template, encounter_pool, difficulty_profile, _rng)
     builder.min_gap = min_breather_gap
@@ -351,6 +365,7 @@ func _start_segment(index: int) -> void:
 
 ## Queue the next segment — waits for the player to reach its start distance.
 func _queue_next_segment() -> void:
+  _logger.debug("Queueing next segment after finishing segment %d" % _segment_index)
   var next_index := _segment_index + 1
   if next_index >= segments.size():
     _finish_stage()
@@ -364,12 +379,19 @@ func _queue_next_segment() -> void:
   else:
     _waiting_for_distance = true
 
+  prints("StageDirector: queued segment [%d] '%s', waiting for player to reach distance %.1f" % [
+    next_index, segments[next_index].id, next_start
+  ])
 
 func _finish_stage() -> void:
   _running = false
   stage_finished.emit()
 
 # ── Runner signal handlers ───────────────────────────────────────────────────
+
+func _on_encounter_started(enc: Encounter) -> void:
+  _logger.debug("Segment started: %s" % enc.id)
+
 
 func _on_encounter_finished(enc: Encounter) -> void:
   if not _running:
@@ -395,8 +417,22 @@ func _on_gate_cleared(_gate: GateEvent) -> void:
 
 
 ## Phase changes — override or connect to react (music, camera, etc.).
-func _on_phase_changed(_phase_name: String) -> void:
-  # Subclass or connect a signal to handle phase transitions.
+func _on_phase_changed(phase_name: String) -> void:
+  _logger.debug("Phase: %s" % phase_name)
+  # Hook: switch music, change camera, update UI
+  # e.g. MusicManager.crossfade_to(phase_name)
+  # e.g. camera_rig.set_profile(phase_name)
+
+
+func _on_marker_hit(marker_name: String, payload: Dictionary) -> void:
+  _logger.debug("Marker: %s → %s" % [marker_name, payload])
+  # Hook: spawn pickups, trigger VFX, show dialogue
+  # e.g. if marker_name == "pickup_health": spawn_health_pickup()
+
+
+func _on_event_fired(_event: EncounterEvent) -> void:
+  # Low-level hook — fires for EVERY event including spawns.
+  # Useful for debug HUD, analytics.
   pass
 
 # ── Rail speed helpers ───────────────────────────────────────────────────────

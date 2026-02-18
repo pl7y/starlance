@@ -1,9 +1,8 @@
 [gd_scene format=3 uid="uid://b1q5gjhbfsuaq"]
 
 [ext_resource type="Script" uid="uid://b716w5y0cpxg7" path="res://scenes/player.gd" id="1_ywjxs"]
-[ext_resource type="Texture2D" uid="uid://bpw2s5uiaalek" path="res://assets/placeholders/fiona_spritesheet.png" id="2_tuyoq"]
+[ext_resource type="Texture2D" uid="uid://bpewq52vivomg" path="res://assets/placeholders/pixellab-Image-to-pixel-art-1771440667508-sheet.png" id="2_tuyoq"]
 [ext_resource type="Script" uid="uid://kpbt6n1fjt4" path="res://scenes/shooter.component.gd" id="3_dqkch"]
-[ext_resource type="Texture2D" uid="uid://cnf0okqaj4eex" path="res://assets/placeholders/pixellab-Image-to-pixel-art-1771440667508.png" id="3_fjrip"]
 [ext_resource type="PackedScene" uid="uid://cbk5xftc2r2mk" path="res://scenes/bullet.tscn" id="4_qlg0r"]
 [ext_resource type="Texture2D" uid="uid://cvgfki3bgh5gx" path="res://assets/placeholders/shadow.png" id="5_qlg0r"]
 [ext_resource type="PackedScene" uid="uid://cimdcjf2l38cy" path="res://scenes/pseudo_area_3d.tscn" id="6_tuyoq"]
@@ -29,19 +28,18 @@ tracks/0/keys = {
 
 [sub_resource type="Animation" id="Animation_smehm"]
 resource_name = "run"
-length = 0.6
 loop_mode = 1
 tracks/0/type = "value"
 tracks/0/imported = false
 tracks/0/enabled = true
 tracks/0/path = NodePath("Sprite2D:frame")
 tracks/0/interp = 1
-tracks/0/loop_wrap = true
+tracks/0/loop_wrap = false
 tracks/0/keys = {
-"times": PackedFloat32Array(0, 0.2, 0.4),
-"transitions": PackedFloat32Array(1, 1, 1),
-"update": 1,
-"values": [0, 1, 2]
+"times": PackedFloat32Array(0, 0.9),
+"transitions": PackedFloat32Array(1, 1),
+"update": 0,
+"values": [0, 5]
 }
 
 [sub_resource type="AnimationLibrary" id="AnimationLibrary_ur7pv"]
@@ -53,20 +51,13 @@ _data = {
 [node name="Player" type="Node2D" unique_id=1077760697 node_paths=PackedStringArray("shadow_sprite")]
 script = ExtResource("1_ywjxs")
 grounded_threshold = 4.0
-fixed_sprite = null
 shadow_sprite = NodePath("Shadow")
 
 [node name="Sprite2D" type="Sprite2D" parent="." unique_id=1836268859]
 unique_name_in_owner = true
-visible = false
-position = Vector2(-1, -37)
-texture = ExtResource("2_tuyoq")
-hframes = 3
-
-[node name="Sprite2D2" type="Sprite2D" parent="." unique_id=925675928]
-unique_name_in_owner = true
 position = Vector2(-1, -51)
-texture = ExtResource("3_fjrip")
+texture = ExtResource("2_tuyoq")
+hframes = 6
 
 [node name="ShooterComponent" type="Node" parent="." unique_id=1545092926]
 script = ExtResource("3_dqkch")

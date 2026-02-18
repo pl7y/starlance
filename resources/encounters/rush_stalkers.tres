@@ -1,0 +1,79 @@
+[gd_resource type="Resource" script_class="Encounter" format=3]
+
+[ext_resource type="Script" path="res://scenes/encounters/encounter_event.gd" id="1_h48cc"]
+[ext_resource type="PackedScene" path="res://scenes/enemy.tscn" id="2_smub5"]
+[ext_resource type="Script" path="res://scenes/encounters/formation.gd" id="3_kyt57"]
+[ext_resource type="Script" path="res://scenes/encounters/move_style.gd" id="4_xu6v7"]
+[ext_resource type="Script" path="res://scenes/encounters/pattern.gd" id="5_bujwc"]
+[ext_resource type="Script" path="res://scenes/encounters/spawn_event.gd" id="6_at1g2"]
+[ext_resource type="Script" path="res://scenes/encounters/encounter.gd" id="7_dbg7q"]
+
+[sub_resource type="Resource" id="Resource_q54oa"]
+script = ExtResource("3_kyt57")
+shape = 2
+spacing = Vector2(35, 25)
+
+[sub_resource type="Resource" id="Resource_d2xco"]
+script = ExtResource("4_xu6v7")
+type = 6
+speed_z = 0.0
+orbit_radius = 8.0
+orbit_speed = 2.0
+follow_distance = 25.0
+rush_turn = 5.0
+
+[sub_resource type="Resource" id="Resource_p8cuc"]
+script = ExtResource("5_bujwc")
+
+[sub_resource type="Resource" id="Resource_f1f6k"]
+script = ExtResource("6_at1g2")
+enemy_scene = ExtResource("2_smub5")
+count = 3
+formation = SubResource("Resource_q54oa")
+z_start = -500.0
+move_style = SubResource("Resource_d2xco")
+pattern = SubResource("Resource_p8cuc")
+hp = 35
+spread = Vector2(30, 20)
+height_offset = 10.0
+tags = PackedStringArray()
+
+[sub_resource type="Resource" id="Resource_4shus"]
+script = ExtResource("3_kyt57")
+
+[sub_resource type="Resource" id="Resource_8b3a4"]
+script = ExtResource("4_xu6v7")
+type = 6
+speed_z = 0.0
+orbit_radius = 5.0
+orbit_speed = 2.5
+follow_distance = 18.0
+rush_turn = 6.0
+
+[sub_resource type="Resource" id="Resource_fqthm"]
+script = ExtResource("5_bujwc")
+fire_interval = 0.8
+bullet_speed = 110.0
+
+[sub_resource type="Resource" id="Resource_3gbug"]
+script = ExtResource("6_at1g2")
+enemy_scene = ExtResource("2_smub5")
+count = 2
+formation = SubResource("Resource_4shus")
+z_start = -500.0
+move_style = SubResource("Resource_8b3a4")
+pattern = SubResource("Resource_fqthm")
+hp = 40
+spawn_origin = Vector2(40, 0)
+spread = Vector2(20, 15)
+height_offset = 0.0
+time = 60.0
+tags = PackedStringArray()
+
+[resource]
+script = ExtResource("7_dbg7q")
+id = "rush_stalkers"
+display_name = "Rush Stalkers"
+duration = 200.0
+events = Array[ExtResource("1_h48cc")]([SubResource("Resource_f1f6k"), SubResource("Resource_3gbug")])
+tags = PackedStringArray("hard", "follow")
