@@ -178,5 +178,4 @@ func _flash_white() -> void:
 func _on_hurt_box_area_entered(_area: Area3D) -> void:
   var player = _area.get_parent() as Player
   if player:
-    prints("* Enemy hit player!")
-    take_hit(1) # TODO: use actual damage value from bullet
+    pass

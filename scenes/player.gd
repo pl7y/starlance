@@ -104,6 +104,5 @@ func take_hit(dmg: int) -> void:
   print("Player HP:", hp)
 
 
-func _on_hurt_box_area_entered(area: Area3D) -> void:
-  var parent = area.get_parent()
-  prints("Player hurt box entered by:", area, "parent:", parent)
+func _on_hurt_box_area_entered(_area: Area3D) -> void:
+  pass

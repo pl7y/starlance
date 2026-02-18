@@ -363,9 +363,6 @@ func _queue_next_segment() -> void:
     _start_segment(next_index)
   else:
     _waiting_for_distance = true
-    print("StageDirector: waiting for distance %.1f to start segment [%d] '%s' (current: %.1f)" % [
-      next_start, next_index, segments[next_index].id, _current_distance
-    ])
 
 
 func _finish_stage() -> void:
