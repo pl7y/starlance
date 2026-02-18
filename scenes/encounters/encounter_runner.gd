@@ -112,17 +112,21 @@ func _ready() -> void:
 
 
 func _process(delta: float) -> void:
-  if not _running or _paused:
+  if not _running:
+    return
+
+  # ── Gate check (always runs, even when paused) ──
+  if _gate_active:
+    _update_gate(delta)
+    return # Don't advance events while gated
+
+  # ── If paused (and not gated), don't advance ──
+  if _paused:
     return
 
   # ── Advance progress (time-driven only; distance is pushed externally) ──
   if _active_clock == ClockMode.TIME:
     _progress += delta
-
-  # ── Gate check ──
-  if _gate_active:
-    _update_gate(delta)
-    return # Don't advance events while gated
 
   # ── Fire due events ──
   _advance_events()

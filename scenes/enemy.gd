@@ -73,6 +73,26 @@ func _ready() -> void:
   # Let custom AI initialize per-instance state
   if pattern == MovePattern.CUSTOM and custom_move_logic != null:
     custom_move_logic.setup(self , rig)
+  
+  # Connect to escape signal
+  escaped.connect(_on_enemy_escaped)
+
+
+func _on_enemy_escaped(escape_type: WorldObject.EscapeType) -> void:
+  # Handle enemy escape - you can add game logic here
+  match escape_type:
+    WorldObject.EscapeType.BEHIND_CAMERA:
+      print("Enemy escaped behind camera")
+    WorldObject.EscapeType.OFF_SCREEN_LEFT:
+      print("Enemy escaped left")
+    WorldObject.EscapeType.OFF_SCREEN_RIGHT:
+      print("Enemy escaped right")
+    WorldObject.EscapeType.TOO_FAR_AHEAD:
+      print("Enemy escaped ahead")
+  
+  # Example: Notify a game manager, increment escaped counter, etc.
+  # if has_node("/root/GameManager"):
+  #   get_node("/root/GameManager").on_enemy_escaped(escape_type)
 
 func configure(p_hp: int, p_fire_interval: float, p_bullet_speed: float, p_pattern := MovePattern.STATIC) -> void:
   hp = p_hp
@@ -205,6 +225,7 @@ func take_hit(dmg: int) -> void:
   explosion.world_pos = world_pos
 
   hp -= dmg
+  
   if hp <= 0:
     get_parent().add_child(explosion)
     queue_free()
@@ -221,4 +242,9 @@ func _flash_white() -> void:
 func _on_hurt_box_area_entered(_area: Area3D) -> void:
   var player = _area.get_parent() as Player
   if player:
-    pass
+    return
+
+  var bullet = _area.get_parent() as Bullet
+  if bullet:
+    take_hit(bullet.damage)
+    bullet.queue_free()

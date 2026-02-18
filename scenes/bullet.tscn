@@ -48,6 +48,7 @@ radius = 5.0
 [node name="Bullet" type="Node2D" unique_id=1906372644 groups=["bullets"]]
 script = ExtResource("1_mkf8s")
 bullet_speed_z = 800.0
+damage = 100
 
 [node name="Sprite2D" type="Sprite2D" parent="." unique_id=335325533]
 texture = ExtResource("2_y25gk")
