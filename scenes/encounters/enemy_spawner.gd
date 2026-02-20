@@ -33,13 +33,18 @@ func spawn_group(event: SpawnEvent, offsets: Array[Vector2], _rng: RandomNumberG
     push_warning("SpawnEvent has no enemy_scene — skipping.")
     return
 
+  var player := get_tree().get_first_node_in_group("player") as Player
+  var spawn_origin := event.world_pos
+  if player != null:
+    spawn_origin.z += player.world_pos.z
+
   for i in offsets.size():
     var offset := offsets[i]
 
     var enemy := event.enemy_scene.instantiate()
 
     # Start with the base world position and add formation offset
-    var spawn_pos := event.world_pos
+    var spawn_pos := spawn_origin
     spawn_pos.x += offset.x
     spawn_pos.y += offset.y
 
@@ -47,7 +52,7 @@ func spawn_group(event: SpawnEvent, offsets: Array[Vector2], _rng: RandomNumberG
     world.add_child(enemy)
 
     # Create and assign movement strategy from MovementStyle resource
-    _apply_movement_strategy(enemy, event.move_style, event.world_pos, i, offsets.size())
+    _apply_movement_strategy(enemy, event.move_style, spawn_origin, i, offsets.size())
 
     # Apply pattern (firing config)
     _apply_pattern(enemy, event.pattern, event.hp)

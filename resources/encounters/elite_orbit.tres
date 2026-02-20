@@ -1,14 +1,14 @@
 [gd_resource type="Resource" script_class="Encounter" format=3]
 
-[ext_resource type="Script" path="res://scenes/encounters/encounter_event.gd" id="1_pr358"]
-[ext_resource type="PackedScene" path="res://scenes/enemy.tscn" id="2_o0gdu"]
-[ext_resource type="Script" path="res://scenes/encounters/circle_formation.resource.gd" id="3_diywt"]
-[ext_resource type="Script" path="res://scenes/encounters/movement_styles/orbit_movement_style.gd" id="4_gpmpx"]
-[ext_resource type="Script" path="res://scenes/encounters/pattern.gd" id="5_doqvg"]
-[ext_resource type="Script" path="res://scenes/encounters/spawn_event.gd" id="6_sqfc1"]
-[ext_resource type="Script" path="res://scenes/encounters/point_formation.resource.gd" id="7_0s0ap"]
-[ext_resource type="Script" path="res://scenes/encounters/movement_styles/dive_at_player_movement_style.gd" id="8_1wncf"]
-[ext_resource type="Script" path="res://scenes/encounters/encounter.gd" id="9_igbvw"]
+[ext_resource type="Script" uid="uid://brv4vhghfui7k" path="res://scenes/encounters/encounter_event.gd" id="1_pr358"]
+[ext_resource type="PackedScene" uid="uid://bk0r22e6fyjqg" path="res://scenes/enemy.tscn" id="2_o0gdu"]
+[ext_resource type="Script" uid="uid://bb0xn0vepmsos" path="res://scenes/encounters/circle_formation.resource.gd" id="3_diywt"]
+[ext_resource type="Script" uid="uid://5g8t74ml5dbs" path="res://scenes/encounters/movement_styles/orbit_movement_style.gd" id="4_gpmpx"]
+[ext_resource type="Script" uid="uid://clo2cqcvulfkw" path="res://scenes/encounters/pattern.gd" id="5_doqvg"]
+[ext_resource type="Script" uid="uid://c8om0jd1cjoha" path="res://scenes/encounters/spawn_event.gd" id="6_sqfc1"]
+[ext_resource type="Script" uid="uid://rc1sg2cc0r4g" path="res://scenes/encounters/point_formation.resource.gd" id="7_0s0ap"]
+[ext_resource type="Script" uid="uid://e4iynmfhi4c2" path="res://scenes/encounters/movement_styles/dive_at_player_movement_style.gd" id="8_1wncf"]
+[ext_resource type="Script" uid="uid://dbp6h4gvlg87c" path="res://scenes/encounters/encounter.resource.gd" id="9_igbvw"]
 
 [sub_resource type="Resource" id="Resource_b1okn"]
 script = ExtResource("3_diywt")

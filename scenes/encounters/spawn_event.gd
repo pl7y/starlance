@@ -22,5 +22,5 @@ class_name SpawnEvent
 ## HP override per enemy. 0 = use scene default.
 @export var hp: int = 0
 
-## World position (3D) where the spawn group originates.
+## Offset from the player's current world position (3D) where the spawn group originates.
 @export var world_pos: Vector3 = Vector3.ZERO

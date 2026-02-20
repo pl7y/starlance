@@ -1,12 +1,12 @@
 [gd_resource type="Resource" script_class="Encounter" format=3]
 
-[ext_resource type="Script" path="res://scenes/encounters/encounter_event.gd" id="1_apio2"]
-[ext_resource type="PackedScene" path="res://scenes/enemy.tscn" id="2_tddui"]
-[ext_resource type="Script" path="res://scenes/encounters/v_formation.resource.gd" id="3_m2bc8"]
-[ext_resource type="Script" path="res://scenes/encounters/movement_styles/sine_strafe_movement_style.gd" id="4_ywsg1"]
-[ext_resource type="Script" path="res://scenes/encounters/pattern.gd" id="5_8m3hb"]
-[ext_resource type="Script" path="res://scenes/encounters/spawn_event.gd" id="6_fyd4g"]
-[ext_resource type="Script" path="res://scenes/encounters/encounter.gd" id="7_af4xi"]
+[ext_resource type="Script" uid="uid://brv4vhghfui7k" path="res://scenes/encounters/encounter_event.gd" id="1_apio2"]
+[ext_resource type="PackedScene" uid="uid://bk0r22e6fyjqg" path="res://scenes/enemy.tscn" id="2_tddui"]
+[ext_resource type="Script" uid="uid://q1gl2dfcbxpb" path="res://scenes/encounters/v_formation.resource.gd" id="3_m2bc8"]
+[ext_resource type="Script" uid="uid://ces2q7ec1p1dl" path="res://scenes/encounters/movement_styles/sine_strafe_movement_style.gd" id="4_ywsg1"]
+[ext_resource type="Script" uid="uid://clo2cqcvulfkw" path="res://scenes/encounters/pattern.gd" id="5_8m3hb"]
+[ext_resource type="Script" uid="uid://c8om0jd1cjoha" path="res://scenes/encounters/spawn_event.gd" id="6_fyd4g"]
+[ext_resource type="Script" uid="uid://dbp6h4gvlg87c" path="res://scenes/encounters/encounter.resource.gd" id="7_af4xi"]
 
 [sub_resource type="Resource" id="Resource_q54oa"]
 script = ExtResource("3_m2bc8")

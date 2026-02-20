@@ -14,7 +14,7 @@
 [ext_resource type="Script" uid="uid://b05e33v5cdts4" path="res://scenes/encounters/movement_styles/drift_movement_style.gd" id="12_lkxyf"]
 [ext_resource type="Script" uid="uid://bb0xn0vepmsos" path="res://scenes/encounters/circle_formation.resource.gd" id="13_iaaf6"]
 [ext_resource type="Script" uid="uid://ces2q7ec1p1dl" path="res://scenes/encounters/movement_styles/sine_strafe_movement_style.gd" id="14_o6im8"]
-[ext_resource type="Script" uid="uid://dbp6h4gvlg87c" path="res://scenes/encounters/encounter.gd" id="15_mew3k"]
+[ext_resource type="Script" uid="uid://dbp6h4gvlg87c" path="res://scenes/encounters/encounter.resource.gd" id="15_mew3k"]
 
 [sub_resource type="Resource" id="Resource_g2l50"]
 script = ExtResource("2_5v0hn")
@@ -125,6 +125,7 @@ spacing = Vector2(40, 0)
 [sub_resource type="Resource" id="Resource_1hkfs"]
 script = ExtResource("12_lkxyf")
 speed_z = 80.0
+z_lock = null
 
 [sub_resource type="Resource" id="Resource_p8cuc"]
 script = ExtResource("8_ktaco")
@@ -155,6 +156,7 @@ radius = 50.0
 script = ExtResource("14_o6im8")
 speed_z = 90.0
 amplitude = Vector2(60, 30)
+z_lock = null
 
 [sub_resource type="Resource" id="Resource_fqthm"]
 script = ExtResource("8_ktaco")
