@@ -3,7 +3,6 @@
 [ext_resource type="Script" uid="uid://b716w5y0cpxg7" path="res://scenes/player.gd" id="1_ywjxs"]
 [ext_resource type="Texture2D" uid="uid://eiq3olwdt7bm" path="res://assets/placeholders/character_running.png" id="2_tuyoq"]
 [ext_resource type="Script" uid="uid://kpbt6n1fjt4" path="res://scenes/shooter.component.gd" id="3_dqkch"]
-[ext_resource type="Texture2D" uid="uid://icglrm81p430" path="res://assets/placeholders/fly.png" id="3_smehm"]
 [ext_resource type="PackedScene" uid="uid://cbk5xftc2r2mk" path="res://scenes/bullet.tscn" id="4_qlg0r"]
 [ext_resource type="Texture2D" uid="uid://cvgfki3bgh5gx" path="res://assets/placeholders/shadow.png" id="5_qlg0r"]
 [ext_resource type="PackedScene" uid="uid://cimdcjf2l38cy" path="res://scenes/pseudo_area_3d.tscn" id="6_tuyoq"]
@@ -11,7 +10,7 @@
 
 [sub_resource type="CapsuleShape3D" id="CapsuleShape3D_tuyoq"]
 radius = 6.0
-height = 20.0
+height = 30.0
 
 [sub_resource type="Animation" id="Animation_fjrip"]
 length = 0.001
@@ -62,12 +61,14 @@ shadow_sprite = NodePath("Visuals/Shadow")
 unique_name_in_owner = true
 position = Vector2(-1, -51)
 texture = ExtResource("2_tuyoq")
-hframes = 4
+hframes = 5
 
 [node name="FlySprite" type="Sprite2D" parent="Visuals" unique_id=1741963846]
 unique_name_in_owner = true
-position = Vector2(0, -43)
-texture = ExtResource("3_smehm")
+position = Vector2(0, -51)
+texture = ExtResource("2_tuyoq")
+hframes = 5
+frame = 4
 
 [node name="Shadow" type="Node2D" parent="Visuals" unique_id=646253260]
 modulate = Color(1, 1, 1, 0.5411765)
@@ -106,7 +107,7 @@ metadata/_edit_use_anchors_ = true
 world_object = NodePath("..")
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="HurtBox" unique_id=19288192]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 12.479946, 0)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 20, 0)
 shape = SubResource("CapsuleShape3D_tuyoq")
 
 [node name="AnimationPlayer" type="AnimationPlayer" parent="." unique_id=1214796584]
