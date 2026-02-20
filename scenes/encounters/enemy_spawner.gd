@@ -47,7 +47,7 @@ func spawn_group(event: SpawnEvent, offsets: Array[Vector2], _rng: RandomNumberG
     world.add_child(enemy)
 
     # Create and assign movement strategy from MovementStyle resource
-    _apply_movement_strategy(enemy, event.move_style)
+    _apply_movement_strategy(enemy, event.move_style, event.world_pos, i, offsets.size())
 
     # Apply pattern (firing config)
     _apply_pattern(enemy, event.pattern, event.hp)
@@ -55,7 +55,7 @@ func spawn_group(event: SpawnEvent, offsets: Array[Vector2], _rng: RandomNumberG
 
 ## Creates and assigns a MovementStrategy to the enemy based on MovementStyle resource.
 ## Override if your Enemy API differs.
-func _apply_movement_strategy(enemy: Node, style: MovementStyle) -> void:
+func _apply_movement_strategy(enemy: Node, style: MovementStyle, encounter_origin: Vector3 = Vector3.ZERO, spawn_index: int = 0, spawn_count: int = 1) -> void:
   prints("Applying movement strategy for enemy: ", enemy, " with style: ", style)
   if style == null:
     # Default to static movement if no style specified
@@ -65,7 +65,14 @@ func _apply_movement_strategy(enemy: Node, style: MovementStyle) -> void:
 
   # Let the MovementStyle resource create the appropriate strategy
   if "movement_strategy" in enemy:
-    enemy.movement_strategy = style.create_strategy()
+    var strategy := style.create_strategy()
+    if "encounter_origin" in strategy:
+      strategy.encounter_origin = encounter_origin
+    if "spawn_index" in strategy:
+      strategy.spawn_index = spawn_index
+    if "spawn_count" in strategy:
+      strategy.spawn_count = spawn_count
+    enemy.movement_strategy = strategy
 
 ## Maps a Pattern resource onto enemy firing properties.
 ## Override if your Enemy API differs.

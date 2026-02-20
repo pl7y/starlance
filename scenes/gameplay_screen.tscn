@@ -20,20 +20,22 @@
 [ext_resource type="PackedScene" uid="uid://bk0r22e6fyjqg" path="res://scenes/enemy.tscn" id="16_clvjq"]
 [ext_resource type="Resource" uid="uid://fcxqais0xfjm" path="res://resources/encounters/pool/demo_pool.tres" id="16_gnb8g"]
 [ext_resource type="Script" uid="uid://cxyxiyhktbobm" path="res://scenes/encounters/line_formation.resource.gd" id="17_baarm"]
-[ext_resource type="Script" uid="uid://ces2q7ec1p1dl" path="res://scenes/encounters/movement_styles/sine_strafe_movement_style.gd" id="18_pw0ia"]
+[ext_resource type="Script" uid="uid://0t57sq0geore" path="res://scenes/encounters/movement_styles/polyline_movement_style.gd" id="18_baarm"]
 [ext_resource type="Script" uid="uid://clo2cqcvulfkw" path="res://scenes/encounters/pattern.gd" id="19_2o7gh"]
 [ext_resource type="Script" uid="uid://c8om0jd1cjoha" path="res://scenes/encounters/spawn_event.gd" id="20_ng3oa"]
 
 [sub_resource type="Resource" id="Resource_pw0ia"]
 script = ExtResource("17_baarm")
-spacing = Vector2(50, 0)
+spacing = Vector2(100, 0)
 metadata/_custom_type_script = "uid://cxyxiyhktbobm"
 
 [sub_resource type="Resource" id="Resource_clvjq"]
-script = ExtResource("18_pw0ia")
-amplitude = Vector2(100, 100)
+script = ExtResource("18_baarm")
+points = PackedVector3Array(-1000, 0, 0, 1000, 0, 0, -100, -150, 1500)
+speed = 1143.0
+path_origin_mode = 0
 z_lock = 1
-metadata/_custom_type_script = "uid://ces2q7ec1p1dl"
+metadata/_custom_type_script = "uid://0t57sq0geore"
 
 [sub_resource type="Resource" id="Resource_6272t"]
 script = ExtResource("19_2o7gh")
@@ -43,6 +45,7 @@ bullet_speed = 70.0
 [sub_resource type="Resource" id="Resource_4xyd6"]
 script = ExtResource("20_ng3oa")
 enemy_scene = ExtResource("16_clvjq")
+count = 9
 formation = SubResource("Resource_pw0ia")
 move_style = SubResource("Resource_clvjq")
 pattern = SubResource("Resource_6272t")
