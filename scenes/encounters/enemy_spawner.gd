@@ -32,22 +32,27 @@ func spawn_group(event: SpawnEvent, offsets: Array[Vector2], rng: RandomNumberGe
     push_warning("SpawnEvent has no enemy_scene — skipping.")
     return
 
+  if event.formation != null and event.spawn_shape != null:
+    push_warning("SpawnEvent has both formation and spawn_shape set. These conflict - using formation only.")
+
   for i in offsets.size():
     var offset := offsets[i]
 
-    # Apply per-unit spread jitter
-    if event.spread != Vector2.ZERO:
-      offset.x += rng.randf_range(-event.spread.x, event.spread.x)
-      offset.y += rng.randf_range(-event.spread.y, event.spread.y)
-
     var enemy := event.enemy_scene.instantiate()
 
-    # Position in world space
-    var z: float = camera_rig.camera_world_position.z + event.z_start
-    var x: float = event.spawn_origin.x + offset.x
-    var y: float = event.spawn_origin.y + offset.y + event.height_offset
+    # Start with the base world position
+    var spawn_pos := event.world_pos
+    
+    # Add formation offset (offset is 2D, apply to X and Y)
+    spawn_pos.x += offset.x
+    spawn_pos.y += offset.y
+    
+    # If a spawn shape is defined, sample a random point within it
+    if event.spawn_shape != null:
+      var random_point := _sample_point_in_shape(event.spawn_shape, rng)
+      spawn_pos += random_point
 
-    enemy.world_pos = Vector3(x, y, z)
+    enemy.world_pos = spawn_pos
     world.add_child(enemy)
 
     # Apply move style  →  map to Enemy.MovePattern integer
@@ -115,3 +120,78 @@ func _apply_pattern(enemy: Node, pat: Pattern, hp_override: int) -> void:
     enemy.fire_min_z = pat.fire_min_z
   if "fire_max_z" in enemy:
     enemy.fire_max_z = pat.fire_max_z
+
+
+## Sample a random point within a Shape3D.
+## Supports common shapes: BoxShape3D, SphereShape3D, CapsuleShape3D, CylinderShape3D.
+func _sample_point_in_shape(shape: Shape3D, rng: RandomNumberGenerator) -> Vector3:
+  if shape is BoxShape3D:
+    var box := shape as BoxShape3D
+    var size := box.size
+    return Vector3(
+      rng.randf_range(-size.x * 0.5, size.x * 0.5),
+      rng.randf_range(-size.y * 0.5, size.y * 0.5),
+      rng.randf_range(-size.z * 0.5, size.z * 0.5)
+    )
+  
+  elif shape is SphereShape3D:
+    var sphere := shape as SphereShape3D
+    var radius := sphere.radius
+    # Uniform sampling within a sphere using rejection sampling
+    var point := Vector3.ZERO
+    var max_attempts := 100
+    for attempt in max_attempts:
+      point = Vector3(
+        rng.randf_range(-1.0, 1.0),
+        rng.randf_range(-1.0, 1.0),
+        rng.randf_range(-1.0, 1.0)
+      )
+      if point.length_squared() <= 1.0:
+        break
+    return point.normalized() * rng.randf_range(0.0, radius)
+  
+  elif shape is CapsuleShape3D:
+    var capsule := shape as CapsuleShape3D
+    var radius := capsule.radius
+    var height := capsule.height
+    # Sample within cylinder part + hemisphere caps
+    var cylinder_height := height - 2.0 * radius
+    if cylinder_height > 0:
+      # Randomly choose cylinder or caps
+      var total_volume := PI * radius * radius * cylinder_height + (4.0 / 3.0) * PI * radius * radius * radius
+      if rng.randf() < (PI * radius * radius * cylinder_height) / total_volume:
+        # Cylinder part
+        var angle := rng.randf() * TAU
+        var r := sqrt(rng.randf()) * radius
+        var y := rng.randf_range(-cylinder_height * 0.5, cylinder_height * 0.5)
+        return Vector3(r * cos(angle), y, r * sin(angle))
+      else:
+        # Hemisphere caps - simplified: sample sphere and offset
+        var point := Vector3.ZERO
+        for attempt in 100:
+          point = Vector3(
+            rng.randf_range(-1.0, 1.0),
+            rng.randf_range(-1.0, 1.0),
+            rng.randf_range(-1.0, 1.0)
+          )
+          if point.length_squared() <= 1.0:
+            break
+        point = point.normalized() * rng.randf_range(0.0, radius)
+        point.y += cylinder_height * 0.5 if point.y > 0 else -cylinder_height * 0.5
+        return point
+    else:
+      # Degenerate: just a sphere
+      return _sample_point_in_shape(SphereShape3D.new(), rng) * radius
+  
+  elif shape is CylinderShape3D:
+    var cylinder := shape as CylinderShape3D
+    var radius := cylinder.radius
+    var height := cylinder.height
+    var angle := rng.randf() * TAU
+    var r := sqrt(rng.randf()) * radius
+    var y := rng.randf_range(-height * 0.5, height * 0.5)
+    return Vector3(r * cos(angle), y, r * sin(angle))
+  
+  else:
+    push_warning("Unsupported Shape3D type: %s — returning zero." % shape.get_class())
+    return Vector3.ZERO

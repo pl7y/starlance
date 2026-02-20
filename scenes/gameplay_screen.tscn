@@ -14,9 +14,46 @@
 [ext_resource type="Script" uid="uid://bx6f3uaf823k7" path="res://scenes/encounters/encounter_runner.gd" id="13_7ocsb"]
 [ext_resource type="Script" uid="uid://b7muo30j743j7" path="res://scenes/encounters/enemy_spawner.gd" id="14_6demn"]
 [ext_resource type="Script" uid="uid://cs50vfhsfsego" path="res://scenes/encounters/stage_director.gd" id="14_7ocsb"]
-[ext_resource type="Resource" uid="uid://ddl2ycy5tfpt4" path="res://resources/encounters/templates/demo_template.tres" id="15_aagjl"]
-[ext_resource type="Resource" uid="uid://boupt0oef78gl" path="res://resources/encounters/pool/demo_pool.tres" id="16_gnb8g"]
-[ext_resource type="Resource" uid="uid://cei166wf43jf8" path="res://resources/encounters/difficulty/normal_profile.tres" id="17_t1iya"]
+[ext_resource type="Resource" uid="uid://cnia7tkej7hdy" path="res://resources/encounters/templates/demo_template.tres" id="15_aagjl"]
+[ext_resource type="Script" uid="uid://brv4vhghfui7k" path="res://scenes/encounters/encounter_event.gd" id="15_pw0ia"]
+[ext_resource type="Script" uid="uid://dbp6h4gvlg87c" path="res://scenes/encounters/encounter.gd" id="15_qfdku"]
+[ext_resource type="PackedScene" uid="uid://bk0r22e6fyjqg" path="res://scenes/enemy.tscn" id="16_clvjq"]
+[ext_resource type="Resource" uid="uid://dvx1x3prw65vm" path="res://resources/encounters/pool/demo_pool.tres" id="16_gnb8g"]
+[ext_resource type="Resource" uid="uid://bdi7xch2is4fp" path="res://resources/encounters/difficulty/normal_profile.tres" id="17_t1iya"]
+[ext_resource type="Script" uid="uid://cbdfbktcb3n7a" path="res://scenes/encounters/move_style.gd" id="18_422ip"]
+[ext_resource type="Script" uid="uid://clo2cqcvulfkw" path="res://scenes/encounters/pattern.gd" id="19_2o7gh"]
+[ext_resource type="Script" uid="uid://c8om0jd1cjoha" path="res://scenes/encounters/spawn_event.gd" id="20_ng3oa"]
+
+[sub_resource type="Resource" id="Resource_1hkfs"]
+script = ExtResource("18_422ip")
+type = 1
+speed_z = 80.0
+
+[sub_resource type="Resource" id="Resource_6272t"]
+script = ExtResource("19_2o7gh")
+fire_interval = 2.0
+bullet_speed = 70.0
+
+[sub_resource type="SphereShape3D" id="SphereShape3D_baarm"]
+
+[sub_resource type="Resource" id="Resource_4xyd6"]
+script = ExtResource("20_ng3oa")
+enemy_scene = ExtResource("16_clvjq")
+count = 50
+move_style = SubResource("Resource_1hkfs")
+pattern = SubResource("Resource_6272t")
+hp = 20
+world_pos = Vector3(0, 100, -1500)
+spawn_shape = SubResource("SphereShape3D_baarm")
+tags = PackedStringArray()
+
+[sub_resource type="Resource" id="Resource_hjvpi"]
+script = ExtResource("15_qfdku")
+id = "scout_line"
+display_name = "Scout Line"
+duration = 120.0
+events = Array[ExtResource("15_pw0ia")]([SubResource("Resource_4xyd6")])
+tags = PackedStringArray("opener", "easy")
 
 [node name="GameplayScreen" type="Node2D" unique_id=158736197]
 script = ExtResource("1_25g3s")
@@ -100,8 +137,9 @@ metadata/_custom_type_script = "uid://bx6f3uaf823k7"
 script = ExtResource("14_7ocsb")
 runner = NodePath("../EncounterRunner")
 player = NodePath("../../ObjectsLayer/Player")
+encounters_override = Array[ExtResource("15_qfdku")]([SubResource("Resource_hjvpi")])
 run_seed = 2
-rail_speed = 200.0
+rail_speed = 500.0
 modifiers = PackedStringArray()
 autostart = true
 stage_template = ExtResource("15_aagjl")

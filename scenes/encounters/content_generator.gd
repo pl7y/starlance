@@ -85,7 +85,7 @@ func _ready() -> void:
 	var scout_line := _encounter("scout_line", "Scout Line", 120.0,
 		["opener", "easy"], [
 			_spawn(enemy_scene, 3, line_5, drift_slow, slow_fire, 0.0, 20,
-				Vector2.ZERO, Vector2(10, 10), 0.0),
+				Vector3(0, 0, -500.0), _box_shape(Vector2(10, 10))),
 	])
 	_save(scout_line, OUTPUT_BASE + "scout_line.tres")
 
@@ -93,7 +93,7 @@ func _ready() -> void:
 	var sine_dancers := _encounter("sine_dancers", "Sine Dancers", 150.0,
 		["mid", "strafe"], [
 			_spawn(enemy_scene, 5, v_shape, sine_strafe, med_fire, 0.0, 25,
-				Vector2.ZERO, Vector2(15, 10), 10.0),
+				Vector3(0, 10.0, -500.0), _box_shape(Vector2(15, 10))),
 	])
 	_save(sine_dancers, OUTPUT_BASE + "sine_dancers.tres")
 
@@ -101,7 +101,7 @@ func _ready() -> void:
 	var grid_assault := _encounter("grid_assault", "Grid Assault", 150.0,
 		["mid", "grid"], [
 			_spawn(enemy_scene, 6, grid_3x2, drift_fast, med_fire, 0.0, 30,
-				Vector2.ZERO, Vector2(20, 15), 20.0),
+				Vector3(0, 20.0, -500.0), _box_shape(Vector2(20, 15))),
 	])
 	_save(grid_assault, OUTPUT_BASE + "grid_assault.tres")
 
@@ -109,7 +109,7 @@ func _ready() -> void:
 	var dive_bombers := _encounter("dive_bombers", "Dive Bombers", 180.0,
 		["hard", "dive"], [
 			_spawn(enemy_scene, 4, circle_6, dive, fast_fire, 0.0, 40,
-				Vector2.ZERO, Vector2(30, 20), 0.0),
+				Vector3(0, 0, -500.0), _box_shape(Vector2(30, 20))),
 	])
 	_save(dive_bombers, OUTPUT_BASE + "dive_bombers.tres")
 
@@ -117,9 +117,9 @@ func _ready() -> void:
 	var swooping_aces := _encounter("swooping_aces", "Swooping Aces", 180.0,
 		["hard", "swoop"], [
 			_spawn(enemy_scene, 3, v_shape, swoop, med_fire, 0.0, 35,
-				Vector2.ZERO, Vector2(20, 15), 15.0),
+				Vector3(0, 15.0, -500.0), _box_shape(Vector2(20, 15))),
 			_spawn(enemy_scene, 2, point, dive, fast_fire, 60.0, 40,
-				Vector2(50.0, 0.0), Vector2(10, 10), 0.0),
+				Vector3(50.0, 0.0, -500.0), _box_shape(Vector2(10, 10))),
 	])
 	_save(swooping_aces, OUTPUT_BASE + "swooping_aces.tres")
 
@@ -127,9 +127,9 @@ func _ready() -> void:
 	var elite_orbit := _encounter("elite_orbit", "Elite Orbit Guard", 200.0,
 		["elite", "orbit"], [
 			_spawn(enemy_scene, 4, circle_6, orbit, fast_fire, 0.0, 50,
-				Vector2.ZERO, Vector2(10, 10), 10.0),
+				Vector3(0, 10.0, -500.0), _box_shape(Vector2(10, 10))),
 			_spawn(enemy_scene, 2, point, dive, fast_fire, 80.0, 60,
-				Vector2.ZERO, Vector2(20, 15), 0.0),
+				Vector3(0, 0, -500.0), _box_shape(Vector2(20, 15))),
 	])
 	_save(elite_orbit, OUTPUT_BASE + "elite_orbit.tres")
 
@@ -138,10 +138,10 @@ func _ready() -> void:
 		["hard", "follow"], [
 			# First group rushes in from far away and orbits close
 			_spawn(enemy_scene, 3, v_shape, rush_follow, med_fire, 0.0, 35,
-				Vector2.ZERO, Vector2(30, 20), 10.0),
+				Vector3(0, 10.0, -500.0), _box_shape(Vector2(30, 20))),
 			# Second group arrives later with tighter orbit — more aggressive
 			_spawn(enemy_scene, 2, point, rush_follow_tight, fast_fire, 60.0, 40,
-				Vector2(40.0, 0.0), Vector2(20, 15), 0.0),
+				Vector3(40.0, 0.0, -500.0), _box_shape(Vector2(20, 15))),
 	])
 	_save(rush_stalkers, OUTPUT_BASE + "rush_stalkers.tres")
 
@@ -154,10 +154,10 @@ func _ready() -> void:
 	var mixed_ambush := _encounter("mixed_ambush", "Mixed Ambush", 250.0,
 		["mid", "mixed"], [
 			_spawn(enemy_scene, 4, line_5, drift_slow, slow_fire, 0.0, 20,
-				Vector2.ZERO, Vector2(15, 10), 10.0),
+				Vector3(0, 10.0, -500.0), _box_shape(Vector2(15, 10))),
 			gate_all_dead,
 			_spawn(enemy_scene, 3, v_shape, sine_fast, med_fire, 55.0, 30,
-				Vector2.ZERO, Vector2(20, 15), 0.0),
+				Vector3(0, 0, -500.0), _box_shape(Vector2(20, 15))),
 	])
 	_save(mixed_ambush, OUTPUT_BASE + "mixed_ambush.tres")
 
@@ -180,12 +180,12 @@ func _ready() -> void:
 			phase1,
 			boss_gate,
 			_spawn(enemy_scene, 1, point, MoveStyle.new(), slow_fire, 0.0, 200,
-				Vector2.ZERO, Vector2.ZERO, 20.0),
+				Vector3(0, 20.0, -500.0), null),
 			_spawn(enemy_scene, 3, line_5, drift_slow, med_fire, 80.0, 25,
-				Vector2.ZERO, Vector2(30, 15), 0.0),
+				Vector3(0, 0, -500.0), _box_shape(Vector2(30, 15))),
 			phase2,
 			_spawn(enemy_scene, 4, circle_6, sine_fast, fast_fire, 155.0, 30,
-				Vector2.ZERO, Vector2(20, 10), 10.0),
+				Vector3(0, 10.0, -500.0), _box_shape(Vector2(20, 10))),
 	])
 	_save(boss_encounter, OUTPUT_BASE + "boss_dreadnought.tres")
 
@@ -193,7 +193,7 @@ func _ready() -> void:
 	var flanker_pair := _encounter("flanker_pair", "Flanker Pair", 200.0,
 		["hard", "ai"], [
 			_spawn(enemy_scene, 2, line_5, ai_flanker, med_fire, 0.0, 40,
-				Vector2.ZERO, Vector2(20, 10), 10.0),
+				Vector3(0, 10.0, -500.0), _box_shape(Vector2(20, 10))),
 	])
 	_save(flanker_pair, OUTPUT_BASE + "flanker_pair.tres")
 
@@ -201,7 +201,7 @@ func _ready() -> void:
 	var dark_mirrors := _encounter("dark_mirrors", "Dark Mirrors", 220.0,
 		["mid", "ai", "creepy"], [
 			_spawn(enemy_scene, 2, line_5, ai_mimic, slow_fire, 0.0, 35,
-				Vector2.ZERO, Vector2(5, 5), 0.0),
+				Vector3(0, 0, -500.0), _box_shape(Vector2(5, 5))),
 	])
 	_save(dark_mirrors, OUTPUT_BASE + "dark_mirrors.tres")
 
@@ -209,7 +209,7 @@ func _ready() -> void:
 	var phantom_ambush := _encounter("phantom_ambush", "Phantom Ambush", 250.0,
 		["hard", "ai", "surprise"], [
 			_spawn(enemy_scene, 3, line_5, ai_ambusher, fast_fire, 0.0, 45,
-				Vector2.ZERO, Vector2(40, 20), 0.0),
+				Vector3(0, 0, -500.0), _box_shape(Vector2(40, 20))),
 	])
 	_save(phantom_ambush, OUTPUT_BASE + "phantom_ambush.tres")
 
@@ -217,7 +217,7 @@ func _ready() -> void:
 	var hive_swarm := _encounter("hive_swarm", "Hive Swarm", 200.0,
 		["mid", "ai", "swarm"], [
 			_spawn(enemy_scene, 6, circle_6, ai_swarm, slow_fire, 0.0, 20,
-				Vector2.ZERO, Vector2(30, 20), 10.0),
+				Vector3(0, 10.0, -500.0), _box_shape(Vector2(30, 20))),
 	])
 	_save(hive_swarm, OUTPUT_BASE + "hive_swarm.tres")
 
@@ -225,7 +225,7 @@ func _ready() -> void:
 	var gunship_raiders := _encounter("gunship_raiders", "Gunship Raiders", 250.0,
 		["hard", "ai"], [
 			_spawn(enemy_scene, 3, v_shape, ai_hitrun, fast_fire, 0.0, 50,
-				Vector2.ZERO, Vector2(15, 10), 5.0),
+				Vector3(0, 5.0, -500.0), _box_shape(Vector2(15, 10))),
 	])
 	_save(gunship_raiders, OUTPUT_BASE + "gunship_raiders.tres")
 
@@ -233,7 +233,7 @@ func _ready() -> void:
 	var helix_dancers := _encounter("helix_dancers", "Helix Dancers", 200.0,
 		["elite", "ai", "helix"], [
 			_spawn(enemy_scene, 4, point, ai_helix, med_fire, 0.0, 40,
-				Vector2.ZERO, Vector2(10, 10), 10.0),
+				Vector3(0, 10.0, -500.0), _box_shape(Vector2(10, 10))),
 	])
 	_save(helix_dancers, OUTPUT_BASE + "helix_dancers.tres")
 
@@ -374,9 +374,18 @@ func _pattern(fire_interval: float = 1.2, bullet_speed: float = 90.0,
 	return p
 
 
+func _box_shape(spread: Vector2, z_spread: float = 0.0) -> BoxShape3D:
+	"""Helper to create a BoxShape3D from a 2D spread vector."""
+	if spread == Vector2.ZERO and z_spread == 0.0:
+		return null
+	var box := BoxShape3D.new()
+	box.size = Vector3(spread.x * 2.0, spread.y * 2.0, z_spread * 2.0)
+	return box
+
+
 func _spawn(scene: PackedScene, count: int, formation: Formation,
 		move_style: MoveStyle, pattern: Pattern, time: float, hp: int,
-		origin: Vector2, spread: Vector2, height_offset: float) -> SpawnEvent:
+		world_pos: Vector3, spawn_shape: Shape3D = null) -> SpawnEvent:
 	var ev := SpawnEvent.new()
 	ev.enemy_scene = scene
 	ev.count = count
@@ -385,10 +394,8 @@ func _spawn(scene: PackedScene, count: int, formation: Formation,
 	ev.pattern = pattern
 	ev.time = time
 	ev.hp = hp
-	ev.z_start = -500.0
-	ev.spawn_origin = origin
-	ev.spread = spread
-	ev.height_offset = height_offset
+	ev.world_pos = world_pos
+	ev.spawn_shape = spawn_shape
 	return ev
 
 
