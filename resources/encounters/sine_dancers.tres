@@ -1,0 +1,41 @@
+[gd_resource type="Resource" script_class="Encounter" format=3]
+
+[ext_resource type="Script" uid="uid://brv4vhghfui7k" path="res://scenes/encounters/encounter_event.gd" id="1_apio2"]
+[ext_resource type="PackedScene" uid="uid://bk0r22e6fyjqg" path="res://scenes/enemy.tscn" id="2_tddui"]
+[ext_resource type="Script" uid="uid://q1gl2dfcbxpb" path="res://scenes/encounters/v_formation.resource.gd" id="3_m2bc8"]
+[ext_resource type="Script" uid="uid://ces2q7ec1p1dl" path="res://scenes/encounters/movement_styles/sine_strafe_movement_style.gd" id="4_ywsg1"]
+[ext_resource type="Script" uid="uid://clo2cqcvulfkw" path="res://scenes/encounters/pattern.gd" id="5_8m3hb"]
+[ext_resource type="Script" uid="uid://c8om0jd1cjoha" path="res://scenes/encounters/spawn_event.gd" id="6_fyd4g"]
+[ext_resource type="Script" uid="uid://dbp6h4gvlg87c" path="res://scenes/encounters/encounter.resource.gd" id="7_af4xi"]
+
+[sub_resource type="Resource" id="Resource_q54oa"]
+script = ExtResource("3_m2bc8")
+spacing = Vector2(35, 25)
+
+[sub_resource type="Resource" id="Resource_lbx15"]
+script = ExtResource("4_ywsg1")
+speed_z = 60.0
+amplitude = Vector2(50, 20)
+frequency = 0.8
+
+[sub_resource type="Resource" id="Resource_p8cuc"]
+script = ExtResource("5_8m3hb")
+
+[sub_resource type="Resource" id="Resource_x8bra"]
+script = ExtResource("6_fyd4g")
+enemy_scene = ExtResource("2_tddui")
+count = 5
+formation = SubResource("Resource_q54oa")
+move_style = SubResource("Resource_lbx15")
+pattern = SubResource("Resource_p8cuc")
+hp = 25
+world_pos = Vector3(0, 10, -500)
+tags = PackedStringArray()
+
+[resource]
+script = ExtResource("7_af4xi")
+id = "sine_dancers"
+display_name = "Sine Dancers"
+duration = 150.0
+events = Array[ExtResource("1_apio2")]([SubResource("Resource_x8bra")])
+tags = PackedStringArray("mid", "strafe")

@@ -1,4 +1,5 @@
 extends Node
+class_name Spawner
 
 @export var enemy_scene: PackedScene
 @export var spawn_ahead_z: float = 90.0

@@ -1,0 +1,11 @@
+[gd_resource type="Resource" script_class="PolylineMovementStyle" format=3 uid="uid://b2w7auj7yikx4"]
+
+[ext_resource type="Script" uid="uid://0t57sq0geore" path="res://scenes/encounters/movement_styles/polyline_movement_style.gd" id="1_y275u"]
+
+[resource]
+script = ExtResource("1_y275u")
+points = PackedVector3Array(-1000, 0, 0, 1000, 0, 0, -100, -150, 1500)
+speed = 1143.0
+path_origin_mode = 0
+z_lock = 1
+metadata/_custom_type_script = "uid://0t57sq0geore"

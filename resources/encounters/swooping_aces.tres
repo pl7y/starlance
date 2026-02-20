@@ -1,0 +1,67 @@
+[gd_resource type="Resource" script_class="Encounter" format=3]
+
+[ext_resource type="Script" uid="uid://brv4vhghfui7k" path="res://scenes/encounters/encounter_event.gd" id="1_egqwa"]
+[ext_resource type="PackedScene" uid="uid://bk0r22e6fyjqg" path="res://scenes/enemy.tscn" id="2_xeviq"]
+[ext_resource type="Script" uid="uid://q1gl2dfcbxpb" path="res://scenes/encounters/v_formation.resource.gd" id="3_1ju3g"]
+[ext_resource type="Script" uid="uid://imamapnrchah" path="res://scenes/encounters/movement_styles/swoop_movement_style.gd" id="4_p2c5f"]
+[ext_resource type="Script" uid="uid://clo2cqcvulfkw" path="res://scenes/encounters/pattern.gd" id="5_c57wt"]
+[ext_resource type="Script" uid="uid://c8om0jd1cjoha" path="res://scenes/encounters/spawn_event.gd" id="6_a42di"]
+[ext_resource type="Script" uid="uid://rc1sg2cc0r4g" path="res://scenes/encounters/point_formation.resource.gd" id="7_nbxse"]
+[ext_resource type="Script" uid="uid://e4iynmfhi4c2" path="res://scenes/encounters/movement_styles/dive_at_player_movement_style.gd" id="8_4shus"]
+[ext_resource type="Script" uid="uid://dbp6h4gvlg87c" path="res://scenes/encounters/encounter.resource.gd" id="9_vkkm8"]
+
+[sub_resource type="Resource" id="Resource_q54oa"]
+script = ExtResource("3_1ju3g")
+spacing = Vector2(35, 25)
+
+[sub_resource type="Resource" id="Resource_hrbha"]
+script = ExtResource("4_p2c5f")
+speed_z = 80.0
+amplitude = Vector2(60, 40)
+frequency = 0.6
+
+[sub_resource type="Resource" id="Resource_p8cuc"]
+script = ExtResource("5_c57wt")
+
+[sub_resource type="Resource" id="Resource_s12wb"]
+script = ExtResource("6_a42di")
+enemy_scene = ExtResource("2_xeviq")
+count = 3
+formation = SubResource("Resource_q54oa")
+move_style = SubResource("Resource_hrbha")
+pattern = SubResource("Resource_p8cuc")
+hp = 35
+world_pos = Vector3(0, 15, -500)
+tags = PackedStringArray()
+
+[sub_resource type="Resource" id="Resource_wm0q8"]
+script = ExtResource("7_nbxse")
+
+[sub_resource type="Resource" id="Resource_ijma2"]
+script = ExtResource("8_4shus")
+speed_z = 70.0
+
+[sub_resource type="Resource" id="Resource_fqthm"]
+script = ExtResource("5_c57wt")
+fire_interval = 0.8
+bullet_speed = 110.0
+
+[sub_resource type="Resource" id="Resource_iqlsa"]
+script = ExtResource("6_a42di")
+enemy_scene = ExtResource("2_xeviq")
+count = 2
+formation = SubResource("Resource_wm0q8")
+move_style = SubResource("Resource_ijma2")
+pattern = SubResource("Resource_fqthm")
+hp = 40
+world_pos = Vector3(50, 0, -500)
+time = 60.0
+tags = PackedStringArray()
+
+[resource]
+script = ExtResource("9_vkkm8")
+id = "swooping_aces"
+display_name = "Swooping Aces"
+duration = 180.0
+events = Array[ExtResource("1_egqwa")]([SubResource("Resource_s12wb"), SubResource("Resource_iqlsa")])
+tags = PackedStringArray("hard", "swoop")

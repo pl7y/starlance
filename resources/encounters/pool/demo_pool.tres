@@ -1,0 +1,641 @@
+[gd_resource type="Resource" script_class="EncounterPool" format=3 uid="uid://fcxqais0xfjm"]
+
+[ext_resource type="Script" uid="uid://c0qggvj364owo" path="res://scenes/encounters/encounter_pool_entry.gd" id="1_1xlms"]
+[ext_resource type="Script" uid="uid://brv4vhghfui7k" path="res://scenes/encounters/encounter_event.gd" id="2_xo02g"]
+[ext_resource type="PackedScene" uid="uid://bk0r22e6fyjqg" path="res://scenes/enemy.tscn" id="3_tawk3"]
+[ext_resource type="Script" uid="uid://cxyxiyhktbobm" path="res://scenes/encounters/line_formation.resource.gd" id="4_xw14r"]
+[ext_resource type="Script" uid="uid://b05e33v5cdts4" path="res://scenes/encounters/movement_styles/drift_movement_style.gd" id="5_st3bq"]
+[ext_resource type="Script" uid="uid://clo2cqcvulfkw" path="res://scenes/encounters/pattern.gd" id="6_efpec"]
+[ext_resource type="Script" uid="uid://c8om0jd1cjoha" path="res://scenes/encounters/spawn_event.gd" id="7_hjvpi"]
+[ext_resource type="Script" uid="uid://dbp6h4gvlg87c" path="res://scenes/encounters/encounter.resource.gd" id="8_jxbhi"]
+[ext_resource type="Script" uid="uid://q1gl2dfcbxpb" path="res://scenes/encounters/v_formation.resource.gd" id="9_cqhm5"]
+[ext_resource type="Script" uid="uid://ces2q7ec1p1dl" path="res://scenes/encounters/movement_styles/sine_strafe_movement_style.gd" id="10_kd844"]
+[ext_resource type="Script" uid="uid://bnbj85fhhtx8w" path="res://scenes/encounters/grid_formation.resource.gd" id="11_s7l8d"]
+[ext_resource type="Script" uid="uid://bgufywjd14j04" path="res://scenes/encounters/gate_event.gd" id="12_ybms2"]
+[ext_resource type="Script" uid="uid://bb0xn0vepmsos" path="res://scenes/encounters/circle_formation.resource.gd" id="13_p8ui2"]
+[ext_resource type="Script" uid="uid://e4iynmfhi4c2" path="res://scenes/encounters/movement_styles/dive_at_player_movement_style.gd" id="14_3smra"]
+[ext_resource type="Script" uid="uid://imamapnrchah" path="res://scenes/encounters/movement_styles/swoop_movement_style.gd" id="15_qwx8t"]
+[ext_resource type="Script" uid="uid://rc1sg2cc0r4g" path="res://scenes/encounters/point_formation.resource.gd" id="16_qd1ra"]
+[ext_resource type="Script" uid="uid://4nwtkn0hba0d" path="res://scenes/encounters/movement_styles/rush_follow_movement_style.gd" id="17_yrtl1"]
+[ext_resource type="Script" uid="uid://d00d0bl8io5sb" path="res://scenes/encounters/ai/flanker_move_logic.gd" id="18_bc80v"]
+[ext_resource type="Script" uid="uid://bbs45hlqmlue0" path="res://scenes/encounters/movement_styles/custom_movement_style.gd" id="19_d3xw4"]
+[ext_resource type="Script" uid="uid://dxk7dc27hqg3x" path="res://scenes/encounters/ai/mimic_move_logic.gd" id="20_mhu4d"]
+[ext_resource type="Script" uid="uid://chusr322dsp0p" path="res://scenes/encounters/ai/ambusher_move_logic.gd" id="21_kfs10"]
+[ext_resource type="Script" uid="uid://bvyxtt8cxjn51" path="res://scenes/encounters/ai/swarm_move_logic.gd" id="22_7dw5s"]
+[ext_resource type="Script" uid="uid://bhfopao1n6cvw" path="res://scenes/encounters/ai/hit_and_run_move_logic.gd" id="23_nnb2u"]
+[ext_resource type="Script" uid="uid://cldeigfkosee4" path="res://scenes/encounters/ai/helix_move_logic.gd" id="24_fivt1"]
+[ext_resource type="Script" uid="uid://5g8t74ml5dbs" path="res://scenes/encounters/movement_styles/orbit_movement_style.gd" id="25_7i0fu"]
+[ext_resource type="Script" uid="uid://cyotofsu0thm7" path="res://scenes/encounters/phase_event.gd" id="26_ltpwa"]
+[ext_resource type="Script" uid="uid://ciox4g4oohsew" path="res://scenes/encounters/movement_styles/movement_style.gd" id="27_rqo2f"]
+[ext_resource type="Script" uid="uid://cxhp7xriewxiu" path="res://scenes/encounters/encounter_pool.gd" id="28_ypj5n"]
+
+[sub_resource type="Resource" id="Resource_jy8uu"]
+script = ExtResource("4_xw14r")
+spacing = Vector2(40, 0)
+
+[sub_resource type="Resource" id="Resource_1hkfs"]
+script = ExtResource("5_st3bq")
+speed_z = 80.0
+
+[sub_resource type="Resource" id="Resource_6272t"]
+script = ExtResource("6_efpec")
+fire_interval = 2.0
+bullet_speed = 70.0
+
+[sub_resource type="Resource" id="Resource_4xyd6"]
+script = ExtResource("7_hjvpi")
+enemy_scene = ExtResource("3_tawk3")
+count = 3
+formation = SubResource("Resource_jy8uu")
+move_style = SubResource("Resource_1hkfs")
+pattern = SubResource("Resource_6272t")
+hp = 20
+world_pos = Vector3(0, 0, -500)
+tags = PackedStringArray()
+
+[sub_resource type="Resource" id="Resource_6kqnk"]
+script = ExtResource("8_jxbhi")
+id = "scout_line"
+display_name = "Scout Line"
+duration = 120.0
+events = Array[ExtResource("2_xo02g")]([SubResource("Resource_4xyd6")])
+tags = PackedStringArray("opener", "easy")
+
+[sub_resource type="Resource" id="Resource_80dcb"]
+script = ExtResource("1_1xlms")
+encounter = SubResource("Resource_6kqnk")
+weight = 3.0
+extra_tags = PackedStringArray("opener", "easy")
+
+[sub_resource type="Resource" id="Resource_q54oa"]
+script = ExtResource("9_cqhm5")
+spacing = Vector2(35, 25)
+
+[sub_resource type="Resource" id="Resource_lbx15"]
+script = ExtResource("10_kd844")
+speed_z = 60.0
+amplitude = Vector2(50, 20)
+frequency = 0.8
+
+[sub_resource type="Resource" id="Resource_p8cuc"]
+script = ExtResource("6_efpec")
+
+[sub_resource type="Resource" id="Resource_x8bra"]
+script = ExtResource("7_hjvpi")
+enemy_scene = ExtResource("3_tawk3")
+count = 5
+formation = SubResource("Resource_q54oa")
+move_style = SubResource("Resource_lbx15")
+pattern = SubResource("Resource_p8cuc")
+hp = 25
+world_pos = Vector3(0, 10, -500)
+tags = PackedStringArray()
+
+[sub_resource type="Resource" id="Resource_ve5rf"]
+script = ExtResource("8_jxbhi")
+id = "sine_dancers"
+display_name = "Sine Dancers"
+duration = 150.0
+events = Array[ExtResource("2_xo02g")]([SubResource("Resource_x8bra")])
+tags = PackedStringArray("mid", "strafe")
+
+[sub_resource type="Resource" id="Resource_0i766"]
+script = ExtResource("1_1xlms")
+encounter = SubResource("Resource_ve5rf")
+weight = 2.0
+tier = 2
+extra_tags = PackedStringArray("mid")
+
+[sub_resource type="Resource" id="Resource_q1l7r"]
+script = ExtResource("11_s7l8d")
+spacing = Vector2(40, 30)
+
+[sub_resource type="Resource" id="Resource_xmr57"]
+script = ExtResource("5_st3bq")
+speed_z = 120.0
+
+[sub_resource type="Resource" id="Resource_mb04t"]
+script = ExtResource("7_hjvpi")
+enemy_scene = ExtResource("3_tawk3")
+count = 6
+formation = SubResource("Resource_q1l7r")
+move_style = SubResource("Resource_xmr57")
+pattern = SubResource("Resource_p8cuc")
+hp = 30
+world_pos = Vector3(0, 20, -500)
+tags = PackedStringArray()
+
+[sub_resource type="Resource" id="Resource_hjmjf"]
+script = ExtResource("8_jxbhi")
+id = "grid_assault"
+display_name = "Grid Assault"
+duration = 150.0
+events = Array[ExtResource("2_xo02g")]([SubResource("Resource_mb04t")])
+tags = PackedStringArray("mid", "grid")
+
+[sub_resource type="Resource" id="Resource_r4kff"]
+script = ExtResource("1_1xlms")
+encounter = SubResource("Resource_hjmjf")
+weight = 2.0
+tier = 2
+extra_tags = PackedStringArray("mid")
+
+[sub_resource type="Resource" id="Resource_x82ni"]
+script = ExtResource("7_hjvpi")
+enemy_scene = ExtResource("3_tawk3")
+count = 4
+formation = SubResource("Resource_jy8uu")
+move_style = SubResource("Resource_1hkfs")
+pattern = SubResource("Resource_6272t")
+hp = 20
+world_pos = Vector3(0, 10, -500)
+tags = PackedStringArray()
+
+[sub_resource type="Resource" id="Resource_ah7gr"]
+script = ExtResource("12_ybms2")
+label = "Clear this wave!"
+time = 50.0
+tags = PackedStringArray()
+
+[sub_resource type="Resource" id="Resource_cllru"]
+script = ExtResource("10_kd844")
+speed_z = 90.0
+amplitude = Vector2(60, 30)
+
+[sub_resource type="Resource" id="Resource_tgqjv"]
+script = ExtResource("7_hjvpi")
+enemy_scene = ExtResource("3_tawk3")
+count = 3
+formation = SubResource("Resource_q54oa")
+move_style = SubResource("Resource_cllru")
+pattern = SubResource("Resource_p8cuc")
+hp = 30
+world_pos = Vector3(0, 0, -500)
+time = 55.0
+tags = PackedStringArray()
+
+[sub_resource type="Resource" id="Resource_thttu"]
+script = ExtResource("8_jxbhi")
+id = "mixed_ambush"
+display_name = "Mixed Ambush"
+duration = 250.0
+events = Array[ExtResource("2_xo02g")]([SubResource("Resource_x82ni"), SubResource("Resource_ah7gr"), SubResource("Resource_tgqjv")])
+tags = PackedStringArray("mid", "mixed")
+
+[sub_resource type="Resource" id="Resource_8xn6w"]
+script = ExtResource("1_1xlms")
+encounter = SubResource("Resource_thttu")
+weight = 1.5
+tier = 2
+extra_tags = PackedStringArray("mid", "mixed")
+
+[sub_resource type="Resource" id="Resource_b1okn"]
+script = ExtResource("13_p8ui2")
+radius = 50.0
+
+[sub_resource type="Resource" id="Resource_ijma2"]
+script = ExtResource("14_3smra")
+speed_z = 70.0
+
+[sub_resource type="Resource" id="Resource_fqthm"]
+script = ExtResource("6_efpec")
+fire_interval = 0.8
+bullet_speed = 110.0
+
+[sub_resource type="Resource" id="Resource_jtfbd"]
+script = ExtResource("7_hjvpi")
+enemy_scene = ExtResource("3_tawk3")
+count = 4
+formation = SubResource("Resource_b1okn")
+move_style = SubResource("Resource_ijma2")
+pattern = SubResource("Resource_fqthm")
+hp = 40
+world_pos = Vector3(0, 0, -500)
+tags = PackedStringArray()
+
+[sub_resource type="Resource" id="Resource_j51d6"]
+script = ExtResource("8_jxbhi")
+id = "dive_bombers"
+display_name = "Dive Bombers"
+duration = 180.0
+events = Array[ExtResource("2_xo02g")]([SubResource("Resource_jtfbd")])
+tags = PackedStringArray("hard", "dive")
+
+[sub_resource type="Resource" id="Resource_8y8wa"]
+script = ExtResource("1_1xlms")
+encounter = SubResource("Resource_j51d6")
+weight = 1.5
+tier = 3
+extra_tags = PackedStringArray("hard")
+
+[sub_resource type="Resource" id="Resource_hrbha"]
+script = ExtResource("15_qwx8t")
+speed_z = 80.0
+amplitude = Vector2(60, 40)
+frequency = 0.6
+
+[sub_resource type="Resource" id="Resource_s12wb"]
+script = ExtResource("7_hjvpi")
+enemy_scene = ExtResource("3_tawk3")
+count = 3
+formation = SubResource("Resource_q54oa")
+move_style = SubResource("Resource_hrbha")
+pattern = SubResource("Resource_p8cuc")
+hp = 35
+world_pos = Vector3(0, 15, -500)
+tags = PackedStringArray()
+
+[sub_resource type="Resource" id="Resource_wm0q8"]
+script = ExtResource("16_qd1ra")
+
+[sub_resource type="Resource" id="Resource_iqlsa"]
+script = ExtResource("7_hjvpi")
+enemy_scene = ExtResource("3_tawk3")
+count = 2
+formation = SubResource("Resource_wm0q8")
+move_style = SubResource("Resource_ijma2")
+pattern = SubResource("Resource_fqthm")
+hp = 40
+world_pos = Vector3(50, 0, -500)
+time = 60.0
+tags = PackedStringArray()
+
+[sub_resource type="Resource" id="Resource_dh2q6"]
+script = ExtResource("8_jxbhi")
+id = "swooping_aces"
+display_name = "Swooping Aces"
+duration = 180.0
+events = Array[ExtResource("2_xo02g")]([SubResource("Resource_s12wb"), SubResource("Resource_iqlsa")])
+tags = PackedStringArray("hard", "swoop")
+
+[sub_resource type="Resource" id="Resource_4x4iw"]
+script = ExtResource("1_1xlms")
+encounter = SubResource("Resource_dh2q6")
+tier = 3
+extra_tags = PackedStringArray("hard")
+
+[sub_resource type="Resource" id="Resource_8b3a4"]
+script = ExtResource("17_yrtl1")
+follow_distance = 25.0
+rush_turn = 5.0
+orbit_radius = 8.0
+orbit_speed = 2.0
+
+[sub_resource type="Resource" id="Resource_3gbug"]
+script = ExtResource("7_hjvpi")
+enemy_scene = ExtResource("3_tawk3")
+count = 3
+formation = SubResource("Resource_q54oa")
+move_style = SubResource("Resource_8b3a4")
+pattern = SubResource("Resource_p8cuc")
+hp = 35
+world_pos = Vector3(0, 10, -500)
+tags = PackedStringArray()
+
+[sub_resource type="Resource" id="Resource_4jxp4"]
+script = ExtResource("17_yrtl1")
+follow_distance = 18.0
+rush_turn = 6.0
+orbit_radius = 5.0
+orbit_speed = 2.5
+
+[sub_resource type="Resource" id="Resource_nte4i"]
+script = ExtResource("7_hjvpi")
+enemy_scene = ExtResource("3_tawk3")
+count = 2
+formation = SubResource("Resource_wm0q8")
+move_style = SubResource("Resource_4jxp4")
+pattern = SubResource("Resource_fqthm")
+hp = 40
+world_pos = Vector3(40, 0, -500)
+time = 60.0
+tags = PackedStringArray()
+
+[sub_resource type="Resource" id="Resource_w5x7d"]
+script = ExtResource("8_jxbhi")
+id = "rush_stalkers"
+display_name = "Rush Stalkers"
+duration = 200.0
+events = Array[ExtResource("2_xo02g")]([SubResource("Resource_3gbug"), SubResource("Resource_nte4i")])
+tags = PackedStringArray("hard", "follow")
+
+[sub_resource type="Resource" id="Resource_c8n1o"]
+script = ExtResource("1_1xlms")
+encounter = SubResource("Resource_w5x7d")
+weight = 1.5
+tier = 3
+extra_tags = PackedStringArray("hard", "follow")
+
+[sub_resource type="Resource" id="Resource_p4gwi"]
+script = ExtResource("18_bc80v")
+
+[sub_resource type="Resource" id="Resource_5o1ev"]
+script = ExtResource("19_d3xw4")
+custom_logic = SubResource("Resource_p4gwi")
+
+[sub_resource type="Resource" id="Resource_q1apa"]
+script = ExtResource("7_hjvpi")
+enemy_scene = ExtResource("3_tawk3")
+count = 2
+formation = SubResource("Resource_jy8uu")
+move_style = SubResource("Resource_5o1ev")
+pattern = SubResource("Resource_p8cuc")
+hp = 40
+world_pos = Vector3(0, 10, -500)
+tags = PackedStringArray()
+
+[sub_resource type="Resource" id="Resource_u52kj"]
+script = ExtResource("8_jxbhi")
+id = "flanker_pair"
+display_name = "Flanker Pair"
+duration = 200.0
+events = Array[ExtResource("2_xo02g")]([SubResource("Resource_q1apa")])
+tags = PackedStringArray("hard", "ai")
+
+[sub_resource type="Resource" id="Resource_bh6kt"]
+script = ExtResource("1_1xlms")
+encounter = SubResource("Resource_u52kj")
+weight = 1.5
+tier = 3
+extra_tags = PackedStringArray("hard", "ai")
+
+[sub_resource type="Resource" id="Resource_ubkxk"]
+script = ExtResource("20_mhu4d")
+
+[sub_resource type="Resource" id="Resource_pfxay"]
+script = ExtResource("19_d3xw4")
+custom_logic = SubResource("Resource_ubkxk")
+
+[sub_resource type="Resource" id="Resource_h2ww6"]
+script = ExtResource("7_hjvpi")
+enemy_scene = ExtResource("3_tawk3")
+count = 2
+formation = SubResource("Resource_jy8uu")
+move_style = SubResource("Resource_pfxay")
+pattern = SubResource("Resource_6272t")
+hp = 35
+world_pos = Vector3(0, 0, -500)
+tags = PackedStringArray()
+
+[sub_resource type="Resource" id="Resource_kb2jj"]
+script = ExtResource("8_jxbhi")
+id = "dark_mirrors"
+display_name = "Dark Mirrors"
+duration = 220.0
+events = Array[ExtResource("2_xo02g")]([SubResource("Resource_h2ww6")])
+tags = PackedStringArray("mid", "ai", "creepy")
+
+[sub_resource type="Resource" id="Resource_bmdej"]
+script = ExtResource("1_1xlms")
+encounter = SubResource("Resource_kb2jj")
+weight = 2.0
+tier = 2
+extra_tags = PackedStringArray("mid", "ai")
+
+[sub_resource type="Resource" id="Resource_in84f"]
+script = ExtResource("21_kfs10")
+lurk_time = 2.0
+charge_speed = 280.0
+
+[sub_resource type="Resource" id="Resource_25qfc"]
+script = ExtResource("19_d3xw4")
+custom_logic = SubResource("Resource_in84f")
+
+[sub_resource type="Resource" id="Resource_nltvt"]
+script = ExtResource("7_hjvpi")
+enemy_scene = ExtResource("3_tawk3")
+count = 3
+formation = SubResource("Resource_jy8uu")
+move_style = SubResource("Resource_25qfc")
+pattern = SubResource("Resource_fqthm")
+hp = 45
+world_pos = Vector3(0, 0, -500)
+tags = PackedStringArray()
+
+[sub_resource type="Resource" id="Resource_5cy0r"]
+script = ExtResource("8_jxbhi")
+id = "phantom_ambush"
+display_name = "Phantom Ambush"
+duration = 250.0
+events = Array[ExtResource("2_xo02g")]([SubResource("Resource_nltvt")])
+tags = PackedStringArray("hard", "ai", "surprise")
+
+[sub_resource type="Resource" id="Resource_je3yh"]
+script = ExtResource("1_1xlms")
+encounter = SubResource("Resource_5cy0r")
+tier = 3
+extra_tags = PackedStringArray("hard", "ai")
+
+[sub_resource type="Resource" id="Resource_a4fws"]
+script = ExtResource("22_7dw5s")
+
+[sub_resource type="Resource" id="Resource_1k10m"]
+script = ExtResource("19_d3xw4")
+custom_logic = SubResource("Resource_a4fws")
+
+[sub_resource type="Resource" id="Resource_ox6xm"]
+script = ExtResource("7_hjvpi")
+enemy_scene = ExtResource("3_tawk3")
+count = 6
+formation = SubResource("Resource_b1okn")
+move_style = SubResource("Resource_1k10m")
+pattern = SubResource("Resource_6272t")
+hp = 20
+world_pos = Vector3(0, 10, -500)
+tags = PackedStringArray()
+
+[sub_resource type="Resource" id="Resource_mvsal"]
+script = ExtResource("8_jxbhi")
+id = "hive_swarm"
+display_name = "Hive Swarm"
+duration = 200.0
+events = Array[ExtResource("2_xo02g")]([SubResource("Resource_ox6xm")])
+tags = PackedStringArray("mid", "ai", "swarm")
+
+[sub_resource type="Resource" id="Resource_yj1ko"]
+script = ExtResource("1_1xlms")
+encounter = SubResource("Resource_mvsal")
+weight = 2.0
+tier = 2
+extra_tags = PackedStringArray("mid", "ai")
+
+[sub_resource type="Resource" id="Resource_6w48s"]
+script = ExtResource("23_nnb2u")
+attack_hold = 1.8
+retreat_distance = 50.0
+
+[sub_resource type="Resource" id="Resource_0ssqv"]
+script = ExtResource("19_d3xw4")
+custom_logic = SubResource("Resource_6w48s")
+
+[sub_resource type="Resource" id="Resource_v8o5m"]
+script = ExtResource("7_hjvpi")
+enemy_scene = ExtResource("3_tawk3")
+count = 3
+formation = SubResource("Resource_q54oa")
+move_style = SubResource("Resource_0ssqv")
+pattern = SubResource("Resource_fqthm")
+hp = 50
+world_pos = Vector3(0, 5, -500)
+tags = PackedStringArray()
+
+[sub_resource type="Resource" id="Resource_gs2d1"]
+script = ExtResource("8_jxbhi")
+id = "gunship_raiders"
+display_name = "Gunship Raiders"
+duration = 250.0
+events = Array[ExtResource("2_xo02g")]([SubResource("Resource_v8o5m")])
+tags = PackedStringArray("hard", "ai")
+
+[sub_resource type="Resource" id="Resource_3j51m"]
+script = ExtResource("1_1xlms")
+encounter = SubResource("Resource_gs2d1")
+tier = 3
+extra_tags = PackedStringArray("hard", "ai")
+
+[sub_resource type="Resource" id="Resource_pvmsg"]
+script = ExtResource("24_fivt1")
+
+[sub_resource type="Resource" id="Resource_13eb3"]
+script = ExtResource("19_d3xw4")
+custom_logic = SubResource("Resource_pvmsg")
+
+[sub_resource type="Resource" id="Resource_462aa"]
+script = ExtResource("7_hjvpi")
+enemy_scene = ExtResource("3_tawk3")
+count = 4
+formation = SubResource("Resource_wm0q8")
+move_style = SubResource("Resource_13eb3")
+pattern = SubResource("Resource_p8cuc")
+hp = 40
+world_pos = Vector3(0, 10, -500)
+tags = PackedStringArray()
+
+[sub_resource type="Resource" id="Resource_am55k"]
+script = ExtResource("8_jxbhi")
+id = "helix_dancers"
+display_name = "Helix Dancers"
+duration = 200.0
+events = Array[ExtResource("2_xo02g")]([SubResource("Resource_462aa")])
+tags = PackedStringArray("elite", "ai", "helix")
+
+[sub_resource type="Resource" id="Resource_gtief"]
+script = ExtResource("1_1xlms")
+encounter = SubResource("Resource_am55k")
+tier = 4
+extra_tags = PackedStringArray("elite", "ai")
+
+[sub_resource type="Resource" id="Resource_8t6ik"]
+script = ExtResource("25_7i0fu")
+speed_z = 30.0
+
+[sub_resource type="Resource" id="Resource_jf1kt"]
+script = ExtResource("7_hjvpi")
+enemy_scene = ExtResource("3_tawk3")
+count = 4
+formation = SubResource("Resource_b1okn")
+move_style = SubResource("Resource_8t6ik")
+pattern = SubResource("Resource_fqthm")
+hp = 50
+world_pos = Vector3(0, 10, -500)
+tags = PackedStringArray()
+
+[sub_resource type="Resource" id="Resource_l0igu"]
+script = ExtResource("7_hjvpi")
+enemy_scene = ExtResource("3_tawk3")
+count = 2
+formation = SubResource("Resource_wm0q8")
+move_style = SubResource("Resource_ijma2")
+pattern = SubResource("Resource_fqthm")
+hp = 60
+world_pos = Vector3(0, 0, -500)
+time = 80.0
+tags = PackedStringArray()
+
+[sub_resource type="Resource" id="Resource_j3ujc"]
+script = ExtResource("8_jxbhi")
+id = "elite_orbit"
+display_name = "Elite Orbit Guard"
+duration = 200.0
+events = Array[ExtResource("2_xo02g")]([SubResource("Resource_jf1kt"), SubResource("Resource_l0igu")])
+tags = PackedStringArray("elite", "orbit")
+
+[sub_resource type="Resource" id="Resource_hnn0a"]
+script = ExtResource("1_1xlms")
+encounter = SubResource("Resource_j3ujc")
+tier = 4
+extra_tags = PackedStringArray("elite")
+
+[sub_resource type="Resource" id="Resource_r5wmi"]
+script = ExtResource("26_ltpwa")
+phase_name = "boss_phase_1"
+tags = PackedStringArray()
+
+[sub_resource type="Resource" id="Resource_6tikc"]
+script = ExtResource("27_rqo2f")
+
+[sub_resource type="Resource" id="Resource_qaaef"]
+script = ExtResource("7_hjvpi")
+enemy_scene = ExtResource("3_tawk3")
+formation = SubResource("Resource_wm0q8")
+move_style = SubResource("Resource_6tikc")
+pattern = SubResource("Resource_6272t")
+hp = 200
+world_pos = Vector3(0, 20, -500)
+tags = PackedStringArray()
+
+[sub_resource type="Resource" id="Resource_mu31x"]
+script = ExtResource("12_ybms2")
+label = "Defeat the Dreadnought!"
+time = 5.0
+tags = PackedStringArray()
+
+[sub_resource type="Resource" id="Resource_re6wj"]
+script = ExtResource("7_hjvpi")
+enemy_scene = ExtResource("3_tawk3")
+count = 3
+formation = SubResource("Resource_jy8uu")
+move_style = SubResource("Resource_1hkfs")
+pattern = SubResource("Resource_p8cuc")
+hp = 25
+world_pos = Vector3(0, 0, -500)
+time = 80.0
+tags = PackedStringArray()
+
+[sub_resource type="Resource" id="Resource_kuby2"]
+script = ExtResource("26_ltpwa")
+phase_name = "boss_phase_2"
+time = 150.0
+tags = PackedStringArray()
+
+[sub_resource type="Resource" id="Resource_luodi"]
+script = ExtResource("7_hjvpi")
+enemy_scene = ExtResource("3_tawk3")
+count = 4
+formation = SubResource("Resource_b1okn")
+move_style = SubResource("Resource_cllru")
+pattern = SubResource("Resource_fqthm")
+hp = 30
+world_pos = Vector3(0, 10, -500)
+time = 155.0
+tags = PackedStringArray()
+
+[sub_resource type="Resource" id="Resource_ko8d4"]
+script = ExtResource("8_jxbhi")
+id = "boss_dreadnought"
+display_name = "Heavy Dreadnought"
+duration = 350.0
+events = Array[ExtResource("2_xo02g")]([SubResource("Resource_r5wmi"), SubResource("Resource_qaaef"), SubResource("Resource_mu31x"), SubResource("Resource_re6wj"), SubResource("Resource_kuby2"), SubResource("Resource_luodi")])
+tags = PackedStringArray("boss")
+
+[sub_resource type="Resource" id="Resource_1qgxj"]
+script = ExtResource("1_1xlms")
+encounter = SubResource("Resource_ko8d4")
+tier = 5
+extra_tags = PackedStringArray("boss")
+
+[resource]
+script = ExtResource("28_ypj5n")
+display_name = "Demo Level Pool"
+entries = Array[ExtResource("1_1xlms")]([SubResource("Resource_80dcb"), SubResource("Resource_0i766"), SubResource("Resource_r4kff"), SubResource("Resource_8xn6w"), SubResource("Resource_8y8wa"), SubResource("Resource_4x4iw"), SubResource("Resource_c8n1o"), SubResource("Resource_bh6kt"), SubResource("Resource_bmdej"), SubResource("Resource_je3yh"), SubResource("Resource_yj1ko"), SubResource("Resource_3j51m"), SubResource("Resource_gtief"), SubResource("Resource_hnn0a"), SubResource("Resource_1qgxj")])
+tags = PackedStringArray("demo")

@@ -1,0 +1,70 @@
+[gd_resource type="Resource" script_class="Encounter" format=3]
+
+[ext_resource type="Script" uid="uid://brv4vhghfui7k" path="res://scenes/encounters/encounter_event.gd" id="1_smub5"]
+[ext_resource type="PackedScene" uid="uid://bk0r22e6fyjqg" path="res://scenes/enemy.tscn" id="2_kyt57"]
+[ext_resource type="Script" uid="uid://q1gl2dfcbxpb" path="res://scenes/encounters/v_formation.resource.gd" id="3_xu6v7"]
+[ext_resource type="Script" uid="uid://4nwtkn0hba0d" path="res://scenes/encounters/movement_styles/rush_follow_movement_style.gd" id="4_bujwc"]
+[ext_resource type="Script" uid="uid://clo2cqcvulfkw" path="res://scenes/encounters/pattern.gd" id="5_at1g2"]
+[ext_resource type="Script" uid="uid://c8om0jd1cjoha" path="res://scenes/encounters/spawn_event.gd" id="6_dbg7q"]
+[ext_resource type="Script" uid="uid://rc1sg2cc0r4g" path="res://scenes/encounters/point_formation.resource.gd" id="7_d2xco"]
+[ext_resource type="Script" uid="uid://dbp6h4gvlg87c" path="res://scenes/encounters/encounter.resource.gd" id="8_f1f6k"]
+
+[sub_resource type="Resource" id="Resource_q54oa"]
+script = ExtResource("3_xu6v7")
+spacing = Vector2(35, 25)
+
+[sub_resource type="Resource" id="Resource_8b3a4"]
+script = ExtResource("4_bujwc")
+follow_distance = 25.0
+rush_turn = 5.0
+orbit_radius = 8.0
+orbit_speed = 2.0
+
+[sub_resource type="Resource" id="Resource_p8cuc"]
+script = ExtResource("5_at1g2")
+
+[sub_resource type="Resource" id="Resource_3gbug"]
+script = ExtResource("6_dbg7q")
+enemy_scene = ExtResource("2_kyt57")
+count = 3
+formation = SubResource("Resource_q54oa")
+move_style = SubResource("Resource_8b3a4")
+pattern = SubResource("Resource_p8cuc")
+hp = 35
+world_pos = Vector3(0, 10, -500)
+tags = PackedStringArray()
+
+[sub_resource type="Resource" id="Resource_wm0q8"]
+script = ExtResource("7_d2xco")
+
+[sub_resource type="Resource" id="Resource_4jxp4"]
+script = ExtResource("4_bujwc")
+follow_distance = 18.0
+rush_turn = 6.0
+orbit_radius = 5.0
+orbit_speed = 2.5
+
+[sub_resource type="Resource" id="Resource_fqthm"]
+script = ExtResource("5_at1g2")
+fire_interval = 0.8
+bullet_speed = 110.0
+
+[sub_resource type="Resource" id="Resource_nte4i"]
+script = ExtResource("6_dbg7q")
+enemy_scene = ExtResource("2_kyt57")
+count = 2
+formation = SubResource("Resource_wm0q8")
+move_style = SubResource("Resource_4jxp4")
+pattern = SubResource("Resource_fqthm")
+hp = 40
+world_pos = Vector3(40, 0, -500)
+time = 60.0
+tags = PackedStringArray()
+
+[resource]
+script = ExtResource("8_f1f6k")
+id = "rush_stalkers"
+display_name = "Rush Stalkers"
+duration = 200.0
+events = Array[ExtResource("1_smub5")]([SubResource("Resource_3gbug"), SubResource("Resource_nte4i")])
+tags = PackedStringArray("hard", "follow")

@@ -1,0 +1,73 @@
+[gd_resource type="Resource" script_class="Encounter" format=3 uid="uid://cygc4mwlm1rxk"]
+
+[ext_resource type="Script" uid="uid://brv4vhghfui7k" path="res://scenes/encounters/encounter_event.gd" id="1_48tfx"]
+[ext_resource type="Script" uid="uid://dbp6h4gvlg87c" path="res://scenes/encounters/encounter.resource.gd" id="2_4a1j6"]
+[ext_resource type="PackedScene" uid="uid://bk0r22e6fyjqg" path="res://scenes/enemy.tscn" id="2_bn13w"]
+[ext_resource type="Script" uid="uid://bmu6m46yfb4sm" path="res://scenes/encounters/formation.resource.gd" id="3_e70sc"]
+[ext_resource type="Script" uid="uid://c8om0jd1cjoha" path="res://scenes/encounters/spawn_event.gd" id="3_uu7bf"]
+[ext_resource type="Script" uid="uid://ciox4g4oohsew" path="res://scenes/encounters/movement_styles/movement_style.gd" id="4_jicf1"]
+[ext_resource type="Script" uid="uid://clo2cqcvulfkw" path="res://scenes/encounters/pattern.gd" id="5_mbfni"]
+
+[sub_resource type="Resource" id="Resource_21pmk"]
+script = ExtResource("3_e70sc")
+metadata/_custom_type_script = "uid://bmu6m46yfb4sm"
+
+[sub_resource type="Resource" id="Resource_5pw5r"]
+script = ExtResource("4_jicf1")
+type = 2
+speed_z = 100.0
+amplitude = Vector2(40, 20)
+metadata/_custom_type_script = "uid://cbdfbktcb3n7a"
+
+[sub_resource type="Resource" id="Resource_sbw03"]
+script = ExtResource("5_mbfni")
+metadata/_custom_type_script = "uid://clo2cqcvulfkw"
+
+[sub_resource type="Resource" id="Resource_7rqy2"]
+script = ExtResource("3_uu7bf")
+enemy_scene = ExtResource("2_bn13w")
+count = 5
+formation = SubResource("Resource_21pmk")
+z_start = -500.0
+move_style = SubResource("Resource_5pw5r")
+pattern = SubResource("Resource_sbw03")
+spread = Vector2(100, 100)
+height_offset = 30.0
+tags = PackedStringArray()
+metadata/_custom_type_script = "uid://c8om0jd1cjoha"
+
+[sub_resource type="Resource" id="Resource_e70sc"]
+script = ExtResource("3_e70sc")
+shape = 2
+spacing = Vector2(50, 50)
+metadata/_custom_type_script = "uid://bmu6m46yfb4sm"
+
+[sub_resource type="Resource" id="Resource_jicf1"]
+script = ExtResource("4_jicf1")
+type = 3
+metadata/_custom_type_script = "uid://cbdfbktcb3n7a"
+
+[sub_resource type="Resource" id="Resource_mbfni"]
+script = ExtResource("5_mbfni")
+metadata/_custom_type_script = "uid://clo2cqcvulfkw"
+
+[sub_resource type="Resource" id="Resource_blkvj"]
+script = ExtResource("3_uu7bf")
+enemy_scene = ExtResource("2_bn13w")
+count = 5
+formation = SubResource("Resource_e70sc")
+z_start = -500.0
+move_style = SubResource("Resource_jicf1")
+pattern = SubResource("Resource_mbfni")
+height_offset = 30.0
+tags = PackedStringArray()
+metadata/_custom_type_script = "uid://c8om0jd1cjoha"
+
+[resource]
+script = ExtResource("2_4a1j6")
+id = "first_ecounter"
+display_name = "First encounter"
+duration = 1000.0
+events = Array[ExtResource("1_48tfx")]([SubResource("Resource_7rqy2"), SubResource("Resource_blkvj")])
+tags = PackedStringArray()
+metadata/_custom_type_script = "uid://dbp6h4gvlg87c"

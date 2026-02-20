@@ -8,6 +8,16 @@
 extends Node2D
 class_name WorldObject
 
+enum EscapeType {
+  NONE,
+  BEHIND_CAMERA, # Went behind the camera (negative depth)
+  OFF_SCREEN_LEFT, # Went too far left
+  OFF_SCREEN_RIGHT, # Went too far right
+  TOO_FAR_AHEAD # Went too far ahead of camera
+}
+
+signal escaped(escape_type: EscapeType)
+
 @export var world_pos: Vector3 = Vector3.ZERO:
   set(value):
     world_pos = value
@@ -18,6 +28,13 @@ class_name WorldObject
 @export var min_scale: float = 0.02
 @export var max_scale: float = 6.0
 @export var fixed_sprite: bool = false
+
+# Escape detection settings
+@export_group("Escape Detection")
+@export var enable_escape_detection: bool = true
+@export var despawn_on_escape: bool = true
+@export var screen_margin_pixels: float = 200.0 # Buffer zone before triggering escape
+@export var max_distance_ahead: float = 150.0 # Max Z distance ahead of camera before escaping
 
 # Shadow settings
 @export_group("Shadow Settings")
@@ -30,6 +47,8 @@ class_name WorldObject
 
 @onready var rig: CameraRig = get_tree().get_first_node_in_group("camera_rig") as CameraRig
 
+var _has_escaped: bool = false
+
 func _ready() -> void:
   if rig == null:
     push_error("CameraRig not found. Did you add it to group 'camera_rig'?")
@@ -41,9 +60,18 @@ func _update() -> void:
   if rig == null:
     return
 
+  # Check for escape conditions
+  if enable_escape_detection and not _has_escaped:
+    var escape_type := _check_escape()
+    if escape_type != EscapeType.NONE:
+      _on_escaped(escape_type)
+      return
+
   var p := rig.project(world_pos)
   if not p.visible:
-    visible = false
+    # Fallback: still despawn if not visible (shouldn't happen if escape detection is on)
+    if not enable_escape_detection and not _has_escaped:
+      queue_free()
     return
 
   visible = true
@@ -68,9 +96,6 @@ func _update() -> void:
   # Update shadow projection
   _update_shadow()
 
-  # Despawn when behind camera (depth becomes negative when behind)
-  if p.rel_z < 0.0:
-    queue_free()
 
 func _update_shadow() -> void:
   if not casts_shadow or shadow_sprite == null:
@@ -100,3 +125,43 @@ func _update_shadow() -> void:
 
   # Shadow should render below the object
   shadow_sprite.z_index = z_index - 1
+
+
+## Check if object has escaped based on various conditions
+func _check_escape() -> EscapeType:
+  var p := rig.project(world_pos)
+  
+  # Check if behind camera
+  if not p.visible:
+    return EscapeType.BEHIND_CAMERA
+  
+  # Get viewport size
+  var viewport_size := get_viewport_rect().size
+  
+  # Check if too far off screen horizontally
+  if p.screen.x < -screen_margin_pixels:
+    return EscapeType.OFF_SCREEN_LEFT
+  if p.screen.x > viewport_size.x + screen_margin_pixels:
+    return EscapeType.OFF_SCREEN_RIGHT
+  
+  # Check if too far ahead of camera
+  var distance_ahead := world_pos.z - rig.camera_world_position.z
+  if distance_ahead > max_distance_ahead:
+    return EscapeType.TOO_FAR_AHEAD
+  
+  return EscapeType.NONE
+
+
+## Called when object escapes - emits signal and optionally despawns
+func _on_escaped(escape_type: EscapeType) -> void:
+  _has_escaped = true
+  escaped.emit(escape_type)
+  
+  if despawn_on_escape:
+    queue_free()
+
+
+## Can be called from child classes to manually trigger escape
+func trigger_escape(escape_type: EscapeType = EscapeType.NONE) -> void:
+  if not _has_escaped:
+    _on_escaped(escape_type)

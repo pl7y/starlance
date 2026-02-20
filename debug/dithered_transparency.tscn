@@ -1,0 +1,17 @@
+[gd_scene format=3 uid="uid://cwiuubocj1w82"]
+
+[ext_resource type="Texture2D" uid="uid://cie10mi1so117" path="res://assets/placeholders/starship.png" id="1_3maaq"]
+[ext_resource type="Shader" uid="uid://cdkvrtuwgofsr" path="res://debug/alpha_dithering.gdshader" id="1_qdq4n"]
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_vlmj2"]
+shader = ExtResource("1_qdq4n")
+shader_parameter/opacity = 0.6450000306375
+shader_parameter/bayer_size = 2
+
+[node name="Node2D" type="Node2D" unique_id=1815869234]
+position = Vector2(26, 16)
+
+[node name="Sprite2D" type="Sprite2D" parent="." unique_id=74951357]
+material = SubResource("ShaderMaterial_vlmj2")
+position = Vector2(257, 154)
+texture = ExtResource("1_3maaq")

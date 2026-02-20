@@ -1,0 +1,110 @@
+[gd_resource type="Resource" script_class="Encounter" format=3]
+
+[ext_resource type="Script" uid="uid://brv4vhghfui7k" path="res://scenes/encounters/encounter_event.gd" id="1_ugqd1"]
+[ext_resource type="Script" uid="uid://cyotofsu0thm7" path="res://scenes/encounters/phase_event.gd" id="2_1ywtg"]
+[ext_resource type="PackedScene" uid="uid://bk0r22e6fyjqg" path="res://scenes/enemy.tscn" id="3_5guji"]
+[ext_resource type="Script" uid="uid://rc1sg2cc0r4g" path="res://scenes/encounters/point_formation.resource.gd" id="4_hjo1a"]
+[ext_resource type="Script" uid="uid://ciox4g4oohsew" path="res://scenes/encounters/movement_styles/movement_style.gd" id="5_qb0oj"]
+[ext_resource type="Script" uid="uid://clo2cqcvulfkw" path="res://scenes/encounters/pattern.gd" id="6_flsqo"]
+[ext_resource type="Script" uid="uid://c8om0jd1cjoha" path="res://scenes/encounters/spawn_event.gd" id="7_ooo4j"]
+[ext_resource type="Script" uid="uid://bgufywjd14j04" path="res://scenes/encounters/gate_event.gd" id="8_l3x4i"]
+[ext_resource type="Script" uid="uid://cxyxiyhktbobm" path="res://scenes/encounters/line_formation.resource.gd" id="9_x8ijc"]
+[ext_resource type="Script" uid="uid://b05e33v5cdts4" path="res://scenes/encounters/movement_styles/drift_movement_style.gd" id="10_ob4ev"]
+[ext_resource type="Script" uid="uid://bb0xn0vepmsos" path="res://scenes/encounters/circle_formation.resource.gd" id="11_7g842"]
+[ext_resource type="Script" uid="uid://ces2q7ec1p1dl" path="res://scenes/encounters/movement_styles/sine_strafe_movement_style.gd" id="12_bokgw"]
+[ext_resource type="Script" uid="uid://dbp6h4gvlg87c" path="res://scenes/encounters/encounter.resource.gd" id="13_avk64"]
+
+[sub_resource type="Resource" id="Resource_r5wmi"]
+script = ExtResource("2_1ywtg")
+phase_name = "boss_phase_1"
+tags = PackedStringArray()
+
+[sub_resource type="Resource" id="Resource_wm0q8"]
+script = ExtResource("4_hjo1a")
+
+[sub_resource type="Resource" id="Resource_6tikc"]
+script = ExtResource("5_qb0oj")
+
+[sub_resource type="Resource" id="Resource_6272t"]
+script = ExtResource("6_flsqo")
+fire_interval = 2.0
+bullet_speed = 70.0
+
+[sub_resource type="Resource" id="Resource_qaaef"]
+script = ExtResource("7_ooo4j")
+enemy_scene = ExtResource("3_5guji")
+formation = SubResource("Resource_wm0q8")
+move_style = SubResource("Resource_6tikc")
+pattern = SubResource("Resource_6272t")
+hp = 200
+world_pos = Vector3(0, 20, -500)
+tags = PackedStringArray()
+
+[sub_resource type="Resource" id="Resource_mu31x"]
+script = ExtResource("8_l3x4i")
+label = "Defeat the Dreadnought!"
+time = 5.0
+tags = PackedStringArray()
+
+[sub_resource type="Resource" id="Resource_jy8uu"]
+script = ExtResource("9_x8ijc")
+spacing = Vector2(40, 0)
+
+[sub_resource type="Resource" id="Resource_1hkfs"]
+script = ExtResource("10_ob4ev")
+speed_z = 80.0
+
+[sub_resource type="Resource" id="Resource_p8cuc"]
+script = ExtResource("6_flsqo")
+
+[sub_resource type="Resource" id="Resource_re6wj"]
+script = ExtResource("7_ooo4j")
+enemy_scene = ExtResource("3_5guji")
+count = 3
+formation = SubResource("Resource_jy8uu")
+move_style = SubResource("Resource_1hkfs")
+pattern = SubResource("Resource_p8cuc")
+hp = 25
+world_pos = Vector3(0, 0, -500)
+time = 80.0
+tags = PackedStringArray()
+
+[sub_resource type="Resource" id="Resource_kuby2"]
+script = ExtResource("2_1ywtg")
+phase_name = "boss_phase_2"
+time = 150.0
+tags = PackedStringArray()
+
+[sub_resource type="Resource" id="Resource_b1okn"]
+script = ExtResource("11_7g842")
+radius = 50.0
+
+[sub_resource type="Resource" id="Resource_cllru"]
+script = ExtResource("12_bokgw")
+speed_z = 90.0
+amplitude = Vector2(60, 30)
+
+[sub_resource type="Resource" id="Resource_fqthm"]
+script = ExtResource("6_flsqo")
+fire_interval = 0.8
+bullet_speed = 110.0
+
+[sub_resource type="Resource" id="Resource_luodi"]
+script = ExtResource("7_ooo4j")
+enemy_scene = ExtResource("3_5guji")
+count = 4
+formation = SubResource("Resource_b1okn")
+move_style = SubResource("Resource_cllru")
+pattern = SubResource("Resource_fqthm")
+hp = 30
+world_pos = Vector3(0, 10, -500)
+time = 155.0
+tags = PackedStringArray()
+
+[resource]
+script = ExtResource("13_avk64")
+id = "boss_dreadnought"
+display_name = "Heavy Dreadnought"
+duration = 350.0
+events = Array[ExtResource("1_ugqd1")]([SubResource("Resource_r5wmi"), SubResource("Resource_qaaef"), SubResource("Resource_mu31x"), SubResource("Resource_re6wj"), SubResource("Resource_kuby2"), SubResource("Resource_luodi")])
+tags = PackedStringArray("boss")

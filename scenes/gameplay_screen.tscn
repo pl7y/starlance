@@ -1,20 +1,132 @@
 [gd_scene format=3 uid="uid://5v7a0ra4elxi"]
 
+[ext_resource type="Script" uid="uid://52c0r8owfv4p" path="res://scenes/gameplay_screen.gd" id="1_25g3s"]
 [ext_resource type="PackedScene" uid="uid://dfvx4shbdy2i0" path="res://scenes/camera_rig.tscn" id="1_nl8x0"]
 [ext_resource type="PackedScene" uid="uid://ehbcmyfcurbu" path="res://scenes/ground.tscn" id="2_gej26"]
 [ext_resource type="PackedScene" uid="uid://cbio2ymsjjt45" path="res://scenes/parallax_2d_layer.tscn" id="2_mcs8y"]
-[ext_resource type="PackedScene" uid="uid://bk0r22e6fyjqg" path="res://scenes/enemy.tscn" id="4_skn3q"]
 [ext_resource type="PackedScene" uid="uid://b1q5gjhbfsuaq" path="res://scenes/player.tscn" id="5_157wf"]
 [ext_resource type="Texture2D" uid="uid://jtdhvpki0hm3" path="res://assets/packages/Glacial-mountains-parallax-background_vnitti/Layers/sky.png" id="8_mcs8y"]
 [ext_resource type="Texture2D" uid="uid://cgke3ahrw3g0a" path="res://assets/packages/Glacial-mountains-parallax-background_vnitti/Layers/glacial_mountains_lightened.png" id="9_6gaaa"]
 [ext_resource type="Script" uid="uid://clwdi74exmma7" path="res://scenes/player_controllr.gd" id="9_iniog"]
-[ext_resource type="Script" uid="uid://cqqqpa6yalyl0" path="res://scenes/encounter_manager.gd" id="9_mcs8y"]
-[ext_resource type="PackedScene" uid="uid://vdrur6x32udr" path="res://scenes/obstacle.tscn" id="10_7ocsb"]
 [ext_resource type="Texture2D" uid="uid://cujsmm07hnsej" path="res://assets/packages/Glacial-mountains-parallax-background_vnitti/Layers/clouds_mg_1.png" id="10_cjr5t"]
 [ext_resource type="Texture2D" uid="uid://pi2m5lc3c6fp" path="res://assets/packages/Glacial-mountains-parallax-background_vnitti/Layers/clouds_mg_2.png" id="11_itntn"]
 [ext_resource type="Texture2D" uid="uid://c6nr8ekrc61va" path="res://assets/packages/Glacial-mountains-parallax-background_vnitti/Layers/clouds_mg_3.png" id="12_7ocsb"]
+[ext_resource type="Script" uid="uid://bx6f3uaf823k7" path="res://scenes/encounters/encounter_runner.gd" id="13_7ocsb"]
+[ext_resource type="Script" uid="uid://b7muo30j743j7" path="res://scenes/encounters/enemy_spawner.gd" id="14_6demn"]
+[ext_resource type="Script" uid="uid://cs50vfhsfsego" path="res://scenes/encounters/stage_director.gd" id="14_7ocsb"]
+[ext_resource type="Resource" uid="uid://2j8kvtmayt4e" path="res://resources/encounters/templates/demo_template.tres" id="15_aagjl"]
+[ext_resource type="Script" uid="uid://brv4vhghfui7k" path="res://scenes/encounters/encounter_event.gd" id="15_pw0ia"]
+[ext_resource type="Script" uid="uid://dbp6h4gvlg87c" path="res://scenes/encounters/encounter.resource.gd" id="15_qfdku"]
+[ext_resource type="PackedScene" uid="uid://bk0r22e6fyjqg" path="res://scenes/enemy.tscn" id="16_clvjq"]
+[ext_resource type="Resource" uid="uid://fcxqais0xfjm" path="res://resources/encounters/pool/demo_pool.tres" id="16_gnb8g"]
+[ext_resource type="Script" uid="uid://cxyxiyhktbobm" path="res://scenes/encounters/line_formation.resource.gd" id="17_baarm"]
+[ext_resource type="Script" uid="uid://bg0aq8jsny3t6" path="res://scenes/encounters/movement_styles/bounce_movement_style.gd" id="18_baarm"]
+[ext_resource type="Script" uid="uid://clo2cqcvulfkw" path="res://scenes/encounters/pattern.gd" id="19_2o7gh"]
+[ext_resource type="Script" uid="uid://c8om0jd1cjoha" path="res://scenes/encounters/spawn_event.gd" id="20_ng3oa"]
+[ext_resource type="Script" uid="uid://bxboq3da63h70" path="res://scenes/enemy.gd" id="21_ng3oa"]
+[ext_resource type="PackedScene" uid="uid://br8xdfa088ssa" path="res://scenes/enemy_bullet.tscn" id="22_gdxox"]
+[ext_resource type="PackedScene" uid="uid://ljkd8f8efq38" path="res://scenes/explosion.tscn" id="23_38d68"]
+[ext_resource type="Texture2D" uid="uid://cupq3ytok6bx6" path="res://assets/placeholders/enemy.png" id="24_je7pc"]
+[ext_resource type="Texture2D" uid="uid://cvgfki3bgh5gx" path="res://assets/placeholders/shadow.png" id="25_u486w"]
+[ext_resource type="PackedScene" uid="uid://cimdcjf2l38cy" path="res://scenes/pseudo_area_3d.tscn" id="26_k1bbh"]
+
+[sub_resource type="Resource" id="Resource_pw0ia"]
+script = ExtResource("17_baarm")
+spacing = Vector2(100, 0)
+metadata/_custom_type_script = "uid://cxyxiyhktbobm"
+
+[sub_resource type="Resource" id="Resource_clvjq"]
+script = ExtResource("18_baarm")
+target = 1
+bounce_amplitude = 100.0
+bounce_duration = 1.0
+pause = 0.49
+direction = Vector3(0, 1, 0)
+
+[sub_resource type="Resource" id="Resource_6272t"]
+script = ExtResource("19_2o7gh")
+fire_interval = 2.0
+bullet_speed = 70.0
+
+[sub_resource type="Resource" id="Resource_4xyd6"]
+script = ExtResource("20_ng3oa")
+enemy_scene = ExtResource("16_clvjq")
+count = 9
+formation = SubResource("Resource_pw0ia")
+move_style = SubResource("Resource_clvjq")
+pattern = SubResource("Resource_6272t")
+hp = 20
+world_pos = Vector3(-200, 0, -500)
+tags = PackedStringArray()
+
+[sub_resource type="Resource" id="Resource_hjvpi"]
+script = ExtResource("15_qfdku")
+id = "scout_line"
+display_name = "Scout Line"
+duration = 1200.0
+events = Array[ExtResource("15_pw0ia")]([SubResource("Resource_4xyd6")])
+tags = PackedStringArray("opener", "easy")
+
+[sub_resource type="SphereShape3D" id="SphereShape3D_nenq2"]
+radius = 20.0
+
+[sub_resource type="PackedScene" id="PackedScene_nv43j"]
+_bundled = {
+"conn_count": 1,
+"conns": PackedInt32Array(1073741830, 1073741831, 40, 41, 2, 0, 0),
+"editable_instances": [],
+"id_paths": [PackedInt32Array(), PackedInt32Array(), PackedInt32Array(), PackedInt32Array(), PackedInt32Array(), PackedInt32Array(), PackedInt32Array(), PackedInt32Array()],
+"names": PackedStringArray("Enemy", "Node2D", "enemies", "script", "hp", "hit_radius_px", "bullet_scene", "explosion_scene", "max_scale", "shadow_sprite", "Sprite2D", "Sprite2D", "unique_name_in_owner", "position", "scale", "texture", "Label", "Label", "unique_name_in_owner", "visible", "offset_right", "offset_bottom", "theme_override_font_sizes/font_size", "text", "Shadow", "Node2D", "modulate", "position", "ShadowSprite", "Sprite2D", "position", "scale", "texture", "HurtBox", "world_object", "CollisionShape3D", "CollisionShape3D", "transform", "shape", "debug_color", "area_entered", "_on_hurt_box_area_entered"),
+"node_count": 7,
+"node_ids": PackedInt32Array(625918716, 1333454786, 943031402, 707858521, 1021593529, 839168076, 1725933202),
+"node_paths": [NodePath("."), NodePath("."), NodePath("."), NodePath("./Shadow"), NodePath("."), NodePath("./HurtBox"), NodePath("HurtBox"), NodePath(".")],
+"nodes": PackedInt32Array(-1, -1, 1, 0, -1, 7, 3, 0, 4, 1, 5, 2, 6, 3, 7, 4, 8, 5, 1073741833, 6, 1, 2, 1073741824, 0, 11, 10, -1, 4, 12, 7, 13, 8, 14, 9, 15, 10, 0, 1073741825, 0, 17, 16, -1, 6, 18, 11, 19, 12, 20, 13, 21, 14, 22, 15, 23, 16, 0, 1073741826, 0, 25, 24, -1, 2, 26, 17, 27, 18, 0, 1073741827, 0, 29, 28, -1, 3, 30, 19, 31, 20, 32, 21, 0, 1073741828, 0, 2147483647, 33, 22, 1, 1073741858, 23, 0, 1073741829, 0, 36, 35, -1, 3, 37, 24, 38, 25, 39, 26, 0),
+"variants": [ExtResource("21_ng3oa"), 2, 10.0, ExtResource("22_gdxox"), ExtResource("23_38d68"), 16.0, NodePath("Shadow"), true, Vector2(0, -27.866665), Vector2(2.7333336, 2.7333338), ExtResource("24_je7pc"), true, false, 40.0, 23.0, 8, "hello", Color(1, 1, 1, 0.5411765), Vector2(0, 3), Vector2(0, -3), Vector2(0.5, 0.375), ExtResource("25_u486w"), ExtResource("26_k1bbh"), NodePath(".."), Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 20, 0), SubResource("SphereShape3D_nenq2"), Color(0, 0.6, 0.69803923, 1)],
+"version": 3
+}
+
+[sub_resource type="Resource" id="Resource_ex2ji"]
+script = ExtResource("17_baarm")
+spacing = Vector2(100, 0)
+metadata/_custom_type_script = "uid://cxyxiyhktbobm"
+
+[sub_resource type="Resource" id="Resource_pr8qn"]
+script = ExtResource("18_baarm")
+target = 1
+bounce_amplitude = 100.0
+bounce_duration = 1.0
+pause = 0.49
+direction = Vector3(0, 1, 0)
+
+[sub_resource type="Resource" id="Resource_jwhdp"]
+script = ExtResource("19_2o7gh")
+fire_interval = 2.0
+bullet_speed = 70.0
+
+[sub_resource type="Resource" id="Resource_0kvo1"]
+script = ExtResource("20_ng3oa")
+enemy_scene = SubResource("PackedScene_nv43j")
+count = 9
+formation = SubResource("Resource_ex2ji")
+move_style = SubResource("Resource_pr8qn")
+pattern = SubResource("Resource_jwhdp")
+hp = 20
+world_pos = Vector3(-200, 0, -500)
+tags = PackedStringArray()
+
+[sub_resource type="Resource" id="Resource_ogfxa"]
+script = ExtResource("15_qfdku")
+id = "scout_line"
+display_name = "Scout Line"
+duration = 1200.0
+events = Array[ExtResource("15_pw0ia")]([SubResource("Resource_0kvo1")])
+tags = PackedStringArray("opener", "easy")
+
+[sub_resource type="Resource" id="Resource_baarm"]
+metadata/__load_path__ = "res://resources/encounters/difficulty/normal_profile.tres"
 
 [node name="GameplayScreen" type="Node2D" unique_id=158736197]
+script = ExtResource("1_25g3s")
 
 [node name="CameraRig" parent="." unique_id=2025045557 instance=ExtResource("1_nl8x0")]
 follow_strength = 1.0
@@ -75,28 +187,35 @@ layer = 2
 
 [node name="Player" parent="ObjectsLayer" unique_id=1077760697 groups=["player"] instance=ExtResource("5_157wf")]
 modulate = Color(1, 1, 1, 0.42745098)
-speed = 0.0
+speed = 200.0
 fixed_sprite = true
-
-[node name="Obstacle" parent="ObjectsLayer" unique_id=625918716 instance=ExtResource("10_7ocsb")]
-world_pos = Vector3(50, 0, -500)
-
-[node name="Enemy" parent="ObjectsLayer" unique_id=1250839268 instance=ExtResource("4_skn3q")]
-world_pos = Vector3(0, 0, -300)
-
-[node name="Enemy2" parent="ObjectsLayer" unique_id=1290573573 instance=ExtResource("4_skn3q")]
-world_pos = Vector3(50, 0, 0)
-
-[node name="EncounterManager" type="Node" parent="." unique_id=1827593536 node_paths=PackedStringArray("world")]
-script = ExtResource("9_mcs8y")
-disabled = true
-enemy_scene = ExtResource("4_skn3q")
-spawn_ahead_z = -2000.0
-height_over_horizon = 50.0
-rest_time = 10.0
-world = NodePath("../ObjectsLayer")
-metadata/_custom_type_script = "uid://cqqqpa6yalyl0"
 
 [node name="PlayerController" type="Node" parent="." unique_id=634795422]
 script = ExtResource("9_iniog")
 metadata/_custom_type_script = "uid://clwdi74exmma7"
+
+[node name="SystemConnector" type="Node" parent="." unique_id=1333706372]
+
+[node name="EncounterRunner" type="Node" parent="SystemConnector" unique_id=749903038 node_paths=PackedStringArray("spawner")]
+script = ExtResource("13_7ocsb")
+autostart = true
+spawner = NodePath("../EnemySpawner")
+metadata/_custom_type_script = "uid://bx6f3uaf823k7"
+
+[node name="StageDirector" type="Node" parent="SystemConnector" unique_id=1937507698 node_paths=PackedStringArray("runner", "player")]
+script = ExtResource("14_7ocsb")
+runner = NodePath("../EncounterRunner")
+player = NodePath("../../ObjectsLayer/Player")
+encounters_override = Array[ExtResource("15_qfdku")]([SubResource("Resource_hjvpi"), SubResource("Resource_ogfxa")])
+run_seed = 2
+modifiers = PackedStringArray()
+autostart = true
+stage_template = ExtResource("15_aagjl")
+encounter_pool = ExtResource("16_gnb8g")
+difficulty_profile = SubResource("Resource_baarm")
+
+[node name="EnemySpawner" type="Node" parent="SystemConnector" unique_id=54553492 node_paths=PackedStringArray("world", "camera_rig")]
+script = ExtResource("14_6demn")
+world = NodePath("../../ObjectsLayer")
+camera_rig = NodePath("../../CameraRig")
+metadata/_custom_type_script = "uid://b7muo30j743j7"

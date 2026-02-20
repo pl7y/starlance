@@ -1,0 +1,37 @@
+[gd_resource type="Resource" script_class="DifficultyProfile" format=3]
+
+[ext_resource type="Script" path="res://scenes/encounters/difficulty_profile.gd" id="1_as7nd"]
+
+[sub_resource type="Curve" id="Curve_sev28"]
+_data = [Vector2(0, 1), 0.0, -0.39999998, 1, 1, Vector2(1, 0.6), -0.39999998, 0.0, 1, 1]
+point_count = 2
+
+[sub_resource type="Curve" id="Curve_wxu0k"]
+_data = [Vector2(0, 1), 0.0, 0.0, 1, 1, Vector2(1, 1), 0.0, 0.0, 1, 1]
+point_count = 2
+
+[sub_resource type="Curve" id="Curve_dq7yw"]
+_data = [Vector2(0, 1), 0.0, 0.0, 1, 1, Vector2(1, 1), 0.0, 0.0, 1, 1]
+point_count = 2
+
+[sub_resource type="Curve" id="Curve_m2boh"]
+_data = [Vector2(0, 1), 0.0, 0.0, 1, 1, Vector2(1, 1), 0.0, 0.0, 1, 1]
+point_count = 2
+
+[sub_resource type="Curve" id="Curve_2r62k"]
+_data = [Vector2(0, 1), 0.0, 0.0, 1, 1, Vector2(1, 1), 0.0, 0.0, 1, 1]
+point_count = 2
+
+[sub_resource type="Curve" id="Curve_cd0i8"]
+_data = [Vector2(0, 1), 0.0, 0.0, 1, 1, Vector2(1, 1), 0.0, 0.0, 1, 1]
+point_count = 2
+
+[resource]
+script = ExtResource("1_as7nd")
+display_name = "Normal"
+hp_curve = SubResource("Curve_dq7yw")
+fire_rate_curve = SubResource("Curve_wxu0k")
+spawn_count_curve = SubResource("Curve_2r62k")
+speed_curve = SubResource("Curve_cd0i8")
+breather_curve = SubResource("Curve_sev28")
+intensity_curve = SubResource("Curve_m2boh")
