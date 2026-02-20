@@ -1,6 +1,6 @@
-[gd_resource type="Resource" script_class="DifficultyProfile" format=3 uid="uid://cei166wf43jf8"]
+[gd_resource type="Resource" script_class="DifficultyProfile" format=3]
 
-[ext_resource type="Script" uid="uid://b24sg000wsii0" path="res://scenes/encounters/difficulty_profile.gd" id="1_as7nd"]
+[ext_resource type="Script" path="res://scenes/encounters/difficulty_profile.gd" id="1_as7nd"]
 
 [sub_resource type="Curve" id="Curve_sev28"]
 _data = [Vector2(0, 1), 0.0, -0.39999998, 1, 1, Vector2(1, 0.6), -0.39999998, 0.0, 1, 1]
