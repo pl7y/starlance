@@ -28,6 +28,8 @@ signal escaped(escape_type: EscapeType)
 @export var min_scale: float = 0.02
 @export var max_scale: float = 6.0
 @export var fixed_sprite: bool = false
+@export var lock_scale: bool = false
+@export var locked_scale: float = 1.0
 
 # Escape detection settings
 @export_group("Escape Detection")
@@ -77,11 +79,16 @@ func _update() -> void:
   visible = true
   global_position = p.screen
 
+  var projected_scale := clampf(p.scale, min_scale, max_scale)
+  var target_scale := Vector2(projected_scale, projected_scale)
+
   if fixed_sprite:
-    global_scale = Vector2(1, 1)
-  else:
-    var s: float = clamp(p.scale, min_scale, max_scale)
-    global_scale = Vector2(s, s)
+    target_scale = Vector2(1, 1)
+
+  if lock_scale:
+    target_scale = Vector2(locked_scale, locked_scale)
+
+  global_scale = target_scale
 
   # Painter’s algorithm: nearer = higher z_index
   # Painter's algorithm: nearer = higher z_index (smaller depth = higher z_index)

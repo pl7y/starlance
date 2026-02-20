@@ -7,7 +7,6 @@
 [ext_resource type="PackedScene" uid="uid://b1q5gjhbfsuaq" path="res://scenes/player.tscn" id="5_157wf"]
 [ext_resource type="Texture2D" uid="uid://jtdhvpki0hm3" path="res://assets/packages/Glacial-mountains-parallax-background_vnitti/Layers/sky.png" id="8_mcs8y"]
 [ext_resource type="Texture2D" uid="uid://cgke3ahrw3g0a" path="res://assets/packages/Glacial-mountains-parallax-background_vnitti/Layers/glacial_mountains_lightened.png" id="9_6gaaa"]
-[ext_resource type="Script" uid="uid://clwdi74exmma7" path="res://scenes/player_controllr.gd" id="9_iniog"]
 [ext_resource type="Texture2D" uid="uid://cujsmm07hnsej" path="res://assets/packages/Glacial-mountains-parallax-background_vnitti/Layers/clouds_mg_1.png" id="10_cjr5t"]
 [ext_resource type="Texture2D" uid="uid://pi2m5lc3c6fp" path="res://assets/packages/Glacial-mountains-parallax-background_vnitti/Layers/clouds_mg_2.png" id="11_itntn"]
 [ext_resource type="Texture2D" uid="uid://c6nr8ekrc61va" path="res://assets/packages/Glacial-mountains-parallax-background_vnitti/Layers/clouds_mg_3.png" id="12_7ocsb"]
@@ -189,10 +188,6 @@ layer = 2
 modulate = Color(1, 1, 1, 0.42745098)
 speed = 200.0
 fixed_sprite = true
-
-[node name="PlayerController" type="Node" parent="." unique_id=634795422]
-script = ExtResource("9_iniog")
-metadata/_custom_type_script = "uid://clwdi74exmma7"
 
 [node name="SystemConnector" type="Node" parent="." unique_id=1333706372]
 

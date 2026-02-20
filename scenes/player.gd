@@ -18,53 +18,33 @@ signal distance_changed(distance: float)
 @export var invuln_seconds: float = 0.8
 @export var hurt_radius_px: float = 14.0
 
-@export var lock_scale: bool = false
-@export var locked_scale: float = 1.0
-
 @export var flash_speed: float = 18.0
 var invuln_t: float = 0.0
-
-@export var ground_y: float = 0.0
-@export var gravity: float = 0.0 # pulls you down when not holding up
-@export var lift_speed: float = 22.0 # how fast you gain altitude
-@export var max_altitude: float = 100.0
-@export var min_altitude: float = 3.0 # minimum height when running
-@export var grounded_threshold: float = min_altitude + 1.0 # how close to ground counts as grounded
 
 @export var speed: float = 1.0
 
 ## Cumulative distance travelled along the rail (always increasing).
 var _distance: float = 0.0
 
+@onready var _movement_component = %PlayerMovementComponent as PlayerMovementComponent
+
 func _ready() -> void:
   super._ready()
   add_to_group("player")
+  if _movement_component != null and _movement_component.target == null:
+    _movement_component.target = self
+  if _movement_component != null:
+    _movement_component.speed = speed
 
 func _process(delta: float) -> void:
   if rig == null:
     return
 
-  # Keep player at a constant depth in front of camera
-  var step := speed * delta
-  world_pos.z -= step
-  _distance += absf(step)
+  if _movement_component != null:
+    _movement_component.speed = speed
+    _distance += _movement_component.apply_movement(delta)
+
   distance_changed.emit(_distance)
-
-
-  # Ground at y = 0. Higher altitude = POSITIVE y.
-  var up := Input.get_action_strength("move_up")
-  var down := Input.get_action_strength("move_down")
-
-  if up > 0.1:
-    world_pos.y += lift_speed * up * delta # go UP = more positive
-  else:
-    world_pos.y -= gravity * delta # fall DOWN = more negative
-
-  if down > 0.1:
-    world_pos.y -= (gravity * 0.8) * down * delta
-
-  # Clamp between ground level and max altitude (positive)
-  world_pos.y = clamp(world_pos.y, ground_y, max_altitude)
 
   # --- Iframes timer (keep your existing code) ---
   invuln_t = maxf(0.0, invuln_t - delta)
@@ -72,12 +52,14 @@ func _process(delta: float) -> void:
   # Project + place sprite
   super._process(delta)
 
-  # Keep player size constant (recommended)
-  if lock_scale:
-    scale = Vector2(locked_scale, locked_scale)
-
   # --- Run vs Fly state ---
-  var altitude := world_pos.y - ground_y
+  var ground_reference := 0.0
+  var grounded_threshold := 0.0
+  if _movement_component != null:
+    ground_reference = _movement_component.ground_y
+    grounded_threshold = _movement_component.grounded_threshold
+
+  var altitude := world_pos.y - ground_reference
   var grounded := altitude <= grounded_threshold
 
   var status := "fly"
