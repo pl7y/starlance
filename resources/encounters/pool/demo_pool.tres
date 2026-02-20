@@ -36,7 +36,6 @@ spacing = Vector2(40, 0)
 [sub_resource type="Resource" id="Resource_1hkfs"]
 script = ExtResource("5_st3bq")
 speed_z = 80.0
-z_lock = null
 
 [sub_resource type="Resource" id="Resource_6272t"]
 script = ExtResource("6_efpec")
@@ -77,7 +76,6 @@ script = ExtResource("10_kd844")
 speed_z = 60.0
 amplitude = Vector2(50, 20)
 frequency = 0.8
-z_lock = null
 
 [sub_resource type="Resource" id="Resource_p8cuc"]
 script = ExtResource("6_efpec")
@@ -115,7 +113,6 @@ spacing = Vector2(40, 30)
 [sub_resource type="Resource" id="Resource_xmr57"]
 script = ExtResource("5_st3bq")
 speed_z = 120.0
-z_lock = null
 
 [sub_resource type="Resource" id="Resource_mb04t"]
 script = ExtResource("7_hjvpi")
@@ -164,7 +161,6 @@ tags = PackedStringArray()
 script = ExtResource("10_kd844")
 speed_z = 90.0
 amplitude = Vector2(60, 30)
-z_lock = null
 
 [sub_resource type="Resource" id="Resource_tgqjv"]
 script = ExtResource("7_hjvpi")
@@ -200,7 +196,6 @@ radius = 50.0
 [sub_resource type="Resource" id="Resource_ijma2"]
 script = ExtResource("14_3smra")
 speed_z = 70.0
-z_lock = null
 
 [sub_resource type="Resource" id="Resource_fqthm"]
 script = ExtResource("6_efpec")
@@ -238,7 +233,6 @@ script = ExtResource("15_qwx8t")
 speed_z = 80.0
 amplitude = Vector2(60, 40)
 frequency = 0.6
-z_lock = null
 
 [sub_resource type="Resource" id="Resource_s12wb"]
 script = ExtResource("7_hjvpi")
@@ -286,7 +280,6 @@ follow_distance = 25.0
 rush_turn = 5.0
 orbit_radius = 8.0
 orbit_speed = 2.0
-z_lock = null
 
 [sub_resource type="Resource" id="Resource_3gbug"]
 script = ExtResource("7_hjvpi")
@@ -305,7 +298,6 @@ follow_distance = 18.0
 rush_turn = 6.0
 orbit_radius = 5.0
 orbit_speed = 2.5
-z_lock = null
 
 [sub_resource type="Resource" id="Resource_nte4i"]
 script = ExtResource("7_hjvpi")
@@ -340,7 +332,6 @@ script = ExtResource("18_bc80v")
 [sub_resource type="Resource" id="Resource_5o1ev"]
 script = ExtResource("19_d3xw4")
 custom_logic = SubResource("Resource_p4gwi")
-z_lock = null
 
 [sub_resource type="Resource" id="Resource_q1apa"]
 script = ExtResource("7_hjvpi")
@@ -374,7 +365,6 @@ script = ExtResource("20_mhu4d")
 [sub_resource type="Resource" id="Resource_pfxay"]
 script = ExtResource("19_d3xw4")
 custom_logic = SubResource("Resource_ubkxk")
-z_lock = null
 
 [sub_resource type="Resource" id="Resource_h2ww6"]
 script = ExtResource("7_hjvpi")
@@ -410,7 +400,6 @@ charge_speed = 280.0
 [sub_resource type="Resource" id="Resource_25qfc"]
 script = ExtResource("19_d3xw4")
 custom_logic = SubResource("Resource_in84f")
-z_lock = null
 
 [sub_resource type="Resource" id="Resource_nltvt"]
 script = ExtResource("7_hjvpi")
@@ -443,7 +432,6 @@ script = ExtResource("22_7dw5s")
 [sub_resource type="Resource" id="Resource_1k10m"]
 script = ExtResource("19_d3xw4")
 custom_logic = SubResource("Resource_a4fws")
-z_lock = null
 
 [sub_resource type="Resource" id="Resource_ox6xm"]
 script = ExtResource("7_hjvpi")
@@ -479,7 +467,6 @@ retreat_distance = 50.0
 [sub_resource type="Resource" id="Resource_0ssqv"]
 script = ExtResource("19_d3xw4")
 custom_logic = SubResource("Resource_6w48s")
-z_lock = null
 
 [sub_resource type="Resource" id="Resource_v8o5m"]
 script = ExtResource("7_hjvpi")
@@ -512,7 +499,6 @@ script = ExtResource("24_fivt1")
 [sub_resource type="Resource" id="Resource_13eb3"]
 script = ExtResource("19_d3xw4")
 custom_logic = SubResource("Resource_pvmsg")
-z_lock = null
 
 [sub_resource type="Resource" id="Resource_462aa"]
 script = ExtResource("7_hjvpi")
@@ -542,7 +528,6 @@ extra_tags = PackedStringArray("elite", "ai")
 [sub_resource type="Resource" id="Resource_8t6ik"]
 script = ExtResource("25_7i0fu")
 speed_z = 30.0
-z_lock = null
 
 [sub_resource type="Resource" id="Resource_jf1kt"]
 script = ExtResource("7_hjvpi")

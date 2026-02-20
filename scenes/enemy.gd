@@ -19,6 +19,8 @@ class_name Enemy
 @export var fire_max_z: float = 95.0
 @export var bullet_speed: float = 90.0
 @export var aim_lead_y: float = 0.0
+@export var death_behaviour: DeathBehaviour
+
 
 ## Movement strategy (set by EnemySpawner at spawn time).
 var movement_strategy: MovementStrategy = null:
@@ -36,11 +38,14 @@ var movement_strategy: MovementStrategy = null:
 @onready var _label = %Label as Label
 
 var _fire_t: float = 0.0
+var _is_dead: bool = false
+var _death_behaviour: DeathBehaviour = null
 
 func _ready() -> void:
   super._ready()
   add_to_group("enemies")
   _fire_t = randf_range(0.0, fire_interval)
+  _death_behaviour = death_behaviour
 
   # Initialize movement strategy if set
   if movement_strategy != null:
@@ -72,7 +77,8 @@ func configure(p_hp: int, p_fire_interval: float, p_bullet_speed: float) -> void
   bullet_speed = p_bullet_speed
 
 func _process(delta: float) -> void:
-  _update_movement(delta)
+  if not _is_dead:
+    _update_movement(delta)
 
   # Set label text to world_pos, rounded to first digit
   _label.text = "Pos: (%.1f, %.1f, %.1f)" % [world_pos.x, world_pos.y, world_pos.z]
@@ -80,8 +86,9 @@ func _process(delta: float) -> void:
   # Project + place sprite
   super._process(delta)
 
-  # Shooting (unchanged, but uses current world_pos)
-  _try_shoot(delta)
+  if not _is_dead:
+    # Shooting (unchanged, but uses current world_pos)
+    _try_shoot(delta)
 
 func _update_movement(delta: float) -> void:
   if rig == null:
@@ -124,18 +131,20 @@ func _fire() -> void:
   b.vel = dir * bullet_speed
 
 func take_hit(dmg: int) -> void:
-  _flash_white()
+  if _is_dead:
+    return
 
-  var explosion: Explosion = explosion_scene.instantiate()
-  explosion.world_pos = world_pos
+  _flash_white()
 
   hp -= dmg
   
   if hp <= 0:
-    get_parent().add_child(explosion)
-    queue_free()
-  else:
-    add_child(explosion)
+    _die()
+
+func _die() -> void:
+  _is_dead = true
+  if _death_behaviour:
+    _death_behaviour.execute(self )
     
 func _flash_white() -> void:
   # Flash white on hit
@@ -145,6 +154,9 @@ func _flash_white() -> void:
 
 
 func _on_hurt_box_area_entered(_area: Area3D) -> void:
+  if _is_dead:
+    return
+
   var player = _area.get_parent() as Player
   if player:
     return

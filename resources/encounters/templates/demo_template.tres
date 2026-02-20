@@ -125,7 +125,6 @@ spacing = Vector2(40, 0)
 [sub_resource type="Resource" id="Resource_1hkfs"]
 script = ExtResource("12_lkxyf")
 speed_z = 80.0
-z_lock = null
 
 [sub_resource type="Resource" id="Resource_p8cuc"]
 script = ExtResource("8_ktaco")
@@ -156,7 +155,6 @@ radius = 50.0
 script = ExtResource("14_o6im8")
 speed_z = 90.0
 amplitude = Vector2(60, 30)
-z_lock = null
 
 [sub_resource type="Resource" id="Resource_fqthm"]
 script = ExtResource("8_ktaco")

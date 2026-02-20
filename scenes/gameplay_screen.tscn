@@ -42,7 +42,6 @@ bounce_amplitude = 100.0
 bounce_duration = 1.0
 pause = 0.49
 direction = Vector3(0, 1, 0)
-z_lock = null
 
 [sub_resource type="Resource" id="Resource_6272t"]
 script = ExtResource("19_2o7gh")
@@ -98,7 +97,6 @@ bounce_amplitude = 100.0
 bounce_duration = 1.0
 pause = 0.49
 direction = Vector3(0, 1, 0)
-z_lock = null
 
 [sub_resource type="Resource" id="Resource_jwhdp"]
 script = ExtResource("19_2o7gh")
@@ -210,7 +208,6 @@ runner = NodePath("../EncounterRunner")
 player = NodePath("../../ObjectsLayer/Player")
 encounters_override = Array[ExtResource("15_qfdku")]([SubResource("Resource_hjvpi"), SubResource("Resource_ogfxa")])
 run_seed = 2
-rail_speed = 500.0
 modifiers = PackedStringArray()
 autostart = true
 stage_template = ExtResource("15_aagjl")
