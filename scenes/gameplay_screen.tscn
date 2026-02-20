@@ -19,10 +19,20 @@
 [ext_resource type="Script" uid="uid://dbp6h4gvlg87c" path="res://scenes/encounters/encounter.gd" id="15_qfdku"]
 [ext_resource type="PackedScene" uid="uid://bk0r22e6fyjqg" path="res://scenes/enemy.tscn" id="16_clvjq"]
 [ext_resource type="Resource" uid="uid://boupt0oef78gl" path="res://resources/encounters/pool/demo_pool.tres" id="16_gnb8g"]
+[ext_resource type="Script" uid="uid://bfxroni6ou238" path="res://scenes/encounters/volume_formation.gd" id="17_pw0ia"]
 [ext_resource type="Resource" uid="uid://cei166wf43jf8" path="res://resources/encounters/difficulty/normal_profile.tres" id="17_t1iya"]
 [ext_resource type="Script" uid="uid://cbdfbktcb3n7a" path="res://scenes/encounters/move_style.gd" id="18_422ip"]
 [ext_resource type="Script" uid="uid://clo2cqcvulfkw" path="res://scenes/encounters/pattern.gd" id="19_2o7gh"]
 [ext_resource type="Script" uid="uid://c8om0jd1cjoha" path="res://scenes/encounters/spawn_event.gd" id="20_ng3oa"]
+
+[sub_resource type="CylinderShape3D" id="CylinderShape3D_clvjq"]
+height = 200.0
+radius = 20.5
+
+[sub_resource type="Resource" id="Resource_mr88a"]
+script = ExtResource("17_pw0ia")
+volume = SubResource("CylinderShape3D_clvjq")
+metadata/_custom_type_script = "uid://bfxroni6ou238"
 
 [sub_resource type="Resource" id="Resource_1hkfs"]
 script = ExtResource("18_422ip")
@@ -34,19 +44,15 @@ script = ExtResource("19_2o7gh")
 fire_interval = 2.0
 bullet_speed = 70.0
 
-[sub_resource type="CapsuleShape3D" id="CapsuleShape3D_baarm"]
-radius = 26.426
-height = 100.0
-
 [sub_resource type="Resource" id="Resource_4xyd6"]
 script = ExtResource("20_ng3oa")
 enemy_scene = ExtResource("16_clvjq")
-count = 50
+count = 5
+formation = SubResource("Resource_mr88a")
 move_style = SubResource("Resource_1hkfs")
 pattern = SubResource("Resource_6272t")
 hp = 20
 world_pos = Vector3(0, 100, -1500)
-spawn_shape = SubResource("CapsuleShape3D_baarm")
 tags = PackedStringArray()
 
 [sub_resource type="Resource" id="Resource_hjvpi"]

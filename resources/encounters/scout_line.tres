@@ -2,7 +2,7 @@
 
 [ext_resource type="Script" path="res://scenes/encounters/encounter_event.gd" id="1_2ki1c"]
 [ext_resource type="PackedScene" path="res://scenes/enemy.tscn" id="2_2a58l"]
-[ext_resource type="Script" path="res://scenes/encounters/formation.gd" id="3_ghxdw"]
+[ext_resource type="Script" path="res://scenes/encounters/shape_formation.gd" id="3_ghxdw"]
 [ext_resource type="Script" path="res://scenes/encounters/move_style.gd" id="4_wru0o"]
 [ext_resource type="Script" path="res://scenes/encounters/pattern.gd" id="5_f6cnt"]
 [ext_resource type="Script" path="res://scenes/encounters/spawn_event.gd" id="6_5bjhh"]
@@ -28,12 +28,10 @@ script = ExtResource("6_5bjhh")
 enemy_scene = ExtResource("2_2a58l")
 count = 3
 formation = SubResource("Resource_jy8uu")
-z_start = -500.0
 move_style = SubResource("Resource_1hkfs")
 pattern = SubResource("Resource_6272t")
 hp = 20
-spread = Vector2(10, 10)
-height_offset = 0.0
+world_pos = Vector3(0, 0, -500)
 tags = PackedStringArray()
 
 [resource]

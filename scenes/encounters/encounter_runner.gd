@@ -328,7 +328,7 @@ func _handle_spawn(ev: SpawnEvent) -> void:
 
   var offsets: Array[Vector2] = []
   if ev.formation != null:
-    offsets = ev.formation.get_offsets(ev.count)
+    offsets = ev.formation.get_offsets(ev.count, _rng)
   else:
     for i in ev.count:
       offsets.append(Vector2.ZERO)
