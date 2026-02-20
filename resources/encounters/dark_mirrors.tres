@@ -2,7 +2,7 @@
 
 [ext_resource type="Script" path="res://scenes/encounters/encounter_event.gd" id="1_m01id"]
 [ext_resource type="PackedScene" path="res://scenes/enemy.tscn" id="2_27dyq"]
-[ext_resource type="Script" path="res://scenes/encounters/shape_formation.resource.gd" id="3_dos2q"]
+[ext_resource type="Script" path="res://scenes/encounters/line_formation.resource.gd" id="3_dos2q"]
 [ext_resource type="Script" path="res://scenes/encounters/ai/mimic_move_logic.gd" id="4_xt23d"]
 [ext_resource type="Script" path="res://scenes/encounters/movement_styles/custom_movement_style.gd" id="5_b2aiy"]
 [ext_resource type="Script" path="res://scenes/encounters/pattern.gd" id="6_n3bw2"]
@@ -11,7 +11,6 @@
 
 [sub_resource type="Resource" id="Resource_jy8uu"]
 script = ExtResource("3_dos2q")
-shape = 1
 spacing = Vector2(40, 0)
 
 [sub_resource type="Resource" id="Resource_ubkxk"]

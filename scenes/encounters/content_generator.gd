@@ -13,6 +13,8 @@ extends Node
 const ENEMY_SCENE_PATH := "res://scenes/enemy.tscn"
 const OUTPUT_BASE := "res://resources/encounters/"
 
+enum FormationShape {POINT, LINE, V, GRID, CIRCLE}
+
 func _ready() -> void:
   print("═══ Content Generator: starting ═══")
 
@@ -26,11 +28,11 @@ func _ready() -> void:
   # ── 1. Reusable sub-resources ────────────────────────────────────────
 
   # Formations
-  var line_5 := _formation(ShapeFormation.Shape.LINE, Vector2(40.0, 0.0))
-  var v_shape := _formation(ShapeFormation.Shape.V, Vector2(35.0, 25.0))
-  var grid_3x2 := _formation(ShapeFormation.Shape.GRID, Vector2(40.0, 30.0), 3)
-  var circle_6 := _formation(ShapeFormation.Shape.CIRCLE, Vector2.ZERO, 1, 50.0)
-  var point := _formation(ShapeFormation.Shape.POINT)
+  var line_5 := _formation(FormationShape.LINE, Vector2(40.0, 0.0))
+  var v_shape := _formation(FormationShape.V, Vector2(35.0, 25.0))
+  var grid_3x2 := _formation(FormationShape.GRID, Vector2(40.0, 30.0), 3)
+  var circle_6 := _formation(FormationShape.CIRCLE, Vector2.ZERO, 1, 50.0)
+  var point := _formation(FormationShape.POINT)
 
   # Move styles
   var drift_slow := _drift_style(80.0, 0.0)
@@ -326,14 +328,34 @@ func _ready() -> void:
 
 # ── Factory helpers ──────────────────────────────────────────────────────────
 
-func _formation(shape: ShapeFormation.Shape, spacing := Vector2(5.0, 3.0),
-    columns: int = 3, radius: float = 6.0) -> ShapeFormation:
-  var f := ShapeFormation.new()
-  f.shape = shape
-  f.spacing = spacing
-  f.columns = columns
-  f.radius = radius
-  return f
+func _formation(shape: FormationShape, spacing := Vector2(5.0, 3.0),
+    columns: int = 3, radius: float = 6.0) -> Formation:
+  match shape:
+    FormationShape.POINT:
+      return PointFormation.new()
+
+    FormationShape.LINE:
+      var line := LineFormation.new()
+      line.spacing = spacing
+      return line
+
+    FormationShape.V:
+      var v := VFormation.new()
+      v.spacing = spacing
+      return v
+
+    FormationShape.GRID:
+      var grid := GridFormation.new()
+      grid.spacing = spacing
+      grid.columns = columns
+      return grid
+
+    FormationShape.CIRCLE:
+      var circle := CircleFormation.new()
+      circle.radius = radius
+      return circle
+
+  return PointFormation.new()
 
 
 func _drift_style(p_speed_z: float = 12.0, p_speed_x: float = 0.0, p_speed_y: float = 0.0) -> DriftMovementStyle:

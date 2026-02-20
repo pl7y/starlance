@@ -21,7 +21,13 @@ class_name Enemy
 @export var aim_lead_y: float = 0.0
 
 ## Movement strategy (set by EnemySpawner at spawn time).
-var movement_strategy: MovementStrategy = null
+var movement_strategy: MovementStrategy = null:
+  set(value):
+    movement_strategy = value
+    if movement_strategy:
+      movement_strategy.setup(self , rig)
+  get:
+    return movement_strategy
 
 @onready var sprite := %Sprite2D
 

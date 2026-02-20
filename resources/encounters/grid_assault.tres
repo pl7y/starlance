@@ -2,7 +2,7 @@
 
 [ext_resource type="Script" path="res://scenes/encounters/encounter_event.gd" id="1_73uwc"]
 [ext_resource type="PackedScene" path="res://scenes/enemy.tscn" id="2_lxcsq"]
-[ext_resource type="Script" path="res://scenes/encounters/shape_formation.resource.gd" id="3_eorhg"]
+[ext_resource type="Script" path="res://scenes/encounters/grid_formation.resource.gd" id="3_eorhg"]
 [ext_resource type="Script" path="res://scenes/encounters/movement_styles/drift_movement_style.gd" id="4_4m1s1"]
 [ext_resource type="Script" path="res://scenes/encounters/pattern.gd" id="5_oya18"]
 [ext_resource type="Script" path="res://scenes/encounters/spawn_event.gd" id="6_nf3d8"]
@@ -10,7 +10,6 @@
 
 [sub_resource type="Resource" id="Resource_q1l7r"]
 script = ExtResource("3_eorhg")
-shape = 3
 spacing = Vector2(40, 30)
 
 [sub_resource type="Resource" id="Resource_xmr57"]

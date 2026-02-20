@@ -22,6 +22,7 @@ class_name EnemySpawner
 ##
 ## Override this in your concrete spawner.
 func spawn_group(event: SpawnEvent, offsets: Array[Vector2], _rng: RandomNumberGenerator) -> void:
+  prints("EnemySpawner: spawn_group() called with event: ", event, " and offsets: ", offsets)
   if world == null:
     push_error("EnemySpawner: world node is not set.")
     return
@@ -55,6 +56,7 @@ func spawn_group(event: SpawnEvent, offsets: Array[Vector2], _rng: RandomNumberG
 ## Creates and assigns a MovementStrategy to the enemy based on MovementStyle resource.
 ## Override if your Enemy API differs.
 func _apply_movement_strategy(enemy: Node, style: MovementStyle) -> void:
+  prints("Applying movement strategy for enemy: ", enemy, " with style: ", style)
   if style == null:
     # Default to static movement if no style specified
     if "movement_strategy" in enemy:
@@ -64,7 +66,6 @@ func _apply_movement_strategy(enemy: Node, style: MovementStyle) -> void:
   # Let the MovementStyle resource create the appropriate strategy
   if "movement_strategy" in enemy:
     enemy.movement_strategy = style.create_strategy()
-
 
 ## Maps a Pattern resource onto enemy firing properties.
 ## Override if your Enemy API differs.

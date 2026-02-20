@@ -343,28 +343,23 @@ These are sub-resources embedded inside `SpawnEvent` — they describe _how_ ene
 
 ### Formation
 
-**File:** `scenes/encounters/formation.gd`
+**File:** `scenes/encounters/formation.resource.gd`
 **Class:** `Formation extends Resource`
 
 Describes the spatial arrangement of a group of enemies.
 
-| Property  | Type      | Default      | Description              |
-| --------- | --------- | ------------ | ------------------------ |
-| `shape`   | `Shape`   | `POINT`      | Geometric shape.         |
-| `spacing` | `Vector2` | `(5.0, 3.0)` | Spacing on X/Y axes.     |
-| `columns` | `int`     | `3`          | Column count for `GRID`. |
-| `radius`  | `float`   | `6.0`        | Radius for `CIRCLE`.     |
+Use one of these concrete subclasses:
 
-**Shape enum and offset logic:**
+| Class             | File                                             | Shape behaviour                            |
+| ----------------- | ------------------------------------------------ | ------------------------------------------ |
+| `PointFormation`  | `scenes/encounters/point_formation.resource.gd`  | All units at `(0, 0)`                      |
+| `LineFormation`   | `scenes/encounters/line_formation.resource.gd`   | Units spread on X axis, centered           |
+| `VFormation`      | `scenes/encounters/v_formation.resource.gd`      | Alternating left/right, fanning backward   |
+| `GridFormation`   | `scenes/encounters/grid_formation.resource.gd`   | Rows × columns grid, centered              |
+| `CircleFormation` | `scenes/encounters/circle_formation.resource.gd` | Units evenly distributed on a circle       |
+| `VolumeFormation` | `scenes/encounters/volume_formation.resource.gd` | Random distribution in a sampled 3D volume |
 
-| Shape    | Behaviour                                                                        |
-| -------- | -------------------------------------------------------------------------------- |
-| `POINT`  | All units at `(0, 0)`.                                                           |
-| `LINE`   | Units spread along X axis, centered. Spacing: `spacing.x`.                       |
-| `V`      | Alternating left/right, fanning backward. Uses both `spacing.x` and `spacing.y`. |
-| `GRID`   | Rows × columns grid, centered. Uses `columns` property.                          |
-| `CIRCLE` | Units evenly distributed on a circle of `radius`.                                |
-| `RANDOM` | Returns zeroes — caller (spawner) adds jitter via `spread` on the SpawnEvent.    |
+`ShapeFormation` (`scenes/encounters/shape_formation.resource.gd`) remains as a legacy adapter for backward compatibility.
 
 **Key method:** `get_offsets(count: int) -> Array[Vector2]`
 Returns an array of local (X, Y) offsets, one per unit. These are in world space relative to the spawn origin.

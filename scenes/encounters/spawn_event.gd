@@ -10,7 +10,7 @@ class_name SpawnEvent
 @export_range(1, 100) var count: int = 1
 
 ## Spatial formation for the group. Leave null for single-point spawn.
-## Use ShapeFormation for geometric patterns or VolumeFormation for 3D volume sampling.
+## Use Point/Line/V/Grid/CircleFormation for geometric patterns or VolumeFormation for 3D volume sampling.
 @export var formation: Formation
 
 ## Movement descriptor applied to each spawned enemy.
