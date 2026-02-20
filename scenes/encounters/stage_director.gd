@@ -170,7 +170,7 @@ func start_stage(seed_override: int = 0) -> void:
 
   # ── Validate mode exclusivity ──────────────────────────────────────
   if stage_template != null and not segments.is_empty():
-    push_warning("StageDirector: stage_template is set but segments array is not empty — procedural build will overwrite manual segments.")
+    push_warning("StageDirector: using manual segments (n=%d) — stage_template will be ignored." % segments.size())
   if stage_template != null and encounter_pool == null:
     push_warning("StageDirector: stage_template is set but encounter_pool is null — procedural build requires both. Falling back to manual segments.")
   if encounter_pool != null and stage_template == null:
@@ -178,9 +178,9 @@ func start_stage(seed_override: int = 0) -> void:
   if difficulty_profile != null and (stage_template == null or encounter_pool == null):
     push_warning("StageDirector: difficulty_profile is set but procedural build is not active (needs stage_template + encounter_pool). Profile will be unused.")
 
-  # ── Procedural build (if template + pool are set) ────────────────────
+  # ── Procedural build (only if segments is empty and template + pool are set) ─
   prints("StageDirector: starting stage with seed %d" % run_seed)
-  if stage_template != null and encounter_pool != null:
+  if segments.is_empty() and stage_template != null and encounter_pool != null:
     var builder := StageBuilder.new(stage_template, encounter_pool, difficulty_profile, _rng)
     builder.min_gap = min_breather_gap
     builder.max_gap = max_breather_gap
@@ -384,6 +384,7 @@ func _queue_next_segment() -> void:
   ])
 
 func _finish_stage() -> void:
+  prints("StageDirector: all segments finished. Total distance: %.1f" % _total_stage_distance)
   _running = false
   stage_finished.emit()
 
