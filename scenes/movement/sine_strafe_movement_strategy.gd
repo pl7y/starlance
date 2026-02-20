@@ -1,6 +1,6 @@
 ## Sine strafe movement strategy - moves forward/back with sinusoidal horizontal motion.
 extends MovementStrategy
-class_name SineStrafMovementStrategy
+class_name SineStrafeMovementStrategy
 
 var speed_z: float = 12.0
 var amp_x: float = 4.0

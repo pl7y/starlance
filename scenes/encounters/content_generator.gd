@@ -343,8 +343,8 @@ func _drift_style(p_speed_z: float = 12.0, p_speed_x: float = 0.0, p_speed_y: fl
   m.speed_y = p_speed_y
   return m
 
-func _sine_strafe_style(p_speed_z: float = 60.0, amplitude := Vector2(4.0, 2.0), frequency: float = 1.2) -> SineStrafMovementStyle:
-  var m := SineStrafMovementStyle.new()
+func _sine_strafe_style(p_speed_z: float = 60.0, amplitude := Vector2(4.0, 2.0), frequency: float = 1.2) -> SineStrafeMovementStyle:
+  var m := SineStrafeMovementStyle.new()
   m.speed_z = p_speed_z
   m.amplitude = amplitude
   m.frequency = frequency
