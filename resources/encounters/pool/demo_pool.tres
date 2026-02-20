@@ -38,12 +38,9 @@ script = ExtResource("7_verax")
 enemy_scene = ExtResource("3_o5246")
 count = 3
 formation = SubResource("Resource_jy8uu")
-z_start = -500.0
 move_style = SubResource("Resource_1hkfs")
 pattern = SubResource("Resource_6272t")
 hp = 20
-spread = Vector2(10, 10)
-height_offset = 0.0
 tags = PackedStringArray()
 
 [sub_resource type="Resource" id="Resource_hjvpi"]
@@ -80,12 +77,9 @@ script = ExtResource("7_verax")
 enemy_scene = ExtResource("3_o5246")
 count = 5
 formation = SubResource("Resource_q54oa")
-z_start = -500.0
 move_style = SubResource("Resource_lbx15")
 pattern = SubResource("Resource_p8cuc")
 hp = 25
-spread = Vector2(15, 10)
-height_offset = 10.0
 tags = PackedStringArray()
 
 [sub_resource type="Resource" id="Resource_cqhm5"]
@@ -118,12 +112,9 @@ script = ExtResource("7_verax")
 enemy_scene = ExtResource("3_o5246")
 count = 6
 formation = SubResource("Resource_q1l7r")
-z_start = -500.0
 move_style = SubResource("Resource_xmr57")
 pattern = SubResource("Resource_p8cuc")
 hp = 30
-spread = Vector2(20, 15)
-height_offset = 20.0
 tags = PackedStringArray()
 
 [sub_resource type="Resource" id="Resource_s7l8d"]
@@ -146,12 +137,9 @@ script = ExtResource("7_verax")
 enemy_scene = ExtResource("3_o5246")
 count = 4
 formation = SubResource("Resource_jy8uu")
-z_start = -500.0
 move_style = SubResource("Resource_1hkfs")
 pattern = SubResource("Resource_6272t")
 hp = 20
-spread = Vector2(15, 10)
-height_offset = 10.0
 tags = PackedStringArray()
 
 [sub_resource type="Resource" id="Resource_jdhy0"]
@@ -171,12 +159,9 @@ script = ExtResource("7_verax")
 enemy_scene = ExtResource("3_o5246")
 count = 3
 formation = SubResource("Resource_q54oa")
-z_start = -500.0
 move_style = SubResource("Resource_lbmwt")
 pattern = SubResource("Resource_p8cuc")
 hp = 30
-spread = Vector2(20, 15)
-height_offset = 0.0
 time = 55.0
 tags = PackedStringArray()
 
@@ -217,12 +202,9 @@ script = ExtResource("7_verax")
 enemy_scene = ExtResource("3_o5246")
 count = 4
 formation = SubResource("Resource_b1okn")
-z_start = -500.0
 move_style = SubResource("Resource_ijma2")
 pattern = SubResource("Resource_fqthm")
 hp = 40
-spread = Vector2(30, 20)
-height_offset = 0.0
 tags = PackedStringArray()
 
 [sub_resource type="Resource" id="Resource_qwx8t"]
@@ -252,12 +234,9 @@ script = ExtResource("7_verax")
 enemy_scene = ExtResource("3_o5246")
 count = 3
 formation = SubResource("Resource_q54oa")
-z_start = -500.0
 move_style = SubResource("Resource_a42di")
 pattern = SubResource("Resource_p8cuc")
 hp = 35
-spread = Vector2(20, 15)
-height_offset = 15.0
 tags = PackedStringArray()
 
 [sub_resource type="Resource" id="Resource_4shus"]
@@ -268,13 +247,9 @@ script = ExtResource("7_verax")
 enemy_scene = ExtResource("3_o5246")
 count = 2
 formation = SubResource("Resource_4shus")
-z_start = -500.0
 move_style = SubResource("Resource_ijma2")
 pattern = SubResource("Resource_fqthm")
 hp = 40
-spawn_origin = Vector2(50, 0)
-spread = Vector2(10, 10)
-height_offset = 0.0
 time = 60.0
 tags = PackedStringArray()
 
@@ -306,12 +281,9 @@ script = ExtResource("7_verax")
 enemy_scene = ExtResource("3_o5246")
 count = 3
 formation = SubResource("Resource_q54oa")
-z_start = -500.0
 move_style = SubResource("Resource_d2xco")
 pattern = SubResource("Resource_p8cuc")
 hp = 35
-spread = Vector2(30, 20)
-height_offset = 10.0
 tags = PackedStringArray()
 
 [sub_resource type="Resource" id="Resource_8b3a4"]
@@ -328,13 +300,9 @@ script = ExtResource("7_verax")
 enemy_scene = ExtResource("3_o5246")
 count = 2
 formation = SubResource("Resource_4shus")
-z_start = -500.0
 move_style = SubResource("Resource_8b3a4")
 pattern = SubResource("Resource_fqthm")
 hp = 40
-spawn_origin = Vector2(40, 0)
-spread = Vector2(20, 15)
-height_offset = 0.0
 time = 60.0
 tags = PackedStringArray()
 
@@ -366,12 +334,9 @@ script = ExtResource("7_verax")
 enemy_scene = ExtResource("3_o5246")
 count = 2
 formation = SubResource("Resource_jy8uu")
-z_start = -500.0
 move_style = SubResource("Resource_5o1ev")
 pattern = SubResource("Resource_p8cuc")
 hp = 40
-spread = Vector2(20, 10)
-height_offset = 10.0
 tags = PackedStringArray()
 
 [sub_resource type="Resource" id="Resource_kfs10"]
@@ -402,12 +367,9 @@ script = ExtResource("7_verax")
 enemy_scene = ExtResource("3_o5246")
 count = 2
 formation = SubResource("Resource_jy8uu")
-z_start = -500.0
 move_style = SubResource("Resource_pfxay")
 pattern = SubResource("Resource_6272t")
 hp = 35
-spread = Vector2(5, 5)
-height_offset = 0.0
 tags = PackedStringArray()
 
 [sub_resource type="Resource" id="Resource_nnb2u"]
@@ -440,12 +402,9 @@ script = ExtResource("7_verax")
 enemy_scene = ExtResource("3_o5246")
 count = 3
 formation = SubResource("Resource_jy8uu")
-z_start = -500.0
 move_style = SubResource("Resource_25qfc")
 pattern = SubResource("Resource_fqthm")
 hp = 45
-spread = Vector2(40, 20)
-height_offset = 0.0
 tags = PackedStringArray()
 
 [sub_resource type="Resource" id="Resource_7i0fu"]
@@ -475,12 +434,9 @@ script = ExtResource("7_verax")
 enemy_scene = ExtResource("3_o5246")
 count = 6
 formation = SubResource("Resource_b1okn")
-z_start = -500.0
 move_style = SubResource("Resource_1k10m")
 pattern = SubResource("Resource_6272t")
 hp = 20
-spread = Vector2(30, 20)
-height_offset = 10.0
 tags = PackedStringArray()
 
 [sub_resource type="Resource" id="Resource_rqo2f"]
@@ -513,12 +469,9 @@ script = ExtResource("7_verax")
 enemy_scene = ExtResource("3_o5246")
 count = 3
 formation = SubResource("Resource_q54oa")
-z_start = -500.0
 move_style = SubResource("Resource_0ssqv")
 pattern = SubResource("Resource_fqthm")
 hp = 50
-spread = Vector2(15, 10)
-height_offset = 5.0
 tags = PackedStringArray()
 
 [sub_resource type="Resource" id="Resource_6kqnk"]
@@ -548,12 +501,9 @@ script = ExtResource("7_verax")
 enemy_scene = ExtResource("3_o5246")
 count = 4
 formation = SubResource("Resource_4shus")
-z_start = -500.0
 move_style = SubResource("Resource_13eb3")
 pattern = SubResource("Resource_p8cuc")
 hp = 40
-spread = Vector2(10, 10)
-height_offset = 10.0
 tags = PackedStringArray()
 
 [sub_resource type="Resource" id="Resource_ve5rf"]
@@ -580,12 +530,9 @@ script = ExtResource("7_verax")
 enemy_scene = ExtResource("3_o5246")
 count = 4
 formation = SubResource("Resource_b1okn")
-z_start = -500.0
 move_style = SubResource("Resource_sqfc1")
 pattern = SubResource("Resource_fqthm")
 hp = 50
-spread = Vector2(10, 10)
-height_offset = 10.0
 tags = PackedStringArray()
 
 [sub_resource type="Resource" id="Resource_1wncf"]
@@ -593,12 +540,9 @@ script = ExtResource("7_verax")
 enemy_scene = ExtResource("3_o5246")
 count = 2
 formation = SubResource("Resource_4shus")
-z_start = -500.0
 move_style = SubResource("Resource_ijma2")
 pattern = SubResource("Resource_fqthm")
 hp = 60
-spread = Vector2(20, 15)
-height_offset = 0.0
 time = 80.0
 tags = PackedStringArray()
 
@@ -628,11 +572,9 @@ script = ExtResource("5_l5shb")
 script = ExtResource("7_verax")
 enemy_scene = ExtResource("3_o5246")
 formation = SubResource("Resource_4shus")
-z_start = -500.0
 move_style = SubResource("Resource_ooo4j")
 pattern = SubResource("Resource_6272t")
 hp = 200
-height_offset = 20.0
 tags = PackedStringArray()
 
 [sub_resource type="Resource" id="Resource_x8ijc"]
@@ -646,12 +588,9 @@ script = ExtResource("7_verax")
 enemy_scene = ExtResource("3_o5246")
 count = 3
 formation = SubResource("Resource_jy8uu")
-z_start = -500.0
 move_style = SubResource("Resource_1hkfs")
 pattern = SubResource("Resource_p8cuc")
 hp = 25
-spread = Vector2(30, 15)
-height_offset = 0.0
 time = 80.0
 tags = PackedStringArray()
 
@@ -666,12 +605,9 @@ script = ExtResource("7_verax")
 enemy_scene = ExtResource("3_o5246")
 count = 4
 formation = SubResource("Resource_b1okn")
-z_start = -500.0
 move_style = SubResource("Resource_lbmwt")
 pattern = SubResource("Resource_fqthm")
 hp = 30
-spread = Vector2(20, 10)
-height_offset = 10.0
 time = 155.0
 tags = PackedStringArray()
 
