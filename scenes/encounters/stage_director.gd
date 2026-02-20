@@ -7,7 +7,7 @@
                                        
 ## StageDirector — macro layer for level progression.
 ##
-## Owns the sequence of encounter segments that make up a stage/planet run.
+## Owns the sequence of encounter encounters_override that make up a stage/planet run.
 ## Picks/starts/stops encounters via EncounterRunner.  Controls rail speed,
 ## transitions, difficulty scaling, and reacts to gate signals.
 ##
@@ -30,9 +30,9 @@ var _logger = EchoLogger.new("StageDirector", "cyan", EchoLogger.LogLevel.DEBUG)
 ## The Player node (used for distance feed and fail detection).
 @export var player: Player
 
-## Ordered list of encounter segments that make up this stage.
+## Ordered list of encounter encounters_override that make up this stage.
 ## Authored in the inspector or built procedurally in start_stage().
-@export var segments: Array[Encounter] = []
+@export var encounters_override: Array[Encounter] = []
 
 ## Master seed for the run.  0 = randomize.
 @export var run_seed: int = 0
@@ -49,14 +49,14 @@ var _logger = EchoLogger.new("StageDirector", "cyan", EchoLogger.LogLevel.DEBUG)
 ## If true, automatically starts the first segment on _ready().
 @export var autostart: bool = false
 
-## Default clock mode passed to the runner for normal segments.
+## Default clock mode passed to the runner for normal encounters_override.
 @export var default_clock: EncounterRunner.ClockMode = EncounterRunner.ClockMode.DISTANCE
 
 # ── Procedural generation (optional) ────────────────────────────────────────
 
 ## Stage template for procedural generation.  When set (along with
-## encounter_pool), start_stage() builds segments automatically instead
-## of using the manual `segments` array.
+## encounter_pool), start_stage() builds encounters_override automatically instead
+## of using the manual `encounters_override` array.
 @export var stage_template: StageTemplate
 
 ## Encounter pool to draw from when building procedurally.
@@ -85,7 +85,7 @@ signal segment_started(index: int, encounter: Encounter)
 ## Emitted after a segment's encounter finishes and before the next starts.
 signal segment_finished(index: int, encounter: Encounter)
 
-## Emitted when all segments are done.
+## Emitted when all encounters_override are done.
 signal stage_finished()
 
 ## Emitted when the rail pauses (gate).
@@ -151,8 +151,8 @@ func _connect_player_signals() -> void:
 # ── Public API ───────────────────────────────────────────────────────────────
 
 ## Start the stage from segment 0.
-## If stage_template + encounter_pool are set, builds segments procedurally.
-## Otherwise falls back to the manual `segments` array.
+## If stage_template + encounter_pool are set, builds encounters_override procedurally.
+## Otherwise falls back to the manual `encounters_override` array.
 func start_stage(seed_override: int = 0) -> void:
   prints("StageDirector: start_stage called with seed_override=%d" % seed_override)
   if runner == null:
@@ -169,37 +169,37 @@ func start_stage(seed_override: int = 0) -> void:
     _rng.seed = run_seed
 
   # ── Validate mode exclusivity ──────────────────────────────────────
-  if stage_template != null and not segments.is_empty():
-    push_warning("StageDirector: using manual segments (n=%d) — stage_template will be ignored." % segments.size())
+  if stage_template != null and not encounters_override.is_empty():
+    push_warning("StageDirector: using manual encounters_override (n=%d) — stage_template will be ignored." % encounters_override.size())
   if stage_template != null and encounter_pool == null:
-    push_warning("StageDirector: stage_template is set but encounter_pool is null — procedural build requires both. Falling back to manual segments.")
+    push_warning("StageDirector: stage_template is set but encounter_pool is null — procedural build requires both. Falling back to manual encounters_override.")
   if encounter_pool != null and stage_template == null:
     push_warning("StageDirector: encounter_pool is set but stage_template is null — pool will be unused. Set a stage_template to enable procedural build.")
   if difficulty_profile != null and (stage_template == null or encounter_pool == null):
     push_warning("StageDirector: difficulty_profile is set but procedural build is not active (needs stage_template + encounter_pool). Profile will be unused.")
 
-  # ── Procedural build (only if segments is empty and template + pool are set) ─
+  # ── Procedural build (only if encounters_override is empty and template + pool are set) ─
   prints("StageDirector: starting stage with seed %d" % run_seed)
-  if segments.is_empty() and stage_template != null and encounter_pool != null:
+  if encounters_override.is_empty() and stage_template != null and encounter_pool != null:
     var builder := StageBuilder.new(stage_template, encounter_pool, difficulty_profile, _rng)
     builder.min_gap = min_breather_gap
     builder.max_gap = max_breather_gap
     builder.auto_breathers = auto_breathers
     _last_build_result = builder.build(run_seed)
-    segments = _last_build_result.segments
-    print("StageDirector: built %d segments (filled=%d, skipped=%d, breathers=%d, seed=%d)" % [
-      segments.size(),
+    encounters_override = _last_build_result.segments
+    print("StageDirector: built %d encounters_override (filled=%d, skipped=%d, breathers=%d, seed=%d)" % [
+      encounters_override.size(),
       _last_build_result.slots_filled,
       _last_build_result.slots_skipped,
       _last_build_result.breathers_inserted,
       _last_build_result.seed_used,
     ])
 
-  if segments.is_empty():
-    push_error("StageDirector: no segments to play.")
+  if encounters_override.is_empty():
+    push_error("StageDirector: no encounters_override to play.")
     return
 
-  # Build the distance map — segments are placed end-to-end on the rail
+  # Build the distance map — encounters_override are placed end-to-end on the rail
   _build_distance_map()
 
   _segment_index = -1
@@ -290,12 +290,12 @@ func is_running() -> bool:
   return _running
 
 
-## Returns true if segments were built procedurally (template + pool).
+## Returns true if encounters_override were built procedurally (template + pool).
 func is_procedural() -> bool:
   return _last_build_result != null
 
 
-## Returns the last StageBuilder.BuildResult (null if manual segments).
+## Returns the last StageBuilder.BuildResult (null if manual encounters_override).
 func last_build_result() -> StageBuilder.BuildResult:
   return _last_build_result
 
@@ -306,16 +306,16 @@ func last_build_result() -> StageBuilder.BuildResult:
 func _build_distance_map() -> void:
   _segment_starts.clear()
   var cursor: float = 0.0
-  for seg in segments:
+  for seg in encounters_override:
     _segment_starts.append(cursor)
     if seg.duration <= 0.0:
       push_warning("StageDirector: segment '%s' has zero duration, defaulting to 20.0" % seg.id)
       seg.duration = 20.0
     cursor += seg.duration
   _total_stage_distance = cursor
-  print("StageDirector: distance map — %d segments, %.1f total distance" % [segments.size(), _total_stage_distance])
-  for i in segments.size():
-    print("  [%d] %s starts at %.1f, duration %.1f" % [i, segments[i].id, _segment_starts[i], segments[i].duration])
+  print("StageDirector: distance map — %d encounters_override, %.1f total distance" % [encounters_override.size(), _total_stage_distance])
+  for i in encounters_override.size():
+    print("  [%d] %s starts at %.1f, duration %.1f" % [i, encounters_override[i].id, _segment_starts[i], encounters_override[i].duration])
 
 # ── Segment sequencing ───────────────────────────────────────────────────────
 
@@ -331,7 +331,7 @@ func _on_distance_changed(distance: float) -> void:
   # Check if we should start the next segment
   if _waiting_for_distance:
     var next_index := _segment_index + 1
-    if next_index < segments.size():
+    if next_index < encounters_override.size():
       var next_start := _segment_starts[next_index]
       if _current_distance >= next_start:
         _waiting_for_distance = false
@@ -340,12 +340,12 @@ func _on_distance_changed(distance: float) -> void:
 
 ## Start a specific segment immediately.
 func _start_segment(index: int) -> void:
-  if index < 0 or index >= segments.size():
+  if index < 0 or index >= encounters_override.size():
     _finish_stage()
     return
 
   _segment_index = index
-  var enc := segments[_segment_index]
+  var enc := encounters_override[_segment_index]
 
   if enc == null:
     push_warning("StageDirector: segment %d is null, skipping." % _segment_index)
@@ -367,7 +367,7 @@ func _start_segment(index: int) -> void:
 func _queue_next_segment() -> void:
   _logger.debug("Queueing next segment after finishing segment %d" % _segment_index)
   var next_index := _segment_index + 1
-  if next_index >= segments.size():
+  if next_index >= encounters_override.size():
     _finish_stage()
     return
 
@@ -380,11 +380,11 @@ func _queue_next_segment() -> void:
     _waiting_for_distance = true
 
   prints("StageDirector: queued segment [%d] '%s', waiting for player to reach distance %.1f" % [
-    next_index, segments[next_index].id, next_start
+    next_index, encounters_override[next_index].id, next_start
   ])
 
 func _finish_stage() -> void:
-  prints("StageDirector: all segments finished. Total distance: %.1f" % _total_stage_distance)
+  prints("StageDirector: all encounters_override finished. Total distance: %.1f" % _total_stage_distance)
   _running = false
   stage_finished.emit()
 
