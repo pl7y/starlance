@@ -13,6 +13,8 @@ class_name Player
 signal distance_changed(distance: float)
 
 @onready var _label = %PlayerLabel as Label
+@onready var _run_sprite = %RunSprite as Node2D
+@onready var _fly_sprite = %FlySprite as Node2D
 
 @export var hp: int = 5
 @export var invuln_seconds: float = 0.8
@@ -26,6 +28,15 @@ var invuln_t: float = 0.0
 ## Cumulative distance travelled along the rail (always increasing).
 var _distance: float = 0.0
 
+enum Status {RUNNING, FLYING}
+
+var _status: Status = Status.FLYING:
+  set(value):
+    if _status == value:
+      return
+    _status = value
+    _apply_status_visuals()
+
 @onready var _movement_component = %PlayerMovementComponent as PlayerMovementComponent
 
 func _ready() -> void:
@@ -35,6 +46,7 @@ func _ready() -> void:
     _movement_component.target = self
   if _movement_component != null:
     _movement_component.speed = speed
+  _apply_status_visuals()
 
 func _process(delta: float) -> void:
   if rig == null:
@@ -62,11 +74,9 @@ func _process(delta: float) -> void:
   var altitude := world_pos.y - ground_reference
   var grounded := altitude <= grounded_threshold
 
-  var status := "fly"
-  if grounded:
-    status = "run"
+  _status = Status.RUNNING if grounded else Status.FLYING
   
-  _label.text = "%s/(%.1f, %.1f, %.1f)" % [status, world_pos.x, world_pos.y, world_pos.z]
+  _label.text = "%s/(%.1f, %.1f, %.1f)" % [_status, world_pos.x, world_pos.y, world_pos.z]
 
   # Blink feedback during iframes (keep your existing blink code)
   if invuln_t > 0.0:
@@ -88,3 +98,11 @@ func take_hit(dmg: int) -> void:
 
 func _on_hurt_box_area_entered(_area: Area3D) -> void:
   pass
+
+func _apply_status_visuals() -> void:
+  if _run_sprite == null or _fly_sprite == null:
+    return
+
+  var is_running := _status == Status.RUNNING
+  _run_sprite.visible = is_running
+  _fly_sprite.visible = not is_running

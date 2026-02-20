@@ -3,6 +3,7 @@
 [ext_resource type="Script" uid="uid://b716w5y0cpxg7" path="res://scenes/player.gd" id="1_ywjxs"]
 [ext_resource type="Texture2D" uid="uid://eiq3olwdt7bm" path="res://assets/placeholders/character_running.png" id="2_tuyoq"]
 [ext_resource type="Script" uid="uid://kpbt6n1fjt4" path="res://scenes/shooter.component.gd" id="3_dqkch"]
+[ext_resource type="Texture2D" uid="uid://icglrm81p430" path="res://assets/placeholders/fly.png" id="3_smehm"]
 [ext_resource type="PackedScene" uid="uid://cbk5xftc2r2mk" path="res://scenes/bullet.tscn" id="4_qlg0r"]
 [ext_resource type="Texture2D" uid="uid://cvgfki3bgh5gx" path="res://assets/placeholders/shadow.png" id="5_qlg0r"]
 [ext_resource type="PackedScene" uid="uid://cimdcjf2l38cy" path="res://scenes/pseudo_area_3d.tscn" id="6_tuyoq"]
@@ -17,7 +18,7 @@ length = 0.001
 tracks/0/type = "value"
 tracks/0/imported = false
 tracks/0/enabled = true
-tracks/0/path = NodePath("Sprite2D:frame")
+tracks/0/path = NodePath("Visuals/RunSprite:frame")
 tracks/0/interp = 1
 tracks/0/loop_wrap = true
 tracks/0/keys = {
@@ -35,7 +36,7 @@ step = 0.125
 tracks/0/type = "value"
 tracks/0/imported = false
 tracks/0/enabled = true
-tracks/0/path = NodePath("Sprite2D:frame")
+tracks/0/path = NodePath("Visuals/RunSprite:frame")
 tracks/0/interp = 1
 tracks/0/loop_wrap = false
 tracks/0/keys = {
@@ -53,13 +54,29 @@ _data = {
 
 [node name="Player" type="Node2D" unique_id=1077760697 node_paths=PackedStringArray("shadow_sprite")]
 script = ExtResource("1_ywjxs")
-shadow_sprite = NodePath("Shadow")
+shadow_sprite = NodePath("Visuals/Shadow")
 
-[node name="Sprite2D" type="Sprite2D" parent="." unique_id=1836268859]
+[node name="Visuals" type="Node2D" parent="." unique_id=1505605314]
+
+[node name="RunSprite" type="Sprite2D" parent="Visuals" unique_id=1836268859]
 unique_name_in_owner = true
 position = Vector2(-1, -51)
 texture = ExtResource("2_tuyoq")
 hframes = 4
+
+[node name="FlySprite" type="Sprite2D" parent="Visuals" unique_id=1741963846]
+unique_name_in_owner = true
+position = Vector2(0, -43)
+texture = ExtResource("3_smehm")
+
+[node name="Shadow" type="Node2D" parent="Visuals" unique_id=646253260]
+modulate = Color(1, 1, 1, 0.5411765)
+position = Vector2(0, 3)
+
+[node name="ShadowSprite" type="Sprite2D" parent="Visuals/Shadow" unique_id=1883007060]
+position = Vector2(0, -3)
+scale = Vector2(0.75, 0.5)
+texture = ExtResource("5_qlg0r")
 
 [node name="ShooterComponent" type="Node" parent="." unique_id=1545092926]
 script = ExtResource("3_dqkch")
@@ -75,15 +92,6 @@ target = NodePath("..")
 lift_speed = 100.0
 max_altitude = 80.0
 enable_screen_controller = true
-
-[node name="Shadow" type="Node2D" parent="." unique_id=646253260]
-modulate = Color(1, 1, 1, 0.5411765)
-position = Vector2(0, 3)
-
-[node name="ShadowSprite" type="Sprite2D" parent="Shadow" unique_id=1883007060]
-position = Vector2(0, -3)
-scale = Vector2(0.75, 0.5)
-texture = ExtResource("5_qlg0r")
 
 [node name="PlayerLabel" type="Label" parent="." unique_id=1092200594]
 unique_name_in_owner = true
