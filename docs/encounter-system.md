@@ -409,6 +409,23 @@ Points are interpreted as local offsets from spawn position.
 | `speed`  | `float`              | `40.0`  | Units per second along the path.                                                           |
 | `z_lock` | `ZLock`              | `NONE`  | Inherited from `MovementStyle` (`NONE` absolute world Z, `PLAYER` compensates player run). |
 
+#### BounceMovementStyle
+
+**File:** `scenes/encounters/movement_styles/bounce_movement_style.gd`
+**Class:** `BounceMovementStyle extends MovementStyle`
+
+Moves an enemy while oscillating up/down. Travel direction comes from target mode.
+
+| Property           | Type      | Default   | Description                                    |
+| ------------------ | --------- | --------- | ---------------------------------------------- |
+| `target`           | `Target`  | `PLAYER`  | Movement target mode: `PLAYER` or `DIRECTION`. |
+| `speed`            | `float`   | `18.0`    | Travel speed along selected target direction.  |
+| `bounce_amplitude` | `float`   | `4.0`     | Vertical bounce amplitude.                     |
+| `bounce_duration`  | `float`   | `0.83`    | Duration of one bounce arc in seconds.         |
+| `pause`            | `float`   | `0.0`     | Seconds spent on ground between bounces.       |
+| `direction`        | `Vector3` | `(0,0,1)` | Axis used when `target = DIRECTION`.           |
+| `z_lock`           | `ZLock`   | `NONE`    | Inherited from `MovementStyle`.                |
+
 Data-only descriptor for enemy movement. Read by `EnemySpawner` at spawn time and mapped onto `Enemy` properties.
 
 | Property       | Type      | Default      | Description                                                                 |
