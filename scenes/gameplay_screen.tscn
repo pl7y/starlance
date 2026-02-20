@@ -14,14 +14,14 @@
 [ext_resource type="Script" uid="uid://bx6f3uaf823k7" path="res://scenes/encounters/encounter_runner.gd" id="13_7ocsb"]
 [ext_resource type="Script" uid="uid://b7muo30j743j7" path="res://scenes/encounters/enemy_spawner.gd" id="14_6demn"]
 [ext_resource type="Script" uid="uid://cs50vfhsfsego" path="res://scenes/encounters/stage_director.gd" id="14_7ocsb"]
-[ext_resource type="Resource" uid="uid://ddl2ycy5tfpt4" path="res://resources/encounters/templates/demo_template.tres" id="15_aagjl"]
+[ext_resource type="Resource" uid="uid://4jtbeey7jjkq" path="res://resources/encounters/templates/demo_template.tres" id="15_aagjl"]
 [ext_resource type="Script" uid="uid://brv4vhghfui7k" path="res://scenes/encounters/encounter_event.gd" id="15_pw0ia"]
 [ext_resource type="Script" uid="uid://dbp6h4gvlg87c" path="res://scenes/encounters/encounter.gd" id="15_qfdku"]
 [ext_resource type="PackedScene" uid="uid://bk0r22e6fyjqg" path="res://scenes/enemy.tscn" id="16_clvjq"]
-[ext_resource type="Resource" uid="uid://boupt0oef78gl" path="res://resources/encounters/pool/demo_pool.tres" id="16_gnb8g"]
-[ext_resource type="Script" uid="uid://bfxroni6ou238" path="res://scenes/encounters/volume_formation.gd" id="17_pw0ia"]
+[ext_resource type="Resource" uid="uid://ch0n1i4bqvvmy" path="res://resources/encounters/pool/demo_pool.tres" id="16_gnb8g"]
+[ext_resource type="Script" uid="uid://bfxroni6ou238" path="res://scenes/encounters/volume_formation.resource.gd" id="17_pw0ia"]
 [ext_resource type="Resource" uid="uid://cei166wf43jf8" path="res://resources/encounters/difficulty/normal_profile.tres" id="17_t1iya"]
-[ext_resource type="Script" uid="uid://cbdfbktcb3n7a" path="res://scenes/encounters/move_style.gd" id="18_422ip"]
+[ext_resource type="Script" uid="uid://ces2q7ec1p1dl" path="res://scenes/encounters/movement_styles/sine_strafe_movement_style.gd" id="18_pw0ia"]
 [ext_resource type="Script" uid="uid://clo2cqcvulfkw" path="res://scenes/encounters/pattern.gd" id="19_2o7gh"]
 [ext_resource type="Script" uid="uid://c8om0jd1cjoha" path="res://scenes/encounters/spawn_event.gd" id="20_ng3oa"]
 
@@ -34,10 +34,12 @@ script = ExtResource("17_pw0ia")
 volume = SubResource("CylinderShape3D_clvjq")
 metadata/_custom_type_script = "uid://bfxroni6ou238"
 
-[sub_resource type="Resource" id="Resource_1hkfs"]
-script = ExtResource("18_422ip")
-type = 1
-speed_z = 80.0
+[sub_resource type="Resource" id="Resource_clvjq"]
+script = ExtResource("18_pw0ia")
+speed_z = 100.0
+amplitude = Vector2(100, 100)
+frequency = 5.0
+metadata/_custom_type_script = "uid://ces2q7ec1p1dl"
 
 [sub_resource type="Resource" id="Resource_6272t"]
 script = ExtResource("19_2o7gh")
@@ -49,7 +51,7 @@ script = ExtResource("20_ng3oa")
 enemy_scene = ExtResource("16_clvjq")
 count = 5
 formation = SubResource("Resource_mr88a")
-move_style = SubResource("Resource_1hkfs")
+move_style = SubResource("Resource_clvjq")
 pattern = SubResource("Resource_6272t")
 hp = 20
 world_pos = Vector3(0, 100, -1500)

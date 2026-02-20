@@ -2,8 +2,8 @@
 
 [ext_resource type="Script" path="res://scenes/encounters/encounter_event.gd" id="1_4wcn3"]
 [ext_resource type="PackedScene" path="res://scenes/enemy.tscn" id="2_lg8hk"]
-[ext_resource type="Script" path="res://scenes/encounters/shape_formation.gd" id="3_67p7c"]
-[ext_resource type="Script" path="res://scenes/encounters/move_style.gd" id="4_y4ny2"]
+[ext_resource type="Script" path="res://scenes/encounters/shape_formation.resource.gd" id="3_67p7c"]
+[ext_resource type="Script" path="res://scenes/encounters/movement_styles/dive_at_player_movement_style.gd" id="4_y4ny2"]
 [ext_resource type="Script" path="res://scenes/encounters/pattern.gd" id="5_cvqlk"]
 [ext_resource type="Script" path="res://scenes/encounters/spawn_event.gd" id="6_wht6q"]
 [ext_resource type="Script" path="res://scenes/encounters/encounter.gd" id="7_x3vfs"]
@@ -17,7 +17,6 @@ radius = 50.0
 
 [sub_resource type="Resource" id="Resource_ijma2"]
 script = ExtResource("4_y4ny2")
-type = 3
 speed_z = 70.0
 
 [sub_resource type="Resource" id="Resource_fqthm"]

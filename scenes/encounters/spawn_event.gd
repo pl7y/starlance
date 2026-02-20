@@ -14,7 +14,7 @@ class_name SpawnEvent
 @export var formation: Formation
 
 ## Movement descriptor applied to each spawned enemy.
-@export var move_style: MoveStyle
+@export var move_style: MovementStyle
 
 ## Firing / attack pattern applied to each spawned enemy.
 @export var pattern: Pattern

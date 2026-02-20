@@ -1,57 +1,56 @@
 [gd_resource type="Resource" script_class="Encounter" format=3]
 
-[ext_resource type="Script" path="res://scenes/encounters/encounter_event.gd" id="1_j531e"]
-[ext_resource type="PackedScene" path="res://scenes/enemy.tscn" id="2_e350f"]
-[ext_resource type="Script" path="res://scenes/encounters/shape_formation.gd" id="3_egqwa"]
-[ext_resource type="Script" path="res://scenes/encounters/move_style.gd" id="4_xeviq"]
-[ext_resource type="Script" path="res://scenes/encounters/pattern.gd" id="5_1ju3g"]
-[ext_resource type="Script" path="res://scenes/encounters/spawn_event.gd" id="6_p2c5f"]
-[ext_resource type="Script" path="res://scenes/encounters/encounter.gd" id="7_c57wt"]
+[ext_resource type="Script" path="res://scenes/encounters/encounter_event.gd" id="1_e350f"]
+[ext_resource type="PackedScene" path="res://scenes/enemy.tscn" id="2_egqwa"]
+[ext_resource type="Script" path="res://scenes/encounters/shape_formation.resource.gd" id="3_xeviq"]
+[ext_resource type="Script" path="res://scenes/encounters/movement_styles/swoop_movement_style.gd" id="4_1ju3g"]
+[ext_resource type="Script" path="res://scenes/encounters/pattern.gd" id="5_p2c5f"]
+[ext_resource type="Script" path="res://scenes/encounters/spawn_event.gd" id="6_c57wt"]
+[ext_resource type="Script" path="res://scenes/encounters/movement_styles/dive_at_player_movement_style.gd" id="7_a42di"]
+[ext_resource type="Script" path="res://scenes/encounters/encounter.gd" id="8_nbxse"]
 
 [sub_resource type="Resource" id="Resource_q54oa"]
-script = ExtResource("3_egqwa")
+script = ExtResource("3_xeviq")
 shape = 2
 spacing = Vector2(35, 25)
 
-[sub_resource type="Resource" id="Resource_a42di"]
-script = ExtResource("4_xeviq")
-type = 4
+[sub_resource type="Resource" id="Resource_4shus"]
+script = ExtResource("4_1ju3g")
 speed_z = 80.0
 amplitude = Vector2(60, 40)
 frequency = 0.6
 
 [sub_resource type="Resource" id="Resource_p8cuc"]
-script = ExtResource("5_1ju3g")
+script = ExtResource("5_p2c5f")
 
-[sub_resource type="Resource" id="Resource_nbxse"]
-script = ExtResource("6_p2c5f")
-enemy_scene = ExtResource("2_e350f")
+[sub_resource type="Resource" id="Resource_vkkm8"]
+script = ExtResource("6_c57wt")
+enemy_scene = ExtResource("2_egqwa")
 count = 3
 formation = SubResource("Resource_q54oa")
-move_style = SubResource("Resource_a42di")
+move_style = SubResource("Resource_4shus")
 pattern = SubResource("Resource_p8cuc")
 hp = 35
 world_pos = Vector3(0, 15, -500)
 tags = PackedStringArray()
 
-[sub_resource type="Resource" id="Resource_4shus"]
-script = ExtResource("3_egqwa")
+[sub_resource type="Resource" id="Resource_hrbha"]
+script = ExtResource("3_xeviq")
 
 [sub_resource type="Resource" id="Resource_ijma2"]
-script = ExtResource("4_xeviq")
-type = 3
+script = ExtResource("7_a42di")
 speed_z = 70.0
 
 [sub_resource type="Resource" id="Resource_fqthm"]
-script = ExtResource("5_1ju3g")
+script = ExtResource("5_p2c5f")
 fire_interval = 0.8
 bullet_speed = 110.0
 
-[sub_resource type="Resource" id="Resource_vkkm8"]
-script = ExtResource("6_p2c5f")
-enemy_scene = ExtResource("2_e350f")
+[sub_resource type="Resource" id="Resource_s12wb"]
+script = ExtResource("6_c57wt")
+enemy_scene = ExtResource("2_egqwa")
 count = 2
-formation = SubResource("Resource_4shus")
+formation = SubResource("Resource_hrbha")
 move_style = SubResource("Resource_ijma2")
 pattern = SubResource("Resource_fqthm")
 hp = 40
@@ -60,9 +59,9 @@ time = 60.0
 tags = PackedStringArray()
 
 [resource]
-script = ExtResource("7_c57wt")
+script = ExtResource("8_nbxse")
 id = "swooping_aces"
 display_name = "Swooping Aces"
 duration = 180.0
-events = Array[ExtResource("1_j531e")]([SubResource("Resource_nbxse"), SubResource("Resource_vkkm8")])
+events = Array[ExtResource("1_e350f")]([SubResource("Resource_vkkm8"), SubResource("Resource_s12wb")])
 tags = PackedStringArray("hard", "swoop")

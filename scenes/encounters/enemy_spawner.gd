@@ -45,50 +45,25 @@ func spawn_group(event: SpawnEvent, offsets: Array[Vector2], _rng: RandomNumberG
     enemy.world_pos = spawn_pos
     world.add_child(enemy)
 
-    # Apply move style  →  map to Enemy.MovePattern integer
-    _apply_move_style(enemy, event.move_style)
+    # Create and assign movement strategy from MovementStyle resource
+    _apply_movement_strategy(enemy, event.move_style)
 
     # Apply pattern (firing config)
     _apply_pattern(enemy, event.pattern, event.hp)
 
 
-## Maps a MoveStyle resource onto enemy properties.
+## Creates and assigns a MovementStrategy to the enemy based on MovementStyle resource.
 ## Override if your Enemy API differs.
-func _apply_move_style(enemy: Node, style: MoveStyle) -> void:
+func _apply_movement_strategy(enemy: Node, style: MovementStyle) -> void:
   if style == null:
+    # Default to static movement if no style specified
+    if "movement_strategy" in enemy:
+      enemy.movement_strategy = StaticMovementStrategy.new()
     return
 
-  # Map MoveStyle.Type → Enemy.MovePattern enum value (same order by convention).
-  if "pattern" in enemy:
-    enemy.pattern = style.type as int
-
-  if "speed_z" in enemy:
-    enemy.speed_z = style.speed_z
-  if "speed_x" in enemy:
-    enemy.speed_x = style.speed_x
-  if "speed_y" in enemy:
-    enemy.speed_y = style.speed_y
-  if "amp_x" in enemy:
-    enemy.amp_x = style.amplitude.x
-  if "amp_y" in enemy:
-    enemy.amp_y = style.amplitude.y
-  if "freq" in enemy:
-    enemy.freq = style.frequency
-  if "dive_turn" in enemy:
-    enemy.dive_turn = style.dive_turn
-  if "orbit_radius" in enemy:
-    enemy.orbit_radius = style.orbit_radius
-  if "orbit_speed" in enemy:
-    enemy.orbit_speed = style.orbit_speed
-  if "follow_distance" in enemy:
-    enemy.follow_distance = style.follow_distance
-  if "rush_turn" in enemy:
-    enemy.rush_turn = style.rush_turn
-
-  # Custom AI logic — duplicate so each enemy gets its own state
-  if style.type == MoveStyle.Type.CUSTOM and style.custom_logic != null:
-    if "custom_move_logic" in enemy:
-      enemy.custom_move_logic = style.custom_logic.duplicate()
+  # Let the MovementStyle resource create the appropriate strategy
+  if "movement_strategy" in enemy:
+    enemy.movement_strategy = style.create_strategy()
 
 
 ## Maps a Pattern resource onto enemy firing properties.

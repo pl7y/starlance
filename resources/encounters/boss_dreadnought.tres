@@ -1,63 +1,64 @@
 [gd_resource type="Resource" script_class="Encounter" format=3]
 
-[ext_resource type="Script" path="res://scenes/encounters/encounter_event.gd" id="1_w4j4u"]
-[ext_resource type="Script" path="res://scenes/encounters/phase_event.gd" id="2_wit3j"]
-[ext_resource type="PackedScene" path="res://scenes/enemy.tscn" id="3_bn01i"]
-[ext_resource type="Script" path="res://scenes/encounters/shape_formation.gd" id="4_2ek1u"]
-[ext_resource type="Script" path="res://scenes/encounters/move_style.gd" id="5_ugqd1"]
-[ext_resource type="Script" path="res://scenes/encounters/pattern.gd" id="6_1ywtg"]
-[ext_resource type="Script" path="res://scenes/encounters/spawn_event.gd" id="7_5guji"]
-[ext_resource type="Script" path="res://scenes/encounters/gate_event.gd" id="8_hjo1a"]
-[ext_resource type="Script" path="res://scenes/encounters/encounter.gd" id="9_qb0oj"]
+[ext_resource type="Script" path="res://scenes/encounters/encounter_event.gd" id="1_bn01i"]
+[ext_resource type="Script" path="res://scenes/encounters/phase_event.gd" id="2_2ek1u"]
+[ext_resource type="PackedScene" path="res://scenes/enemy.tscn" id="3_ugqd1"]
+[ext_resource type="Script" path="res://scenes/encounters/shape_formation.resource.gd" id="4_1ywtg"]
+[ext_resource type="Script" path="res://scenes/encounters/movement_styles/movement_style.gd" id="5_5guji"]
+[ext_resource type="Script" path="res://scenes/encounters/pattern.gd" id="6_hjo1a"]
+[ext_resource type="Script" path="res://scenes/encounters/spawn_event.gd" id="7_qb0oj"]
+[ext_resource type="Script" path="res://scenes/encounters/gate_event.gd" id="8_flsqo"]
+[ext_resource type="Script" path="res://scenes/encounters/movement_styles/drift_movement_style.gd" id="9_ooo4j"]
+[ext_resource type="Script" path="res://scenes/encounters/movement_styles/sine_strafe_movement_style.gd" id="10_l3x4i"]
+[ext_resource type="Script" path="res://scenes/encounters/encounter.gd" id="11_x8ijc"]
 
-[sub_resource type="Resource" id="Resource_flsqo"]
-script = ExtResource("2_wit3j")
+[sub_resource type="Resource" id="Resource_ob4ev"]
+script = ExtResource("2_2ek1u")
 phase_name = "boss_phase_1"
 tags = PackedStringArray()
 
-[sub_resource type="Resource" id="Resource_4shus"]
-script = ExtResource("4_2ek1u")
+[sub_resource type="Resource" id="Resource_hrbha"]
+script = ExtResource("4_1ywtg")
 
-[sub_resource type="Resource" id="Resource_ooo4j"]
-script = ExtResource("5_ugqd1")
+[sub_resource type="Resource" id="Resource_7g842"]
+script = ExtResource("5_5guji")
 
 [sub_resource type="Resource" id="Resource_6272t"]
-script = ExtResource("6_1ywtg")
+script = ExtResource("6_hjo1a")
 fire_interval = 2.0
 bullet_speed = 70.0
 
-[sub_resource type="Resource" id="Resource_l3x4i"]
-script = ExtResource("7_5guji")
-enemy_scene = ExtResource("3_bn01i")
-formation = SubResource("Resource_4shus")
-move_style = SubResource("Resource_ooo4j")
+[sub_resource type="Resource" id="Resource_bokgw"]
+script = ExtResource("7_qb0oj")
+enemy_scene = ExtResource("3_ugqd1")
+formation = SubResource("Resource_hrbha")
+move_style = SubResource("Resource_7g842")
 pattern = SubResource("Resource_6272t")
 hp = 200
 world_pos = Vector3(0, 20, -500)
 tags = PackedStringArray()
 
-[sub_resource type="Resource" id="Resource_x8ijc"]
-script = ExtResource("8_hjo1a")
+[sub_resource type="Resource" id="Resource_avk64"]
+script = ExtResource("8_flsqo")
 label = "Defeat the Dreadnought!"
 time = 5.0
 tags = PackedStringArray()
 
 [sub_resource type="Resource" id="Resource_jy8uu"]
-script = ExtResource("4_2ek1u")
+script = ExtResource("4_1ywtg")
 shape = 1
 spacing = Vector2(40, 0)
 
 [sub_resource type="Resource" id="Resource_1hkfs"]
-script = ExtResource("5_ugqd1")
-type = 1
+script = ExtResource("9_ooo4j")
 speed_z = 80.0
 
 [sub_resource type="Resource" id="Resource_p8cuc"]
-script = ExtResource("6_1ywtg")
+script = ExtResource("6_hjo1a")
 
-[sub_resource type="Resource" id="Resource_ob4ev"]
-script = ExtResource("7_5guji")
-enemy_scene = ExtResource("3_bn01i")
+[sub_resource type="Resource" id="Resource_r5wmi"]
+script = ExtResource("7_qb0oj")
+enemy_scene = ExtResource("3_ugqd1")
 count = 3
 formation = SubResource("Resource_jy8uu")
 move_style = SubResource("Resource_1hkfs")
@@ -67,36 +68,35 @@ world_pos = Vector3(0, 0, -500)
 time = 80.0
 tags = PackedStringArray()
 
-[sub_resource type="Resource" id="Resource_7g842"]
-script = ExtResource("2_wit3j")
+[sub_resource type="Resource" id="Resource_6tikc"]
+script = ExtResource("2_2ek1u")
 phase_name = "boss_phase_2"
 time = 150.0
 tags = PackedStringArray()
 
 [sub_resource type="Resource" id="Resource_b1okn"]
-script = ExtResource("4_2ek1u")
+script = ExtResource("4_1ywtg")
 shape = 4
 spacing = Vector2(0, 0)
 columns = 1
 radius = 50.0
 
-[sub_resource type="Resource" id="Resource_lbmwt"]
-script = ExtResource("5_ugqd1")
-type = 2
+[sub_resource type="Resource" id="Resource_x82ni"]
+script = ExtResource("10_l3x4i")
 speed_z = 90.0
 amplitude = Vector2(60, 30)
 
 [sub_resource type="Resource" id="Resource_fqthm"]
-script = ExtResource("6_1ywtg")
+script = ExtResource("6_hjo1a")
 fire_interval = 0.8
 bullet_speed = 110.0
 
-[sub_resource type="Resource" id="Resource_bokgw"]
-script = ExtResource("7_5guji")
-enemy_scene = ExtResource("3_bn01i")
+[sub_resource type="Resource" id="Resource_qaaef"]
+script = ExtResource("7_qb0oj")
+enemy_scene = ExtResource("3_ugqd1")
 count = 4
 formation = SubResource("Resource_b1okn")
-move_style = SubResource("Resource_lbmwt")
+move_style = SubResource("Resource_x82ni")
 pattern = SubResource("Resource_fqthm")
 hp = 30
 world_pos = Vector3(0, 10, -500)
@@ -104,9 +104,9 @@ time = 155.0
 tags = PackedStringArray()
 
 [resource]
-script = ExtResource("9_qb0oj")
+script = ExtResource("11_x8ijc")
 id = "boss_dreadnought"
 display_name = "Heavy Dreadnought"
 duration = 350.0
-events = Array[ExtResource("1_w4j4u")]([SubResource("Resource_flsqo"), SubResource("Resource_l3x4i"), SubResource("Resource_x8ijc"), SubResource("Resource_ob4ev"), SubResource("Resource_7g842"), SubResource("Resource_bokgw")])
+events = Array[ExtResource("1_bn01i")]([SubResource("Resource_ob4ev"), SubResource("Resource_bokgw"), SubResource("Resource_avk64"), SubResource("Resource_r5wmi"), SubResource("Resource_6tikc"), SubResource("Resource_qaaef")])
 tags = PackedStringArray("boss")

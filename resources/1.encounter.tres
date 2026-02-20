@@ -3,9 +3,9 @@
 [ext_resource type="Script" uid="uid://brv4vhghfui7k" path="res://scenes/encounters/encounter_event.gd" id="1_48tfx"]
 [ext_resource type="Script" uid="uid://dbp6h4gvlg87c" path="res://scenes/encounters/encounter.gd" id="2_4a1j6"]
 [ext_resource type="PackedScene" uid="uid://bk0r22e6fyjqg" path="res://scenes/enemy.tscn" id="2_bn13w"]
-[ext_resource type="Script" uid="uid://bmu6m46yfb4sm" path="res://scenes/encounters/formation.gd" id="3_e70sc"]
+[ext_resource type="Script" uid="uid://bmu6m46yfb4sm" path="res://scenes/encounters/formation.resource.gd" id="3_e70sc"]
 [ext_resource type="Script" uid="uid://c8om0jd1cjoha" path="res://scenes/encounters/spawn_event.gd" id="3_uu7bf"]
-[ext_resource type="Script" uid="uid://cbdfbktcb3n7a" path="res://scenes/encounters/move_style.gd" id="4_jicf1"]
+[ext_resource type="Script" uid="uid://cbdfbktcb3n7a" path="res://scenes/encounters/movement_styles/movement_style.gd" id="4_jicf1"]
 [ext_resource type="Script" uid="uid://clo2cqcvulfkw" path="res://scenes/encounters/pattern.gd" id="5_mbfni"]
 
 [sub_resource type="Resource" id="Resource_21pmk"]

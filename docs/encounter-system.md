@@ -20,7 +20,7 @@
    - [SignalEvent](#signalevent)
 6. [Payload Resources](#payload-resources)
    - [Formation](#formation)
-   - [MoveStyle](#movestyle)
+   - [MovementStyle](#movestyle)
    - [Pattern](#pattern)
 7. [Runtime Nodes](#runtime-nodes)
    - [EncounterRunner](#encounterrunner)
@@ -93,7 +93,7 @@ The system is split into two layers that communicate via signals:
 ┌──────────────────────────▼──────────────────────────────────┐
 │                     EnemySpawner (FACTORY)                    │
 │                                                              │
-│  Owns: actual instantiation logic, applying MoveStyle /     │
+│  Owns: actual instantiation logic, applying MovementStyle /     │
 │        Pattern / HP to enemy nodes                           │
 │                                                              │
 │  Does: instantiates PackedScenes, sets world_pos,           │
@@ -127,7 +127,7 @@ Resource
  │    ├── MarkerEvent             # Named marker with payload
  │    └── SignalEvent             # Fire a custom signal
  ├── Formation                    # Spatial arrangement of a group
- ├── MoveStyle                    # Movement descriptor for enemies
+ ├── MovementStyle                    # Movement descriptor for enemies
  └── Pattern                      # Firing / attack config for enemies
 ```
 
@@ -201,19 +201,19 @@ The field is called `time` even in distance mode. This is intentional — it rep
 
 The primary event type. Declares a group of enemies to spawn.
 
-| Property        | Type          | Default  | Description                                                                |
-| --------------- | ------------- | -------- | -------------------------------------------------------------------------- |
-| `enemy_scene`   | `PackedScene` | `null`   | The enemy scene to instantiate.                                            |
-| `count`         | `int`         | `1`      | Number of enemies to spawn. Range: 1–100.                                  |
-| `formation`     | `Formation`   | `null`   | Spatial formation for the group. Null = all at origin.                     |
-| `z_start`       | `float`       | `95.0`   | World-Z distance ahead of camera where enemies appear.                     |
-| `move_style`    | `MoveStyle`   | `null`   | Movement descriptor applied to each enemy at spawn.                        |
-| `pattern`       | `Pattern`     | `null`   | Firing/attack pattern applied to each enemy.                               |
-| `hp`            | `int`         | `0`      | HP override per enemy. 0 = use scene default.                              |
-| `spawn_space`   | `SpawnSpace`  | `WORLD`  | Whether positions are in world space or screen-normalised coords.          |
-| `spawn_origin`  | `Vector2`     | `(0, 0)` | Centre of the spawn group.                                                 |
-| `spread`        | `Vector2`     | `(0, 0)` | Per-axis random jitter added to each unit's offset.                        |
-| `height_offset` | `float`       | `-30.0`  | Y offset relative to horizon. Matches the old `height_over_horizon` value. |
+| Property        | Type            | Default  | Description                                                                |
+| --------------- | --------------- | -------- | -------------------------------------------------------------------------- |
+| `enemy_scene`   | `PackedScene`   | `null`   | The enemy scene to instantiate.                                            |
+| `count`         | `int`           | `1`      | Number of enemies to spawn. Range: 1–100.                                  |
+| `formation`     | `Formation`     | `null`   | Spatial formation for the group. Null = all at origin.                     |
+| `z_start`       | `float`         | `95.0`   | World-Z distance ahead of camera where enemies appear.                     |
+| `move_style`    | `MovementStyle` | `null`   | Movement descriptor applied to each enemy at spawn.                        |
+| `pattern`       | `Pattern`       | `null`   | Firing/attack pattern applied to each enemy.                               |
+| `hp`            | `int`           | `0`      | HP override per enemy. 0 = use scene default.                              |
+| `spawn_space`   | `SpawnSpace`    | `WORLD`  | Whether positions are in world space or screen-normalised coords.          |
+| `spawn_origin`  | `Vector2`       | `(0, 0)` | Centre of the spawn group.                                                 |
+| `spread`        | `Vector2`       | `(0, 0)` | Per-axis random jitter added to each unit's offset.                        |
+| `height_offset` | `float`         | `-30.0`  | Y offset relative to horizon. Matches the old `height_over_horizon` value. |
 
 **SpawnSpace enum:**
 
@@ -386,10 +386,10 @@ GRID (6 units, 3 cols):              CIRCLE (6 units, radius=5):
 
 ---
 
-### MoveStyle
+### MovementStyle
 
 **File:** `scenes/encounters/move_style.gd`
-**Class:** `MoveStyle extends Resource`
+**Class:** `MovementStyle extends Resource`
 
 Data-only descriptor for enemy movement. Read by `EnemySpawner` at spawn time and mapped onto `Enemy` properties.
 
@@ -526,7 +526,7 @@ For each offset in the array:
 3. Computes world position: `camera_z + z_start` for depth, `origin + offset + height_offset` for X/Y.
 4. Sets `enemy.world_pos`.
 5. Adds enemy to `world` node.
-6. Calls `_apply_move_style()` to map `MoveStyle` → enemy movement properties.
+6. Calls `_apply_move_style()` to map `MovementStyle` → enemy movement properties.
 7. Calls `_apply_pattern()` to map `Pattern` → enemy firing properties + HP override.
 
 #### Mapping details
@@ -809,13 +809,13 @@ Each enemy owns its own lifecycle independently of the encounter system:
 
 ```
 ENTER    → Fly to formation position (0.5–1s)
-ACTIVE   → Shoot, strafe, do your pattern (2–6s based on MoveStyle)
+ACTIVE   → Shoot, strafe, do your pattern (2–6s based on MovementStyle)
 EXIT     → Fly away off-screen (1s), then queue_free()
 
 At any point: if killed → death anim → queue_free()
 ```
 
-The `MoveStyle` tells the enemy _how_ to behave during ACTIVE. The `Pattern` tells it _how_ to shoot. The enemy doesn't know about encounters — it does its thing for its lifespan.
+The `MovementStyle` tells the enemy _how_ to behave during ACTIVE. The `Pattern` tells it _how_ to shoot. The enemy doesn't know about encounters — it does its thing for its lifespan.
 
 **Consequence:** EncounterRunner places enemies into the world. Enemies run themselves. EncounterRunner doesn't track them (except for gate conditions where it checks a group count).
 
@@ -938,7 +938,7 @@ For replay/ghost systems, store the `run_seed` and the `segments` array — the 
    - Drag an enemy PackedScene to `enemy_scene`.
    - Set `count`.
    - Create (or reuse) a `Formation` sub-resource — set `shape`, `spacing`, etc.
-   - Create (or reuse) a `MoveStyle` sub-resource — set `type`, speeds, etc.
+   - Create (or reuse) a `MovementStyle` sub-resource — set `type`, speeds, etc.
    - Create (or reuse) a `Pattern` sub-resource — set `fire_interval`, `bullet_speed`, etc.
    - Adjust `spawn_origin`, `z_start`, `height_offset`, `spread` as needed.
 
@@ -946,7 +946,7 @@ For replay/ghost systems, store the `run_seed` and the `segments` array — the 
 
 ### Reusing sub-resources
 
-`Formation`, `MoveStyle`, and `Pattern` can be saved as standalone `.tres` files and shared across multiple SpawnEvents. This avoids duplicating configuration:
+`Formation`, `MovementStyle`, and `Pattern` can be saved as standalone `.tres` files and shared across multiple SpawnEvents. This avoids duplicating configuration:
 
 ```
 res://encounters/formations/v_formation_5.tres
@@ -1028,7 +1028,7 @@ All encounter system files live in `scenes/encounters/`:
 | `marker_event.gd`         | `MarkerEvent`        | Resource   | Named marker with payload                    |
 | `signal_event.gd`         | `SignalEvent`        | Resource   | Fire custom signal                           |
 | `formation.gd`            | `Formation`          | Resource   | Spatial group arrangement                    |
-| `move_style.gd`           | `MoveStyle`          | Resource   | Enemy movement descriptor                    |
+| `move_style.gd`           | `MovementStyle`      | Resource   | Enemy movement descriptor                    |
 | `pattern.gd`              | `Pattern`            | Resource   | Enemy firing config                          |
 | `encounter_runner.gd`     | `EncounterRunner`    | Node       | Micro layer: plays encounter timeline        |
 | `enemy_spawner.gd`        | `EnemySpawner`       | Node       | Factory: instantiates and configures enemies |
@@ -1044,12 +1044,12 @@ All encounter system files live in `scenes/encounters/`:
 
 Related files outside `encounters/`:
 
-| File              | Class         | Modification                                                  |
-| ----------------- | ------------- | ------------------------------------------------------------- |
-| `player.gd`       | `Player`      | Added `_distance: float`, `signal distance_changed(distance)` |
-| `enemy.gd`        | `Enemy`       | No changes — `MoveStyle`/`Pattern` map to existing exports    |
-| `camera_rig.gd`   | `CameraRig`   | No changes — `EnemySpawner` reads `camera_world_position`     |
-| `world_object.gd` | `WorldObject` | No changes — base class for Player/Enemy                      |
+| File              | Class         | Modification                                                   |
+| ----------------- | ------------- | -------------------------------------------------------------- |
+| `player.gd`       | `Player`      | Added `_distance: float`, `signal distance_changed(distance)`  |
+| `enemy.gd`        | `Enemy`       | No changes — `MovementStyle`/`Pattern` map to existing exports |
+| `camera_rig.gd`   | `CameraRig`   | No changes — `EnemySpawner` reads `camera_world_position`      |
+| `world_object.gd` | `WorldObject` | No changes — base class for Player/Enemy                       |
 
 ---
 
@@ -1195,7 +1195,7 @@ var result := builder.build(run_seed)
 - Spawn count scaled by `spawn_count` curve
 - Move style speeds scaled by `speed` curve
 - Fire interval divided by `fire_rate` curve (faster = shorter interval)
-- Sub-resources (MoveStyle, Pattern) are duplicated before mutation
+- Sub-resources (MovementStyle, Pattern) are duplicated before mutation
 
 ### StageDirector Integration
 
@@ -2058,7 +2058,7 @@ func _mutate_spawn_event(ev: SpawnEvent, scales: Dictionary) -> void:
 
 	# Scale move style speed
 	if ev.move_style != null:
-		ev.move_style = ev.move_style.duplicate() as MoveStyle
+		ev.move_style = ev.move_style.duplicate() as MovementStyle
 		ev.move_style.speed_x *= scales[&"speed"]
 		ev.move_style.speed_z *= scales[&"speed"]
 

@@ -1,32 +1,32 @@
 [gd_resource type="Resource" script_class="Encounter" format=3]
 
-[ext_resource type="Script" path="res://scenes/encounters/encounter_event.gd" id="1_3btwy"]
-[ext_resource type="PackedScene" path="res://scenes/enemy.tscn" id="2_hn1y1"]
-[ext_resource type="Script" path="res://scenes/encounters/shape_formation.gd" id="3_g74wp"]
-[ext_resource type="Script" path="res://scenes/encounters/move_style.gd" id="4_p1yf1"]
-[ext_resource type="Script" path="res://scenes/encounters/pattern.gd" id="5_8su0k"]
-[ext_resource type="Script" path="res://scenes/encounters/spawn_event.gd" id="6_3m4im"]
-[ext_resource type="Script" path="res://scenes/encounters/gate_event.gd" id="7_tbk26"]
-[ext_resource type="Script" path="res://scenes/encounters/encounter.gd" id="8_g0vw7"]
+[ext_resource type="Script" path="res://scenes/encounters/encounter_event.gd" id="1_hn1y1"]
+[ext_resource type="PackedScene" path="res://scenes/enemy.tscn" id="2_g74wp"]
+[ext_resource type="Script" path="res://scenes/encounters/shape_formation.resource.gd" id="3_p1yf1"]
+[ext_resource type="Script" path="res://scenes/encounters/movement_styles/drift_movement_style.gd" id="4_8su0k"]
+[ext_resource type="Script" path="res://scenes/encounters/pattern.gd" id="5_3m4im"]
+[ext_resource type="Script" path="res://scenes/encounters/spawn_event.gd" id="6_tbk26"]
+[ext_resource type="Script" path="res://scenes/encounters/gate_event.gd" id="7_g0vw7"]
+[ext_resource type="Script" path="res://scenes/encounters/movement_styles/sine_strafe_movement_style.gd" id="8_xsvf2"]
+[ext_resource type="Script" path="res://scenes/encounters/encounter.gd" id="9_jdhy0"]
 
 [sub_resource type="Resource" id="Resource_jy8uu"]
-script = ExtResource("3_g74wp")
+script = ExtResource("3_p1yf1")
 shape = 1
 spacing = Vector2(40, 0)
 
 [sub_resource type="Resource" id="Resource_1hkfs"]
-script = ExtResource("4_p1yf1")
-type = 1
+script = ExtResource("4_8su0k")
 speed_z = 80.0
 
 [sub_resource type="Resource" id="Resource_6272t"]
-script = ExtResource("5_8su0k")
+script = ExtResource("5_3m4im")
 fire_interval = 2.0
 bullet_speed = 70.0
 
-[sub_resource type="Resource" id="Resource_xsvf2"]
-script = ExtResource("6_3m4im")
-enemy_scene = ExtResource("2_hn1y1")
+[sub_resource type="Resource" id="Resource_lbmwt"]
+script = ExtResource("6_tbk26")
+enemy_scene = ExtResource("2_g74wp")
 count = 4
 formation = SubResource("Resource_jy8uu")
 move_style = SubResource("Resource_1hkfs")
@@ -35,32 +35,31 @@ hp = 20
 world_pos = Vector3(0, 10, -500)
 tags = PackedStringArray()
 
-[sub_resource type="Resource" id="Resource_jdhy0"]
-script = ExtResource("7_tbk26")
+[sub_resource type="Resource" id="Resource_c68ts"]
+script = ExtResource("7_g0vw7")
 label = "Clear this wave!"
 time = 50.0
 tags = PackedStringArray()
 
 [sub_resource type="Resource" id="Resource_q54oa"]
-script = ExtResource("3_g74wp")
+script = ExtResource("3_p1yf1")
 shape = 2
 spacing = Vector2(35, 25)
 
-[sub_resource type="Resource" id="Resource_lbmwt"]
-script = ExtResource("4_p1yf1")
-type = 2
+[sub_resource type="Resource" id="Resource_x82ni"]
+script = ExtResource("8_xsvf2")
 speed_z = 90.0
 amplitude = Vector2(60, 30)
 
 [sub_resource type="Resource" id="Resource_p8cuc"]
-script = ExtResource("5_8su0k")
+script = ExtResource("5_3m4im")
 
-[sub_resource type="Resource" id="Resource_c68ts"]
-script = ExtResource("6_3m4im")
-enemy_scene = ExtResource("2_hn1y1")
+[sub_resource type="Resource" id="Resource_ah7gr"]
+script = ExtResource("6_tbk26")
+enemy_scene = ExtResource("2_g74wp")
 count = 3
 formation = SubResource("Resource_q54oa")
-move_style = SubResource("Resource_lbmwt")
+move_style = SubResource("Resource_x82ni")
 pattern = SubResource("Resource_p8cuc")
 hp = 30
 world_pos = Vector3(0, 0, -500)
@@ -68,9 +67,9 @@ time = 55.0
 tags = PackedStringArray()
 
 [resource]
-script = ExtResource("8_g0vw7")
+script = ExtResource("9_jdhy0")
 id = "mixed_ambush"
 display_name = "Mixed Ambush"
 duration = 250.0
-events = Array[ExtResource("1_3btwy")]([SubResource("Resource_xsvf2"), SubResource("Resource_jdhy0"), SubResource("Resource_c68ts")])
+events = Array[ExtResource("1_hn1y1")]([SubResource("Resource_lbmwt"), SubResource("Resource_c68ts"), SubResource("Resource_ah7gr")])
 tags = PackedStringArray("mid", "mixed")

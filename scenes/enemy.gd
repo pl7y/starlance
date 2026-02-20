@@ -9,8 +9,6 @@
 extends WorldObject
 class_name Enemy
 
-enum MovePattern {STATIC, DRIFT, SINE_STRAFE, DIVE_AT_PLAYER, SWOOP, ORBIT, RUSH_FOLLOW, CUSTOM}
-
 @export var hp: int = 30
 @export var hit_radius_px: float = 18.0
 
@@ -22,33 +20,8 @@ enum MovePattern {STATIC, DRIFT, SINE_STRAFE, DIVE_AT_PLAYER, SWOOP, ORBIT, RUSH
 @export var bullet_speed: float = 90.0
 @export var aim_lead_y: float = 0.0
 
-# Movement
-@export var pattern: MovePattern = MovePattern.STATIC
-@export var speed_z: float = 12.0 # negative = moves toward camera
-@export var speed_x: float = 0.0
-@export var speed_y: float = 0.0
-
-# Sine/curve params
-@export var amp_x: float = 4.0
-@export var amp_y: float = 2.0
-@export var freq: float = 1.2
-
-# Dive params
-@export var dive_turn: float = 2.5 # higher = homes faster (but keep readable)
-
-# Orbit params
-@export var orbit_radius: float = 6.0
-@export var orbit_speed: float = 1.5
-
-# Rush-follow params
-## Z-distance ahead of camera where the enemy "locks in" after rushing.
-@export var follow_distance: float = 30.0
-## How fast the enemy homes onto the follow position during the rush phase.
-@export var rush_turn: float = 4.0
-
-## Custom AI logic resource (only used when pattern == CUSTOM).
-## Set by EnemySpawner — each instance gets its own duplicate.
-var custom_move_logic: MoveLogic = null
+## Movement strategy (set by EnemySpawner at spawn time).
+var movement_strategy: MovementStrategy = null
 
 @onready var sprite := %Sprite2D
 
@@ -57,22 +30,15 @@ var custom_move_logic: MoveLogic = null
 @onready var _label = %Label as Label
 
 var _fire_t: float = 0.0
-var _age: float = 0.0
-var _spawn_pos: Vector3
-var _orbit_angle: float = 0.0
-var _rush_arrived: bool = false
 
 func _ready() -> void:
   super._ready()
   add_to_group("enemies")
   _fire_t = randf_range(0.0, fire_interval)
-  _age = 0.0
-  _spawn_pos = world_pos
-  _orbit_angle = randf_range(0.0, TAU)
 
-  # Let custom AI initialize per-instance state
-  if pattern == MovePattern.CUSTOM and custom_move_logic != null:
-    custom_move_logic.setup(self , rig)
+  # Initialize movement strategy if set
+  if movement_strategy != null:
+    movement_strategy.setup(self , rig)
   
   # Connect to escape signal
   escaped.connect(_on_enemy_escaped)
@@ -94,15 +60,12 @@ func _on_enemy_escaped(escape_type: WorldObject.EscapeType) -> void:
   # if has_node("/root/GameManager"):
   #   get_node("/root/GameManager").on_enemy_escaped(escape_type)
 
-func configure(p_hp: int, p_fire_interval: float, p_bullet_speed: float, p_pattern := MovePattern.STATIC) -> void:
+func configure(p_hp: int, p_fire_interval: float, p_bullet_speed: float) -> void:
   hp = p_hp
   fire_interval = p_fire_interval
   bullet_speed = p_bullet_speed
-  pattern = p_pattern
 
 func _process(delta: float) -> void:
-  _age += delta
-
   _update_movement(delta)
 
   # Set label text to world_pos, rounded to first digit
@@ -118,73 +81,9 @@ func _update_movement(delta: float) -> void:
   if rig == null:
     return
 
-  match pattern:
-    MovePattern.STATIC:
-      # no-op
-      pass
-
-    MovePattern.DRIFT:
-      world_pos.x += speed_x * delta
-      world_pos.y += speed_y * delta
-      world_pos.z += speed_z * delta
-
-    MovePattern.SINE_STRAFE:
-      # Moves forward/back via speed_z, with sinusoidal x (and optional y)
-      world_pos.z += speed_z * delta
-      world_pos.x = _spawn_pos.x + sin(_age * TAU * freq) * amp_x
-      world_pos.y = _spawn_pos.y + sin(_age * TAU * (freq * 0.7)) * amp_y
-
-    MovePattern.DIVE_AT_PLAYER:
-      # Smoothly home towards camera X/Y while advancing in Z
-      world_pos.z += speed_z * delta
-
-      var target_x := rig.camera_world_position.x
-      var target_y := rig.camera_world_position.y
-      world_pos.x = lerp(world_pos.x, target_x, 1.0 - exp(-dive_turn * delta))
-      world_pos.y = lerp(world_pos.y, target_y, 1.0 - exp(-dive_turn * delta))
-
-    MovePattern.SWOOP:
-      # A readable “arc”: starts offset, crosses center, exits
-      world_pos.z += speed_z * delta
-      world_pos.x = _spawn_pos.x + sin(_age * TAU * freq) * amp_x
-      world_pos.y = _spawn_pos.y + cos(_age * TAU * freq) * amp_y
-
-    MovePattern.ORBIT:
-      # Orbits around a point in front of camera (feels 3D-ish even in fake 3D)
-      world_pos.z += speed_z * delta
-      _orbit_angle += orbit_speed * delta
-      var cx := rig.camera_world_position.x
-      var cy := rig.camera_world_position.y
-      world_pos.x = cx + cos(_orbit_angle) * orbit_radius
-      world_pos.y = cy + sin(_orbit_angle) * (orbit_radius * 0.6)
-
-    MovePattern.RUSH_FOLLOW:
-      # Phase 1: Rush toward a point `follow_distance` ahead of camera.
-      # Phase 2: Once arrived, orbit at that distance like an escort.
-      var target_z := rig.camera_world_position.z - follow_distance
-      var target_x := rig.camera_world_position.x
-      var target_y := rig.camera_world_position.y
-
-      if not _rush_arrived:
-        # Approach phase — fast homing toward the lock-on point
-        world_pos.z = lerp(world_pos.z, target_z, 1.0 - exp(-rush_turn * delta))
-        world_pos.x = lerp(world_pos.x, target_x, 1.0 - exp(-rush_turn * delta))
-        world_pos.y = lerp(world_pos.y, target_y, 1.0 - exp(-rush_turn * delta))
-
-        # Check if close enough to transition
-        var dist_sq := (world_pos - Vector3(target_x, target_y, target_z)).length_squared()
-        if dist_sq < 4.0: # within ~2 world units
-          _rush_arrived = true
-      else:
-        # Follow phase — orbit around the player at fixed Z offset
-        _orbit_angle += orbit_speed * delta
-        world_pos.z = lerp(world_pos.z, target_z, 1.0 - exp(-2.0 * delta)) # gently track Z
-        world_pos.x = target_x + cos(_orbit_angle) * orbit_radius
-        world_pos.y = target_y + sin(_orbit_angle) * (orbit_radius * 0.6)
-
-    MovePattern.CUSTOM:
-      if custom_move_logic != null:
-        custom_move_logic.update(self , rig, delta)
+  # Delegate to movement strategy
+  if movement_strategy != null:
+    movement_strategy.update(self , rig, delta)
 
 func _try_shoot(delta: float) -> void:
   if rig == null or bullet_scene == null:

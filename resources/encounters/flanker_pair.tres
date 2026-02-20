@@ -2,9 +2,9 @@
 
 [ext_resource type="Script" path="res://scenes/encounters/encounter_event.gd" id="1_qmdlg"]
 [ext_resource type="PackedScene" path="res://scenes/enemy.tscn" id="2_ry2py"]
-[ext_resource type="Script" path="res://scenes/encounters/shape_formation.gd" id="3_pqnp4"]
+[ext_resource type="Script" path="res://scenes/encounters/shape_formation.resource.gd" id="3_pqnp4"]
 [ext_resource type="Script" path="res://scenes/encounters/ai/flanker_move_logic.gd" id="4_4t8em"]
-[ext_resource type="Script" path="res://scenes/encounters/move_style.gd" id="5_f0hjw"]
+[ext_resource type="Script" path="res://scenes/encounters/movement_styles/custom_movement_style.gd" id="5_f0hjw"]
 [ext_resource type="Script" path="res://scenes/encounters/pattern.gd" id="6_2po85"]
 [ext_resource type="Script" path="res://scenes/encounters/spawn_event.gd" id="7_w14h2"]
 [ext_resource type="Script" path="res://scenes/encounters/encounter.gd" id="8_fg60b"]
@@ -19,7 +19,6 @@ script = ExtResource("4_4t8em")
 
 [sub_resource type="Resource" id="Resource_5o1ev"]
 script = ExtResource("5_f0hjw")
-type = 7
 custom_logic = SubResource("Resource_p4gwi")
 
 [sub_resource type="Resource" id="Resource_p8cuc"]

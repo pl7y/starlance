@@ -202,7 +202,7 @@ func _mutate_spawn_event(ev: SpawnEvent, scales: Dictionary) -> void:
 
 	# Scale move style speed
 	if ev.move_style != null:
-		ev.move_style = ev.move_style.duplicate() as MoveStyle
+		ev.move_style = ev.move_style.duplicate() as MovementStyle
 		ev.move_style.speed_x *= scales[&"speed"]
 		ev.move_style.speed_z *= scales[&"speed"]
 

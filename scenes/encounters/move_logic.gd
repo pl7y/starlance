@@ -4,7 +4,7 @@
 ## pluggable movement behaviours.  Each enemy gets a duplicate() so
 ## instance state is safe.
 ##
-## Usage in MoveStyle:
+## Usage in MovementStyle:
 ##   1. Set type = CUSTOM
 ##   2. Assign your MoveLogic subclass .tres to custom_logic
 ##

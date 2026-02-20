@@ -2,9 +2,9 @@
 
 [ext_resource type="Script" path="res://scenes/encounters/encounter_event.gd" id="1_jk0d0"]
 [ext_resource type="PackedScene" path="res://scenes/enemy.tscn" id="2_g7vh7"]
-[ext_resource type="Script" path="res://scenes/encounters/shape_formation.gd" id="3_5p2v2"]
+[ext_resource type="Script" path="res://scenes/encounters/shape_formation.resource.gd" id="3_5p2v2"]
 [ext_resource type="Script" path="res://scenes/encounters/ai/ambusher_move_logic.gd" id="4_doucb"]
-[ext_resource type="Script" path="res://scenes/encounters/move_style.gd" id="5_50oov"]
+[ext_resource type="Script" path="res://scenes/encounters/movement_styles/custom_movement_style.gd" id="5_50oov"]
 [ext_resource type="Script" path="res://scenes/encounters/pattern.gd" id="6_kubge"]
 [ext_resource type="Script" path="res://scenes/encounters/spawn_event.gd" id="7_e4van"]
 [ext_resource type="Script" path="res://scenes/encounters/encounter.gd" id="8_kyjot"]
@@ -21,7 +21,6 @@ charge_speed = 280.0
 
 [sub_resource type="Resource" id="Resource_25qfc"]
 script = ExtResource("5_50oov")
-type = 7
 custom_logic = SubResource("Resource_in84f")
 
 [sub_resource type="Resource" id="Resource_fqthm"]

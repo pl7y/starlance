@@ -1,6 +1,7 @@
 ## Base class: describes how a group of enemies is arranged spatially.
 ## Subclass this to implement different formation strategies.
 @tool
+@icon("res://icon.svg")
 extends Resource
 class_name Formation
 

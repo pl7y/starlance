@@ -2,8 +2,8 @@
 
 [ext_resource type="Script" path="res://scenes/encounters/encounter_event.gd" id="1_apio2"]
 [ext_resource type="PackedScene" path="res://scenes/enemy.tscn" id="2_tddui"]
-[ext_resource type="Script" path="res://scenes/encounters/shape_formation.gd" id="3_m2bc8"]
-[ext_resource type="Script" path="res://scenes/encounters/move_style.gd" id="4_ywsg1"]
+[ext_resource type="Script" path="res://scenes/encounters/shape_formation.resource.gd" id="3_m2bc8"]
+[ext_resource type="Script" path="res://scenes/encounters/movement_styles/sine_strafe_movement_style.gd" id="4_ywsg1"]
 [ext_resource type="Script" path="res://scenes/encounters/pattern.gd" id="5_8m3hb"]
 [ext_resource type="Script" path="res://scenes/encounters/spawn_event.gd" id="6_fyd4g"]
 [ext_resource type="Script" path="res://scenes/encounters/encounter.gd" id="7_af4xi"]
@@ -15,7 +15,6 @@ spacing = Vector2(35, 25)
 
 [sub_resource type="Resource" id="Resource_lbx15"]
 script = ExtResource("4_ywsg1")
-type = 2
 speed_z = 60.0
 amplitude = Vector2(50, 20)
 frequency = 0.8

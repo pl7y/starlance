@@ -1,54 +1,53 @@
 [gd_resource type="Resource" script_class="Encounter" format=3]
 
-[ext_resource type="Script" path="res://scenes/encounters/encounter_event.gd" id="1_trxl1"]
-[ext_resource type="PackedScene" path="res://scenes/enemy.tscn" id="2_pspo6"]
-[ext_resource type="Script" path="res://scenes/encounters/shape_formation.gd" id="3_pr358"]
-[ext_resource type="Script" path="res://scenes/encounters/move_style.gd" id="4_o0gdu"]
-[ext_resource type="Script" path="res://scenes/encounters/pattern.gd" id="5_diywt"]
-[ext_resource type="Script" path="res://scenes/encounters/spawn_event.gd" id="6_gpmpx"]
-[ext_resource type="Script" path="res://scenes/encounters/encounter.gd" id="7_doqvg"]
+[ext_resource type="Script" path="res://scenes/encounters/encounter_event.gd" id="1_pspo6"]
+[ext_resource type="PackedScene" path="res://scenes/enemy.tscn" id="2_pr358"]
+[ext_resource type="Script" path="res://scenes/encounters/shape_formation.resource.gd" id="3_o0gdu"]
+[ext_resource type="Script" path="res://scenes/encounters/movement_styles/orbit_movement_style.gd" id="4_diywt"]
+[ext_resource type="Script" path="res://scenes/encounters/pattern.gd" id="5_gpmpx"]
+[ext_resource type="Script" path="res://scenes/encounters/spawn_event.gd" id="6_doqvg"]
+[ext_resource type="Script" path="res://scenes/encounters/movement_styles/dive_at_player_movement_style.gd" id="7_sqfc1"]
+[ext_resource type="Script" path="res://scenes/encounters/encounter.gd" id="8_0s0ap"]
 
 [sub_resource type="Resource" id="Resource_b1okn"]
-script = ExtResource("3_pr358")
+script = ExtResource("3_o0gdu")
 shape = 4
 spacing = Vector2(0, 0)
 columns = 1
 radius = 50.0
 
-[sub_resource type="Resource" id="Resource_sqfc1"]
-script = ExtResource("4_o0gdu")
-type = 5
+[sub_resource type="Resource" id="Resource_1wncf"]
+script = ExtResource("4_diywt")
 speed_z = 30.0
 
 [sub_resource type="Resource" id="Resource_fqthm"]
-script = ExtResource("5_diywt")
+script = ExtResource("5_gpmpx")
 fire_interval = 0.8
 bullet_speed = 110.0
 
-[sub_resource type="Resource" id="Resource_0s0ap"]
-script = ExtResource("6_gpmpx")
-enemy_scene = ExtResource("2_pspo6")
+[sub_resource type="Resource" id="Resource_igbvw"]
+script = ExtResource("6_doqvg")
+enemy_scene = ExtResource("2_pr358")
 count = 4
 formation = SubResource("Resource_b1okn")
-move_style = SubResource("Resource_sqfc1")
+move_style = SubResource("Resource_1wncf")
 pattern = SubResource("Resource_fqthm")
 hp = 50
 world_pos = Vector3(0, 10, -500)
 tags = PackedStringArray()
 
-[sub_resource type="Resource" id="Resource_4shus"]
-script = ExtResource("3_pr358")
+[sub_resource type="Resource" id="Resource_hrbha"]
+script = ExtResource("3_o0gdu")
 
 [sub_resource type="Resource" id="Resource_ijma2"]
-script = ExtResource("4_o0gdu")
-type = 3
+script = ExtResource("7_sqfc1")
 speed_z = 70.0
 
-[sub_resource type="Resource" id="Resource_1wncf"]
-script = ExtResource("6_gpmpx")
-enemy_scene = ExtResource("2_pspo6")
+[sub_resource type="Resource" id="Resource_8t6ik"]
+script = ExtResource("6_doqvg")
+enemy_scene = ExtResource("2_pr358")
 count = 2
-formation = SubResource("Resource_4shus")
+formation = SubResource("Resource_hrbha")
 move_style = SubResource("Resource_ijma2")
 pattern = SubResource("Resource_fqthm")
 hp = 60
@@ -57,9 +56,9 @@ time = 80.0
 tags = PackedStringArray()
 
 [resource]
-script = ExtResource("7_doqvg")
+script = ExtResource("8_0s0ap")
 id = "elite_orbit"
 display_name = "Elite Orbit Guard"
 duration = 200.0
-events = Array[ExtResource("1_trxl1")]([SubResource("Resource_0s0ap"), SubResource("Resource_1wncf")])
+events = Array[ExtResource("1_pspo6")]([SubResource("Resource_igbvw"), SubResource("Resource_8t6ik")])
 tags = PackedStringArray("elite", "orbit")
