@@ -6,7 +6,7 @@
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_lmksl"]
 shader = ExtResource("1_mi8v4")
 shader_parameter/focal = 320.0
-shader_parameter/screen_center = Vector2(640, 360)
+shader_parameter/screen_center = Vector2(256, 160)
 shader_parameter/horizon_y = 468.0
 shader_parameter/camera_world_pos = Vector3(0, 50, 0)
 shader_parameter/bank_offset = 0.0
