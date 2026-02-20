@@ -26,14 +26,13 @@
 
 [sub_resource type="Resource" id="Resource_pw0ia"]
 script = ExtResource("17_baarm")
-spacing = Vector2(100, 0)
+spacing = Vector2(50, 0)
 metadata/_custom_type_script = "uid://cxyxiyhktbobm"
 
 [sub_resource type="Resource" id="Resource_clvjq"]
 script = ExtResource("18_pw0ia")
-speed_z = 5.0
 amplitude = Vector2(100, 100)
-frequency = 1.0
+z_lock = 1
 metadata/_custom_type_script = "uid://ces2q7ec1p1dl"
 
 [sub_resource type="Resource" id="Resource_6272t"]
@@ -44,12 +43,11 @@ bullet_speed = 70.0
 [sub_resource type="Resource" id="Resource_4xyd6"]
 script = ExtResource("20_ng3oa")
 enemy_scene = ExtResource("16_clvjq")
-count = 6
 formation = SubResource("Resource_pw0ia")
 move_style = SubResource("Resource_clvjq")
 pattern = SubResource("Resource_6272t")
 hp = 20
-world_pos = Vector3(0, 100, -1500)
+world_pos = Vector3(-200, 200, -1500)
 tags = PackedStringArray()
 
 [sub_resource type="Resource" id="Resource_hjvpi"]

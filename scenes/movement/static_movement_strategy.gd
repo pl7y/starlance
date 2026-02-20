@@ -2,6 +2,6 @@
 extends MovementStrategy
 class_name StaticMovementStrategy
 
-func update(_enemy: Node, _rig: CameraRig, _delta: float) -> void:
+func update(enemy: Node, rig: CameraRig, _delta: float) -> void:
 	# No movement
-	pass
+	_apply_z_lock(enemy, rig)

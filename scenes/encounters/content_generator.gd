@@ -46,6 +46,8 @@ func _ready() -> void:
   # Rush-follow: fly in fast, then orbit the player at close range
   var rush_follow := _rush_follow_style(25.0, 5.0, 8.0, 2.0)
   var rush_follow_tight := _rush_follow_style(18.0, 6.0, 5.0, 2.5)
+  var boss_lock := StaticMovementStyle.new()
+  boss_lock.z_lock = MovementStyle.ZLock.PLAYER
 
   # Patterns (firing)
   var slow_fire := _pattern(2.0, 70.0)
@@ -154,7 +156,7 @@ func _ready() -> void:
   ])
   _save(mixed_ambush, OUTPUT_BASE + "mixed_ambush.tres")
 
-  # --- Boss: Heavy Dreadnought (static boss + drone waves) ---
+  # --- Boss: Heavy Dreadnought (z-locked static boss + drone waves) ---
   var phase1 := PhaseEvent.new()
   phase1.time = 0.0
   phase1.phase_name = "boss_phase_1"
@@ -172,7 +174,7 @@ func _ready() -> void:
     ["boss"], [
       phase1,
       boss_gate,
-      _spawn(enemy_scene, 1, point, MovementStyle.new(), slow_fire, 0.0, 200,
+      _spawn(enemy_scene, 1, point, boss_lock, slow_fire, 0.0, 200,
         Vector3(0, 20.0, -500.0)),
       _spawn(enemy_scene, 3, line_5, drift_slow, med_fire, 80.0, 25,
         Vector3(0, 0, -500.0)),

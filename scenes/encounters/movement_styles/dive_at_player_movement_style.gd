@@ -10,4 +10,4 @@ func create_strategy() -> MovementStrategy:
 	var strategy := DiveAtPlayerMovementStrategy.new()
 	strategy.speed_z = speed_z
 	strategy.dive_turn = dive_turn
-	return strategy
+	return _apply_shared_settings(strategy)

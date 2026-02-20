@@ -12,4 +12,4 @@ func create_strategy() -> MovementStrategy:
 	strategy.speed_z = speed_z
 	strategy.speed_x = speed_x
 	strategy.speed_y = speed_y
-	return strategy
+	return _apply_shared_settings(strategy)

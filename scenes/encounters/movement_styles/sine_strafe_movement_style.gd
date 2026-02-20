@@ -13,4 +13,4 @@ func create_strategy() -> MovementStrategy:
 	strategy.amp_x = amplitude.x
 	strategy.amp_y = amplitude.y
 	strategy.freq = frequency
-	return strategy
+	return _apply_shared_settings(strategy)

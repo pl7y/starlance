@@ -14,4 +14,4 @@ func create_strategy() -> MovementStrategy:
 	strategy.rush_turn = rush_turn
 	strategy.orbit_radius = orbit_radius
 	strategy.orbit_speed = orbit_speed
-	return strategy
+	return _apply_shared_settings(strategy)

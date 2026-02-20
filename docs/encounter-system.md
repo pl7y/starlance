@@ -386,6 +386,29 @@ GRID (6 units, 3 cols):              CIRCLE (6 units, radius=5):
 **File:** `scenes/encounters/move_style.gd`
 **Class:** `MovementStyle extends Resource`
 
+Concrete movement style resources live in `scenes/encounters/movement_styles/` and each one creates a runtime strategy in `scenes/movement/`.
+
+All movement styles share base property `z_lock`:
+
+- `NONE`: movement in absolute world coordinates.
+- `PLAYER`: compensates player/camera forward run so movement behaves as if the player were not advancing in Z.
+
+#### PolylineMovementStyle
+
+**File:** `scenes/encounters/movement_styles/polyline_movement_style.gd`
+**Class:** `PolylineMovementStyle extends MovementStyle`
+
+Moves an enemy along a `PackedVector3Array` of waypoints from first to last.
+Points are interpreted as local offsets from spawn position.
+
+| Property | Type                 | Default | Description                                                                                |
+| -------- | -------------------- | ------- | ------------------------------------------------------------------------------------------ |
+| `points` | `PackedVector3Array` | `[]`    | Polyline waypoints (local offsets from spawn).                                             |
+| `close`  | `bool`               | `false` | Appends first point at end (returns to start).                                             |
+| `cycle`  | `Cycle`              | `NONE`  | End-of-path behaviour: `NONE`, `LOOP`, `PING_PONG`.                                        |
+| `speed`  | `float`              | `40.0`  | Units per second along the path.                                                           |
+| `z_lock` | `ZLock`              | `NONE`  | Inherited from `MovementStyle` (`NONE` absolute world Z, `PLAYER` compensates player run). |
+
 Data-only descriptor for enemy movement. Read by `EnemySpawner` at spawn time and mapped onto `Enemy` properties.
 
 | Property       | Type      | Default      | Description                                                                 |

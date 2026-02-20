@@ -10,4 +10,4 @@ func create_strategy() -> MovementStrategy:
 	# Duplicate the logic so each enemy gets its own state
 	if custom_logic != null:
 		strategy.custom_logic = custom_logic.duplicate()
-	return strategy
+	return _apply_shared_settings(strategy)

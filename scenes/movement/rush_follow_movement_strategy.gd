@@ -12,9 +12,10 @@ var orbit_speed: float = 1.5
 var _rush_arrived: bool = false
 var _orbit_angle: float = 0.0
 
-func setup(_enemy: Node, _rig: CameraRig) -> void:
+func setup(_enemy: Node, rig: CameraRig) -> void:
 	_rush_arrived = false
 	_orbit_angle = randf_range(0.0, TAU)
+	_setup_z_lock(rig)
 
 func update(enemy: Node, rig: CameraRig, delta: float) -> void:
 	var target_z := rig.camera_world_position.z - follow_distance
@@ -37,3 +38,5 @@ func update(enemy: Node, rig: CameraRig, delta: float) -> void:
 		enemy.world_pos.z = lerp(enemy.world_pos.z, target_z, 1.0 - exp(-2.0 * delta)) # gently track Z
 		enemy.world_pos.x = target_x + cos(_orbit_angle) * orbit_radius
 		enemy.world_pos.y = target_y + sin(_orbit_angle) * (orbit_radius * 0.6)
+
+	_apply_z_lock(enemy, rig)
