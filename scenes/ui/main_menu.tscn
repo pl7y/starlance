@@ -1,0 +1,30 @@
+[gd_scene format=3 uid="uid://1ggkw84lcaac"]
+
+[ext_resource type="Script" uid="uid://dhvlre2ln1xd5" path="res://scenes/ui/main_menu.gd" id="1_sl1te"]
+
+[node name="MainMenu" type="CanvasLayer" unique_id=695802487]
+script = ExtResource("1_sl1te")
+
+[node name="Label" type="Label" parent="." unique_id=1179824715]
+offset_left = 225.0
+offset_top = 87.0
+offset_right = 313.0
+offset_bottom = 110.0
+text = "Main menu"
+
+[node name="StartButton" type="Button" parent="." unique_id=2017435088]
+offset_left = 246.0
+offset_top = 120.0
+offset_right = 292.0
+offset_bottom = 151.0
+text = "Start"
+
+[node name="QuitButton" type="Button" parent="." unique_id=566520823]
+offset_left = 245.0
+offset_top = 166.0
+offset_right = 291.0
+offset_bottom = 197.0
+text = "Quit"
+
+[connection signal="pressed" from="StartButton" to="." method="_on_start_button_pressed"]
+[connection signal="pressed" from="QuitButton" to="." method="_on_quit_button_pressed"]
