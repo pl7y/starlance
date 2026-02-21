@@ -13,10 +13,12 @@ var current_run_config: RunConfiguration
 
 @export var main_menu_scene: PackedScene
 @export var gameplay_screen_scene: PackedScene
+@export var starship_screen_scene: PackedScene
 
 # Private variables -------
 var _main_menu: MainMenu
 var _gameplay_screen: GameplayScreen
+var _starship_screen: StarshipScreen
 
 func _ready() -> void:
   _show_main_menu()
@@ -24,13 +26,7 @@ func _ready() -> void:
 # Main menu ---------------
 
 func _show_main_menu() -> void:
-  if _main_menu:
-    remove_child(_main_menu)
-    _main_menu.queue_free()
-    
-  if _gameplay_screen:
-    remove_child(_gameplay_screen)
-    _gameplay_screen.queue_free()
+  _clear_screens()
 
   _main_menu = main_menu_scene.instantiate()
   add_child(_main_menu)
@@ -47,7 +43,7 @@ func _on_main_menu_quit_pressed() -> void:
 
 # Gameplay screen ----------
 
-func _show_gameplay_screen() -> void:
+func _clear_screens() -> void:
   if _main_menu:
     remove_child(_main_menu)
     _main_menu.queue_free()
@@ -56,5 +52,24 @@ func _show_gameplay_screen() -> void:
     remove_child(_gameplay_screen)
     _gameplay_screen.queue_free()
 
+  if _starship_screen:
+    remove_child(_starship_screen)
+    _starship_screen.queue_free()
+
+  
+func _show_gameplay_screen() -> void:
+  _clear_screens()
+
   _gameplay_screen = gameplay_screen_scene.instantiate()
   add_child(_gameplay_screen)
+  _gameplay_screen.stage_completed.connect(_on_gameplay_screen_stage_completed)
+
+func _on_gameplay_screen_stage_completed() -> void:
+  _show_starship_screen()
+
+# Starship screen ----------
+func _show_starship_screen() -> void:
+  _clear_screens()
+
+  _starship_screen = starship_screen_scene.instantiate()
+  add_child(_starship_screen)

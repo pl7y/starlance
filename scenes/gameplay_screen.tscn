@@ -17,6 +17,7 @@
 [ext_resource type="Script" uid="uid://dbp6h4gvlg87c" path="res://scenes/encounters/encounter.resource.gd" id="15_qfdku"]
 [ext_resource type="Resource" uid="uid://fcxqais0xfjm" path="res://resources/encounters/pool/demo_pool.tres" id="16_gnb8g"]
 [ext_resource type="Resource" uid="uid://cksohj4gw0hg4" path="res://resources/encounters/boss_dreadnought.tres" id="20_clvjq"]
+[ext_resource type="PackedScene" uid="uid://noqc6sl7fqcx" path="res://scenes/outro_cutscene.tscn" id="20_t1iya"]
 [ext_resource type="Resource" uid="uid://bdi7xch2is4fp" path="res://resources/encounters/difficulty/normal.difficulty_profile.tres" id="22_pw0ia"]
 [ext_resource type="PackedScene" uid="uid://cvko0bycqpbyo" path="res://scenes/intro_cutscene.tscn" id="23_baarm"]
 
@@ -118,5 +119,8 @@ metadata/_custom_type_script = "uid://b7muo30j743j7"
 [node name="IntroCutscene" parent="." unique_id=620946400 instance=ExtResource("23_baarm")]
 unique_name_in_owner = true
 layer = 4
+
+[node name="OutroCutscene" parent="." unique_id=716920073 instance=ExtResource("20_t1iya")]
+unique_name_in_owner = true
 
 [connection signal="stage_finished" from="Mechanics/StageDirector" to="." method="_on_stage_director_stage_finished"]
