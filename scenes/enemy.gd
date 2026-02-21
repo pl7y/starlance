@@ -36,6 +36,8 @@ var movement_strategy: MovementStrategy = null:
 @export var explosion_scene: PackedScene
 
 @onready var _label = %Label as Label
+var _logger = EchoLogger.new("Enemy", "red", EchoLogger.LogLevel.DEBUG)
+
 
 var _fire_t: float = 0.0
 var _is_dead: bool = false
@@ -59,13 +61,13 @@ func _on_enemy_escaped(escape_type: WorldObject.EscapeType) -> void:
   # Handle enemy escape - you can add game logic here
   match escape_type:
     WorldObject.EscapeType.BEHIND_CAMERA:
-      print("Enemy escaped behind camera")
+      _logger.debug("Enemy escaped behind camera")
     WorldObject.EscapeType.OFF_SCREEN_LEFT:
-      print("Enemy escaped left")
+      _logger.debug("Enemy escaped left")
     WorldObject.EscapeType.OFF_SCREEN_RIGHT:
-      print("Enemy escaped right")
+      _logger.debug("Enemy escaped right")
     WorldObject.EscapeType.TOO_FAR_AHEAD:
-      print("Enemy escaped ahead")
+      _logger.debug("Enemy escaped ahead")
   
   # Example: Notify a game manager, increment escaped counter, etc.
   # if has_node("/root/GameManager"):

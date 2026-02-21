@@ -14,6 +14,7 @@ class_name EnemySpawner
 ## Camera rig, used to compute spawn positions ahead of camera.
 @export var camera_rig: CameraRig
 
+var _logger = EchoLogger.new("EnemySpawner", "violet", EchoLogger.LogLevel.DEBUG)
 
 ## Called by EncounterRunner when a SpawnEvent fires.
 ## [param event]  — the SpawnEvent resource (read-only data).
@@ -22,7 +23,7 @@ class_name EnemySpawner
 ##
 ## Override this in your concrete spawner.
 func spawn_group(event: SpawnEvent, offsets: Array[Vector2], _rng: RandomNumberGenerator) -> void:
-  prints("EnemySpawner: spawn_group() called with event: ", event, " and offsets: ", offsets)
+  _logger.debug("EnemySpawner: spawn_group() called with event: %s and offsets: %s" % [event, offsets])
   if world == null:
     push_error("EnemySpawner: world node is not set.")
     return
@@ -61,7 +62,6 @@ func spawn_group(event: SpawnEvent, offsets: Array[Vector2], _rng: RandomNumberG
 ## Creates and assigns a MovementStrategy to the enemy based on MovementStyle resource.
 ## Override if your Enemy API differs.
 func _apply_movement_strategy(enemy: Node, style: MovementStyle, encounter_origin: Vector3 = Vector3.ZERO, spawn_index: int = 0, spawn_count: int = 1) -> void:
-  prints("Applying movement strategy for enemy: ", enemy, " with style: ", style)
   if style == null:
     # Default to static movement if no style specified
     if "movement_strategy" in enemy:

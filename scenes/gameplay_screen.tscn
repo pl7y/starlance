@@ -100,7 +100,7 @@ tags = PackedStringArray("opener", "easy")
 [sub_resource type="Resource" id="Resource_baarm"]
 metadata/__load_path__ = "res://resources/encounters/difficulty/normal_profile.tres"
 
-[node name="GameplayScreen" type="Node2D" unique_id=158736197]
+[node name="GameplayScreen" type="CanvasLayer" unique_id=1759060554]
 script = ExtResource("1_25g3s")
 
 [node name="CameraRig" parent="." unique_id=2025045557 instance=ExtResource("1_nl8x0")]

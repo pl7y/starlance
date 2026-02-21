@@ -1,0 +1,13 @@
+[gd_scene format=3 uid="uid://cvko0bycqpbyo"]
+
+[ext_resource type="Script" uid="uid://dnw852l4lreo4" path="res://scenes/intro_cutscene.gd" id="1_vuduy"]
+
+[node name="IntroCutscene" type="CanvasLayer" unique_id=620946400]
+script = ExtResource("1_vuduy")
+
+[node name="Label" type="Label" parent="." unique_id=917418589]
+offset_left = 219.0
+offset_top = 135.0
+offset_right = 290.0
+offset_bottom = 158.0
+text = "Cutscene"

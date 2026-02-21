@@ -154,7 +154,7 @@ func _connect_player_signals() -> void:
 ## If stage_template + encounter_pool are set, builds encounters_override procedurally.
 ## Otherwise falls back to the manual `encounters_override` array.
 func start_stage(seed_override: int = 0) -> void:
-  prints("StageDirector: start_stage called with seed_override=%d" % seed_override)
+  _logger.debug("StageDirector: start_stage called with seed_override=%d" % seed_override)
   if runner == null:
     push_error("StageDirector: no EncounterRunner assigned.")
     return
@@ -179,7 +179,7 @@ func start_stage(seed_override: int = 0) -> void:
     push_warning("StageDirector: difficulty_profile is set but procedural build is not active (needs stage_template + encounter_pool). Profile will be unused.")
 
   # ── Procedural build (only if encounters_override is empty and template + pool are set) ─
-  prints("StageDirector: starting stage with seed %d" % run_seed)
+  _logger.debug("StageDirector: starting stage with seed %d" % run_seed)
   if encounters_override.is_empty() and stage_template != null and encounter_pool != null:
     var builder := StageBuilder.new(stage_template, encounter_pool, difficulty_profile, _rng)
     builder.min_gap = min_breather_gap
@@ -313,9 +313,9 @@ func _build_distance_map() -> void:
       seg.duration = 20.0
     cursor += seg.duration
   _total_stage_distance = cursor
-  print("StageDirector: distance map — %d encounters_override, %.1f total distance" % [encounters_override.size(), _total_stage_distance])
+  _logger.debug("StageDirector: distance map — %d encounters_override, %.1f total distance" % [encounters_override.size(), _total_stage_distance])
   for i in encounters_override.size():
-    print("  [%d] %s starts at %.1f, duration %.1f" % [i, encounters_override[i].id, _segment_starts[i], encounters_override[i].duration])
+    _logger.debug("  [%d] %s starts at %.1f, duration %.1f" % [i, encounters_override[i].id, _segment_starts[i], encounters_override[i].duration])
 
 # ── Segment sequencing ───────────────────────────────────────────────────────
 
@@ -355,7 +355,7 @@ func _start_segment(index: int) -> void:
   # Derive a per-segment seed from the run seed
   var seg_seed := _rng.randi()
 
-  print("StageDirector: starting segment [%d] '%s' at distance %.1f" % [
+  _logger.debug("StageDirector: starting segment [%d] '%s' at distance %.1f" % [
     _segment_index, enc.id, _current_distance
   ])
 
@@ -379,12 +379,12 @@ func _queue_next_segment() -> void:
   else:
     _waiting_for_distance = true
 
-  prints("StageDirector: queued segment [%d] '%s', waiting for player to reach distance %.1f" % [
+  _logger.debug("StageDirector: queued segment [%d] '%s', waiting for player to reach distance %.1f" % [
     next_index, encounters_override[next_index].id, next_start
   ])
 
 func _finish_stage() -> void:
-  prints("StageDirector: all encounters_override finished. Total distance: %.1f" % _total_stage_distance)
+  _logger.debug("StageDirector: all encounters_override finished. Total distance: %.1f" % _total_stage_distance)
   _running = false
   stage_finished.emit()
 
