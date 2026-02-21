@@ -1,4 +1,4 @@
-[gd_resource type="Resource" script_class="Encounter" format=3]
+[gd_resource type="Resource" script_class="Encounter" format=3 uid="uid://cksohj4gw0hg4"]
 
 [ext_resource type="Script" uid="uid://brv4vhghfui7k" path="res://scenes/encounters/encounter_event.gd" id="1_ugqd1"]
 [ext_resource type="Script" uid="uid://cyotofsu0thm7" path="res://scenes/encounters/phase_event.gd" id="2_1ywtg"]

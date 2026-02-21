@@ -53,7 +53,8 @@ signal encounter_started(enc: Encounter)
 ## Emitted every time an event fires.
 signal event_fired(event: EncounterEvent)
 
-## Emitted when the encounter timeline has been fully consumed or duration reached.
+## Emitted when the encounter truly completes (duration reached or explicit
+## early-finish condition met).
 signal encounter_finished(enc: Encounter)
 
 ## Emitted on failure / abort (e.g. player died).
@@ -132,14 +133,13 @@ func _process(delta: float) -> void:
   _advance_events()
 
   # ── End condition ──
+  # Default behavior: finish by encounter duration/progress.
+  # Optional behavior: when finish_on_clear is enabled, allow early finish
+  # only after all events are dispatched AND all enemies are gone.
   if _progress >= encounter.duration:
     _finish()
-  elif _all_events_fired():
-    if finish_on_clear:
-      # All events dispatched — finish early only when no enemies remain
-      if get_tree().get_nodes_in_group("enemies").size() == 0:
-        _finish()
-    else:
+  elif finish_on_clear and _all_events_fired():
+    if get_tree().get_nodes_in_group("enemies").size() == 0:
       _finish()
 
 # ── Public API ───────────────────────────────────────────────────────────────

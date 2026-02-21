@@ -21,3 +21,6 @@ func _on_intro_cutscene_finished() -> void:
   _logger.debug("Intro cutscene finished, starting stage.")
   _intro_cutscene.visible = false
   _stage_director.start_stage(_run_config.seed)
+
+func _on_stage_director_stage_finished() -> void:
+  _logger.debug("Stage finished, returning to main menu.")

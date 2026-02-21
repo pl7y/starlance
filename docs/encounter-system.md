@@ -510,17 +510,17 @@ The micro layer. Plays a single `Encounter` resource over time or distance.
 
 #### Signals
 
-| Signal               | Parameters                                   | When                                       |
-| -------------------- | -------------------------------------------- | ------------------------------------------ |
-| `encounter_started`  | `(enc: Encounter)`                           | Playback begins.                           |
-| `event_fired`        | `(event: EncounterEvent)`                    | Any event fires (generic).                 |
-| `encounter_finished` | `(enc: Encounter)`                           | Timeline complete or duration reached.     |
-| `encounter_failed`   | `(reason: String)`                           | `fail()` was called.                       |
-| `phase_changed`      | `(phase_name: String)`                       | PhaseEvent fires.                          |
-| `marker_hit`         | `(marker_name: String, payload: Dictionary)` | MarkerEvent fires.                         |
-| `custom_signal`      | `(signal_name: String, argument: String)`    | SignalEvent fires.                         |
-| `gate_entered`       | `(gate: GateEvent)`                          | GateEvent reached — progression paused.    |
-| `gate_cleared`       | `(gate: GateEvent)`                          | Gate condition met — progression resuming. |
+| Signal               | Parameters                                   | When                                                     |
+| -------------------- | -------------------------------------------- | -------------------------------------------------------- |
+| `encounter_started`  | `(enc: Encounter)`                           | Playback begins.                                         |
+| `event_fired`        | `(event: EncounterEvent)`                    | Any event fires (generic).                               |
+| `encounter_finished` | `(enc: Encounter)`                           | Duration reached, or early finish via `finish_on_clear`. |
+| `encounter_failed`   | `(reason: String)`                           | `fail()` was called.                                     |
+| `phase_changed`      | `(phase_name: String)`                       | PhaseEvent fires.                                        |
+| `marker_hit`         | `(marker_name: String, payload: Dictionary)` | MarkerEvent fires.                                       |
+| `custom_signal`      | `(signal_name: String, argument: String)`    | SignalEvent fires.                                       |
+| `gate_entered`       | `(gate: GateEvent)`                          | GateEvent reached — progression paused.                  |
+| `gate_cleared`       | `(gate: GateEvent)`                          | Gate condition met — progression resuming.               |
 
 #### Internal flow (`_process`)
 
@@ -529,7 +529,7 @@ _process(delta):
   if TIME mode → _progress += delta
   if gated → _update_gate(delta), return
   _advance_events()     # fire all events where event.time <= _progress
-  check end condition   # _progress >= duration OR all events fired
+	check end condition   # _progress >= duration (or early clear if enabled)
 ```
 
 ---

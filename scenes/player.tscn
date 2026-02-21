@@ -96,7 +96,6 @@ enable_screen_controller = true
 
 [node name="PlayerLabel" type="Label" parent="." unique_id=1092200594]
 unique_name_in_owner = true
-visible = false
 offset_right = 40.0
 offset_bottom = 23.0
 theme_override_font_sizes/font_size = 8
