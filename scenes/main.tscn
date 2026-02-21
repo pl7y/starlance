@@ -2,7 +2,9 @@
 
 [ext_resource type="Script" uid="uid://bo8hrcq8eukx0" path="res://scenes/main.gd" id="1_o5qli"]
 [ext_resource type="PackedScene" uid="uid://1ggkw84lcaac" path="res://scenes/ui/main_menu.tscn" id="2_0wfyh"]
+[ext_resource type="PackedScene" uid="uid://5v7a0ra4elxi" path="res://scenes/gameplay_screen.tscn" id="3_sugp2"]
 
 [node name="Main" type="Node" unique_id=113265975]
 script = ExtResource("1_o5qli")
 main_menu_scene = ExtResource("2_0wfyh")
+gameplay_screen_scene = ExtResource("3_sugp2")
