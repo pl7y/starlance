@@ -1,15 +1,49 @@
 [gd_scene format=3 uid="uid://1ggkw84lcaac"]
 
 [ext_resource type="Script" uid="uid://dhvlre2ln1xd5" path="res://scenes/ui/main_menu.gd" id="1_sl1te"]
+[ext_resource type="Texture2D" uid="uid://c1qxgwjrj6jrx" path="res://assets/placeholders/T8g30s.png" id="2_1g8jr"]
+[ext_resource type="PackedScene" uid="uid://dxsu1nbuevjcm" path="res://scenes/ui/planetosphere.tscn" id="3_m1kxf"]
+[ext_resource type="FontFile" uid="uid://87l84nfgj5gj" path="res://assets/v1/fonts/phased-1.2/Phased.ttf" id="4_m1kxf"]
 
 [node name="MainMenu" type="CanvasLayer" unique_id=695802487]
 script = ExtResource("1_sl1te")
 
+[node name="TextureRect" type="TextureRect" parent="." unique_id=11468484]
+offset_left = -1.0
+offset_top = -3.0
+offset_right = 319.0
+offset_bottom = 177.0
+texture = ExtResource("2_1g8jr")
+
+[node name="TextureRect2" type="TextureRect" parent="." unique_id=233182455]
+offset_left = 318.0
+offset_top = -3.0
+offset_right = 638.0
+offset_bottom = 177.0
+texture = ExtResource("2_1g8jr")
+
+[node name="TextureRect3" type="TextureRect" parent="." unique_id=2043630349]
+offset_left = 315.0
+offset_top = 176.0
+offset_right = 635.0
+offset_bottom = 356.0
+texture = ExtResource("2_1g8jr")
+
+[node name="TextureRect4" type="TextureRect" parent="." unique_id=340475650]
+offset_top = 177.0
+offset_right = 320.0
+offset_bottom = 357.0
+texture = ExtResource("2_1g8jr")
+
+[node name="Planetosphere" parent="." unique_id=768096059 instance=ExtResource("3_m1kxf")]
+
 [node name="Label" type="Label" parent="." unique_id=1179824715]
 offset_left = 225.0
 offset_top = 87.0
-offset_right = 313.0
-offset_bottom = 110.0
+offset_right = 346.0
+offset_bottom = 123.0
+theme_override_fonts/font = ExtResource("4_m1kxf")
+theme_override_font_sizes/font_size = 8
 text = "Main menu"
 
 [node name="StartButton" type="Button" parent="." unique_id=2017435088]
@@ -21,13 +55,23 @@ offset_bottom = 151.0
 focus_next = NodePath("../QuitButton")
 text = "Start"
 
+[node name="OptionsButton" type="Button" parent="." unique_id=944770775]
+unique_name_in_owner = true
+offset_left = 246.0
+offset_top = 159.0
+offset_right = 316.0
+offset_bottom = 190.0
+focus_next = NodePath("../QuitButton")
+text = "Options"
+
 [node name="QuitButton" type="Button" parent="." unique_id=566520823]
 offset_left = 245.0
-offset_top = 166.0
+offset_top = 201.0
 offset_right = 291.0
-offset_bottom = 197.0
+offset_bottom = 232.0
 focus_previous = NodePath("../StartButton")
 text = "Quit"
 
 [connection signal="pressed" from="StartButton" to="." method="_on_start_button_pressed"]
+[connection signal="pressed" from="OptionsButton" to="." method="_on_start_button_pressed"]
 [connection signal="pressed" from="QuitButton" to="." method="_on_quit_button_pressed"]
