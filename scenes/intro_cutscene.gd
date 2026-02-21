@@ -3,17 +3,13 @@ class_name IntroCutscene
 
 signal finished
 
-@export var duration_sec: float = 2.0
-var _is_playing := false
+@onready var animation_player: AnimationPlayer = $AnimationPlayer
 
 func play() -> void:
-    if _is_playing:
-        return
-    _is_playing = true
-    visible = true
+  animation_player.play("open")
+  animation_player.seek(0.0)
 
-    await get_tree().create_timer(duration_sec).timeout
 
-    visible = false
-    _is_playing = false
+func _on_animation_player_animation_finished(anim_name: StringName) -> void:
+  if anim_name == "open":
     finished.emit()

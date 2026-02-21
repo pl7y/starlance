@@ -11,7 +11,7 @@ config_version=5
 [application]
 
 config/name="Downstar"
-run/main_scene="uid://5v7a0ra4elxi"
+run/main_scene="uid://1tqrl15eu86j"
 config/features=PackedStringArray("4.6", "Forward Plus")
 config/icon="res://icon.svg"
 

@@ -22,6 +22,7 @@
 [ext_resource type="Script" uid="uid://bg0aq8jsny3t6" path="res://scenes/encounters/movement_styles/bounce_movement_style.gd" id="18_baarm"]
 [ext_resource type="Script" uid="uid://clo2cqcvulfkw" path="res://scenes/encounters/pattern.gd" id="19_2o7gh"]
 [ext_resource type="Script" uid="uid://c8om0jd1cjoha" path="res://scenes/encounters/spawn_event.gd" id="20_ng3oa"]
+[ext_resource type="PackedScene" uid="uid://cvko0bycqpbyo" path="res://scenes/intro_cutscene.tscn" id="23_baarm"]
 
 [sub_resource type="Resource" id="Resource_pw0ia"]
 script = ExtResource("17_baarm")
@@ -166,6 +167,7 @@ speed = 200.0
 fixed_sprite = true
 
 [node name="UILayer" type="CanvasLayer" parent="." unique_id=731936281]
+layer = 3
 
 [node name="Mechanics" type="Node" parent="." unique_id=1333706372]
 
@@ -176,6 +178,7 @@ spawner = NodePath("../EnemySpawner")
 metadata/_custom_type_script = "uid://bx6f3uaf823k7"
 
 [node name="StageDirector" type="Node" parent="Mechanics" unique_id=1937507698 node_paths=PackedStringArray("runner", "player")]
+unique_name_in_owner = true
 script = ExtResource("14_7ocsb")
 runner = NodePath("../EncounterRunner")
 player = NodePath("../../ObjectsLayer/Player")
@@ -183,7 +186,6 @@ encounters_override = Array[ExtResource("15_qfdku")]([SubResource("Resource_hjvp
 run_seed = 2
 rail_speed = 50.0
 modifiers = PackedStringArray()
-autostart = true
 stage_template = ExtResource("15_aagjl")
 encounter_pool = ExtResource("16_gnb8g")
 difficulty_profile = SubResource("Resource_baarm")
@@ -193,3 +195,7 @@ script = ExtResource("14_6demn")
 world = NodePath("../../ObjectsLayer")
 camera_rig = NodePath("../../CameraRig")
 metadata/_custom_type_script = "uid://b7muo30j743j7"
+
+[node name="IntroCutscene" parent="." unique_id=620946400 instance=ExtResource("23_baarm")]
+unique_name_in_owner = true
+layer = 4

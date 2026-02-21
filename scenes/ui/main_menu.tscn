@@ -13,10 +13,12 @@ offset_bottom = 110.0
 text = "Main menu"
 
 [node name="StartButton" type="Button" parent="." unique_id=2017435088]
+unique_name_in_owner = true
 offset_left = 246.0
 offset_top = 120.0
 offset_right = 292.0
 offset_bottom = 151.0
+focus_next = NodePath("../QuitButton")
 text = "Start"
 
 [node name="QuitButton" type="Button" parent="." unique_id=566520823]
@@ -24,6 +26,7 @@ offset_left = 245.0
 offset_top = 166.0
 offset_right = 291.0
 offset_bottom = 197.0
+focus_previous = NodePath("../StartButton")
 text = "Quit"
 
 [connection signal="pressed" from="StartButton" to="." method="_on_start_button_pressed"]
