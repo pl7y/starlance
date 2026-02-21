@@ -165,15 +165,17 @@ modulate = Color(1, 1, 1, 0.42745098)
 speed = 200.0
 fixed_sprite = true
 
-[node name="SystemConnector" type="Node" parent="." unique_id=1333706372]
+[node name="UILayer" type="CanvasLayer" parent="." unique_id=731936281]
 
-[node name="EncounterRunner" type="Node" parent="SystemConnector" unique_id=749903038 node_paths=PackedStringArray("spawner")]
+[node name="Mechanics" type="Node" parent="." unique_id=1333706372]
+
+[node name="EncounterRunner" type="Node" parent="Mechanics" unique_id=749903038 node_paths=PackedStringArray("spawner")]
 script = ExtResource("13_7ocsb")
 autostart = true
 spawner = NodePath("../EnemySpawner")
 metadata/_custom_type_script = "uid://bx6f3uaf823k7"
 
-[node name="StageDirector" type="Node" parent="SystemConnector" unique_id=1937507698 node_paths=PackedStringArray("runner", "player")]
+[node name="StageDirector" type="Node" parent="Mechanics" unique_id=1937507698 node_paths=PackedStringArray("runner", "player")]
 script = ExtResource("14_7ocsb")
 runner = NodePath("../EncounterRunner")
 player = NodePath("../../ObjectsLayer/Player")
@@ -186,7 +188,7 @@ stage_template = ExtResource("15_aagjl")
 encounter_pool = ExtResource("16_gnb8g")
 difficulty_profile = SubResource("Resource_baarm")
 
-[node name="EnemySpawner" type="Node" parent="SystemConnector" unique_id=54553492 node_paths=PackedStringArray("world", "camera_rig")]
+[node name="EnemySpawner" type="Node" parent="Mechanics" unique_id=54553492 node_paths=PackedStringArray("world", "camera_rig")]
 script = ExtResource("14_6demn")
 world = NodePath("../../ObjectsLayer")
 camera_rig = NodePath("../../CameraRig")

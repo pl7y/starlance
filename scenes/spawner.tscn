@@ -1,6 +1,0 @@
-[gd_scene format=3 uid="uid://owjcip6umxuh"]
-
-[ext_resource type="Script" uid="uid://dko36swby78a7" path="res://scenes/spawner.gd" id="1_2vbf6"]
-
-[node name="Spawner" type="Node" unique_id=2009793224]
-script = ExtResource("1_2vbf6")
