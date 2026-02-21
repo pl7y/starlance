@@ -3,12 +3,13 @@
 [ext_resource type="Script" uid="uid://dhvlre2ln1xd5" path="res://scenes/ui/main_menu.gd" id="1_sl1te"]
 [ext_resource type="Texture2D" uid="uid://c1qxgwjrj6jrx" path="res://assets/placeholders/T8g30s.png" id="2_1g8jr"]
 [ext_resource type="PackedScene" uid="uid://dxsu1nbuevjcm" path="res://scenes/ui/planetosphere.tscn" id="3_m1kxf"]
-[ext_resource type="FontFile" uid="uid://87l84nfgj5gj" path="res://assets/v1/fonts/phased-1.2/Phased.ttf" id="4_m1kxf"]
+[ext_resource type="Texture2D" uid="uid://djlm8pojau4e4" path="res://assets/placeholders/pixellab-Image-to-pixel-art-1771688650389.png" id="4_m1kxf"]
+[ext_resource type="Texture2D" uid="uid://dv8uq8sjx18v" path="res://assets/placeholders/typew.png" id="5_x2yvf"]
 
 [node name="MainMenu" type="CanvasLayer" unique_id=695802487]
 script = ExtResource("1_sl1te")
 
-[node name="TextureRect" type="TextureRect" parent="." unique_id=11468484]
+[node name="TextureRect5" type="TextureRect" parent="." unique_id=2085224373]
 offset_left = -1.0
 offset_top = -3.0
 offset_right = 319.0
@@ -37,40 +38,61 @@ texture = ExtResource("2_1g8jr")
 
 [node name="Planetosphere" parent="." unique_id=768096059 instance=ExtResource("3_m1kxf")]
 
-[node name="Label" type="Label" parent="." unique_id=1179824715]
-offset_left = 225.0
-offset_top = 87.0
-offset_right = 346.0
-offset_bottom = 123.0
-theme_override_fonts/font = ExtResource("4_m1kxf")
-theme_override_font_sizes/font_size = 8
-text = "Main menu"
+[node name="TextureRect" type="TextureRect" parent="." unique_id=11468484]
+offset_left = 6.4444275
+offset_right = 520.2223
+offset_bottom = 289.0
+texture = ExtResource("4_m1kxf")
 
 [node name="StartButton" type="Button" parent="." unique_id=2017435088]
 unique_name_in_owner = true
-offset_left = 246.0
-offset_top = 120.0
-offset_right = 292.0
-offset_bottom = 151.0
+visible = false
+offset_left = 306.0
+offset_top = 179.0
+offset_right = 352.0
+offset_bottom = 210.0
 focus_next = NodePath("../QuitButton")
 text = "Start"
 
 [node name="OptionsButton" type="Button" parent="." unique_id=944770775]
 unique_name_in_owner = true
-offset_left = 246.0
-offset_top = 159.0
-offset_right = 316.0
-offset_bottom = 190.0
+visible = false
+offset_left = 360.0
+offset_top = 179.0
+offset_right = 430.0
+offset_bottom = 210.0
 focus_next = NodePath("../QuitButton")
 text = "Options"
 
 [node name="QuitButton" type="Button" parent="." unique_id=566520823]
-offset_left = 245.0
-offset_top = 201.0
-offset_right = 291.0
-offset_bottom = 232.0
+visible = false
+offset_left = 442.0
+offset_top = 179.0
+offset_right = 488.0
+offset_bottom = 210.0
 focus_previous = NodePath("../StartButton")
 text = "Quit"
+
+[node name="TextureRect6" type="TextureRect" parent="." unique_id=1458452061]
+offset_left = 315.0
+offset_top = 188.0
+offset_right = 349.0
+offset_bottom = 197.0
+texture = ExtResource("5_x2yvf")
+
+[node name="TextureRect7" type="TextureRect" parent="." unique_id=848695055]
+offset_left = 421.0
+offset_top = 188.0
+offset_right = 455.0
+offset_bottom = 197.0
+texture = ExtResource("5_x2yvf")
+
+[node name="TextureRect8" type="TextureRect" parent="." unique_id=1678144926]
+offset_left = 368.0
+offset_top = 188.0
+offset_right = 402.0
+offset_bottom = 197.0
+texture = ExtResource("5_x2yvf")
 
 [connection signal="pressed" from="StartButton" to="." method="_on_start_button_pressed"]
 [connection signal="pressed" from="OptionsButton" to="." method="_on_start_button_pressed"]

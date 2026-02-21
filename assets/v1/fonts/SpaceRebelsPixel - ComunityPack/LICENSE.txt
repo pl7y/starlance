@@ -1,0 +1,50 @@
+Copyright (c) 2021–2025 Jesse D. Jimenez (jdj.jdjimenez@gmail.com, patreon.com/jdjimenez, jdjimenez.itch.io, @jaydeejim.bsky.social)
+
+This Asset is licensed under the JDJ General Font License, Version 1.0.
+The license is as follows:
+
+-----------------------------------------------------------------------------
+JDJ GENERAL FONT LICENSE Version 1.0 - 16 July 2025
+-----------------------------------------------------------------------------
+
+PERMISSION AND CONDITIONS
+
+1) You may use, study, and modify the font(s) for use in your own personal or commercial projects, provided you are an individual person (not a company, group, or organization).
+
+2) You may embed the font(s) in your own games, apps, documents, and other digital works, provided the font file is not made accessible or extractable  by end users.
+
+3) You may not redistribute or resell the font(s), in original or modified form, on their own or as part of a package, bundle, or template.
+
+4) You may not use the font(s) as part of any AI dataset, training, fine-tuning, generation, or other machine learning application.
+
+5) You may not sublicense or share the font(s) with others. Only the individual who downloaded or purchased the font may use it.
+
+6) You may not use the name(s) or identity of the original font(s) or author to promote, endorse, or publish modified versions.
+
+7) You are permitted (but not required) to attribute the author.
+
+8) This license includes all variations and styles of the font family that were originally included (such as bold, italic, stroke, etc.). Other fonts from the same author not included in this set are not covered.
+
+9) This license applies to all formats of the font(s) included in the original download (such as OTF, TTF, WOFF, WOFF2, SVG, PNG, EOT, or other file formats). Converting the font to another format does not change the license terms or permit redistribution.
+
+10) This license is not valid for teams, studios, or organizations. If the font(s) is being used in a project involving multiple collaborators, a separate Team License Add-On is required, regardless of who directly handles the font(s).
+
+TEAM LICENSE ADD-ONS
+
+If you wish to use this font as part of a team, you must obtain the appropriate add-on license:
+- Indie Team License: Up to 10 persons.
+- Studio License: Up to 50 persons.
+- For Corporate, Enterprise, or Custom Licenses please contact me via email.
+
+See individual add-on license files for specific terms.
+
+TERMINATION
+
+This license becomes null and void if any of the above conditions are not met.
+
+DISCLAIMER
+
+THE FONT(S) ARE PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO ANY WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT OF COPYRIGHT, PATENT, TRADEMARK, OR OTHER RIGHT. IN NO EVENT SHALL THE COPYRIGHT HOLDER BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, INCLUDING ANY GENERAL, SPECIAL, INDIRECT, INCIDENTAL, OR CONSEQUENTIAL DAMAGES, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF THE USE OR INABILITY TO USE THE FONT(S) OR FROM OTHER DEALINGS IN THE ASSETS.
+
+
+

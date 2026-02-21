@@ -1,0 +1,36 @@
+[remap]
+
+importer="font_data_dynamic"
+type="FontFile"
+uid="uid://c02awpdcpglvj"
+path="res://.godot/imported/Space Rebels Pixel Soft-Stroke.otf-9f83b0d72a7cbb703f27af3815656f04.fontdata"
+
+[deps]
+
+source_file="res://assets/v1/fonts/SpaceRebelsPixel - ComunityPack/OTF/Space Rebels Pixel Soft-Stroke.otf"
+dest_files=["res://.godot/imported/Space Rebels Pixel Soft-Stroke.otf-9f83b0d72a7cbb703f27af3815656f04.fontdata"]
+
+[params]
+
+Rendering=null
+antialiasing=1
+generate_mipmaps=false
+disable_embedded_bitmaps=true
+multichannel_signed_distance_field=false
+msdf_pixel_range=8
+msdf_size=48
+allow_system_fallback=true
+force_autohinter=false
+modulate_color_glyphs=false
+hinting=1
+subpixel_positioning=4
+keep_rounding_remainders=true
+oversampling=0.0
+Fallbacks=null
+fallbacks=[]
+Compress=null
+compress=true
+preload=[]
+language_support={}
+script_support={}
+opentype_features={}
